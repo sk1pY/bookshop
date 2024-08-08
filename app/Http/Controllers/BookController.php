@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Author;
+use App\Models\Basket;
 use App\Models\Book;
 use App\Models\Category;
 use Illuminate\Http\Request;
@@ -12,7 +13,8 @@ class BookController extends Controller
     public function index(){
         $categories = Category::all();
         $books = Book::all();
-        return view('index',compact('books','categories'));
+        $bookInBasket = Basket::all()->count();
+        return view('index',compact('books','categories','bookInBasket'));
     }
 
     public function author($id){

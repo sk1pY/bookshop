@@ -12,3 +12,4 @@ Route::get('/category/{id}', [BookController::class,'categoryBooks'])->name('boo
 
 Route::get('/basket', [BasketController::class,'index'])->name('basket.index');
 Route::post('/basket/add', [BasketController::class,'add'])->name('basket.add');
+Route::delete('/basket/delete/{id}', [BasketController::class,'delete'])->name('basket.delete');
