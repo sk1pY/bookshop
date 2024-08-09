@@ -17,6 +17,7 @@ class BooksSeeder extends Seeder
         for ($i = 0; $i < 10; $i++) {
             DB::table('books')->insert([
                 'title' => "book$i",
+                'price' => rand(10, 30),
                 'author_id'=>rand(1, 10),
                 'category_id'=>rand(1, 10),
             ]);

@@ -1,29 +1,7 @@
 @extends('layouts.app')
 @section('content')
     <div class="container">
-        <nav class="navbar navbar-expand-lg bg-body-tertiary">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="{{ route('books.index') }}">BookShop</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Features</a>
-                        </li>
-                    </ul>
-                    <ul class="navbar-nav ms-auto">
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('basket.index') }}">Корзина: {{ $bookInBasket }}</a>
-                            <span></span>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
         <div class="container">
             @if (session('success'))
                 <div class="alert alert-success">
@@ -66,6 +44,7 @@
                                         <p class="card-text">
                                             <a href="{{ route('books.author', ['id' => $book->author->id]) }}">{{ $book->author->name }}</a>
                                         </p>
+                                        <p>Цена: {{$book->price}}</p>
                                         <form action="{{route('basket.add')}}" method="post">
                                             @csrf
                                             <input type="text" hidden name="book_id" value="{{$book->id}}">
