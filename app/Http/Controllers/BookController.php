@@ -28,8 +28,10 @@ class BookController extends Controller
 
     public function categoryBooks($id)
     {
-        $categoryBooks = Book::where('category_id',$id)->get();
-        return view('categoryBooks',compact('categoryBooks'));
+        $categories = Category::all();
+
+        $books = Book::where('category_id',$id)->get();
+        return view('categoryBooks',compact('books','categories'));
     }
 
 }

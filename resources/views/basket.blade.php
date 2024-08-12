@@ -48,5 +48,12 @@
             @endforeach
             </tbody>
         </table>
+
+        <h2>Sum: {{ $sum }} рублей </h2>
+        <form action="">
+            <input class="btn btn-success" type="submit">
+        </form>
+
     </div>
+
 @endsection

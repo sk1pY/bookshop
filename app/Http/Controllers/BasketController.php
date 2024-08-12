@@ -13,18 +13,21 @@ class BasketController extends Controller
         $baskets = Book::withCount('baskets')
             ->having('baskets_count', '>', 0)
             ->get();
-        $price = Book::sum('price');
 
-        return view('basket',compact('baskets'));
+        $sum = Basket::with('book')
+            ->get()
+            ->sum(function ($basketItem) {
+                return $basketItem->book->price;
+            });
+
+        return view('basket',compact('baskets','sum'));
     }
 
     public function add(Request $request){
             $basket = new Basket();
             $basket->book_id = $request->input('book_id');
             $basket->save();
-            return redirect()->route('basket.index')->with('success', 'Item successfully added to basket!');
-//        }
-//        return redirect()->route('books.index')->with('error', 'An error occurred while processing your request.');
+            return redirect()->route('books.index')->with('success', 'Книга добавлена в корзину!');
 
     }
 

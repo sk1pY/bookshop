@@ -16,31 +16,71 @@
           crossorigin="anonymous" referrerpolicy="no-referrer"/>
     <title>Document</title>
 </head>
+<style>
+    a {
+        color: black;
+        text-decoration: none;
+    }
+
+    a:hover {
+        color: grey;
+    }
+</style>
 <body>
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
-    <div class="container-fluid">
+    <div class="container">
         <a class="navbar-brand" href="{{ route('books.index') }}">BookShop</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <ul class="navbar-nav   ms-auto     mb-2 mb-lg-0">
+                <div class="">
+                    <form class="d-flex" role="search">
+                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                    </form>
+                </div>
 
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Features</a>
-                </li>
-            </ul>
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('basket.index') }}">Корзина: {{ $bookInBasket }}</a>
-                    <span></span>
-                </li>
+                @guest
+
+                    <li class="nav-item ">
+                        <a class="nav-link" href="{{ route('login') }}">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('register') }}">Register</a>
+                    </li>
+                @endguest
+                @auth
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{route('home.index')}}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <button onclick="document.getElementById('logout-form').submit();" class="btn ">
+                            Logout
+                        </button>
+
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                            @csrf
+                        </form>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('basket.index') }}">Корзина: {{ $bookInBasket }}</a>
+                        <span></span>
+                    </li>
+                @endauth
             </ul>
         </div>
     </div>
 </nav>
-@yield('content')
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-12 ">
+            @yield('content')
+        </div>
+        <footer class="bg-body-tertiary">
+            footer
+        </footer>
 
 </body>
 </html>
