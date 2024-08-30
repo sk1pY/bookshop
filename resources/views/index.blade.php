@@ -45,14 +45,12 @@
                                                 href="{{ route('books.book', ['id' => $book->id]) }}">{{ $book->title }}</a>
                                         </h5>
                                         <div>
-
-{{--                                            <a href="{{ route('books.categoryBooks',[$category->id])}}">{{ $book->category->name }}</a>--}}
                                             <a href="{{ route('books.author', ['id' => $book->author->id]) }}">{{ $book->author->name }}</a>
 
                                         </div>
                                         @auth
                                         <div class="d-flex justify-content-center align-items-center">
-                                            <form action="{{route('basket.add')}}" method="post">
+                                            <form action="{{route('basket.add',$book->id)}}" method="post">
                                                 @csrf
                                                 <input type="text" hidden name="book_id" value="{{$book->id}}">
                                                 <button style=" width:160px;height: 30px;" class="btn btn-outline-success d-flex justify-content-center align-items-center"> В корзину</button>

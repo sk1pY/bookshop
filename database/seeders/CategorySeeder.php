@@ -2,6 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Models\Author;
+use App\Models\Book;
+use App\Models\Category;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -13,12 +16,8 @@ class CategorySeeder extends Seeder
      */
     public function run(): void
     {
-
-        for ($i = 0; $i < 10; $i++) {
-            DB::table('categories')->insert([
-                'name' => "category_$i",
-
-            ]);
-        }
+        Category::factory()
+            ->count(5)
+            ->create();
     }
 }

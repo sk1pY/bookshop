@@ -3,9 +3,11 @@
 namespace Database\Seeders;
 
 use App\Models\Author;
+use App\Models\Book;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 class AuthorSeeder extends Seeder
 {
@@ -14,10 +16,11 @@ class AuthorSeeder extends Seeder
      */
     public function run(): void
     {
-        for ($i = 0; $i < 10; $i++) {
-            DB::table('authors')->insert([
-                'name' => "author$i",
-            ]);
-        }
+       Author::factory()
+            ->count(5)
+            ->create();
     }
+
 }
+
+

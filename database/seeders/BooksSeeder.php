@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Author;
 use App\Models\Book;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -14,13 +15,16 @@ class BooksSeeder extends Seeder
      */
     public function run(): void
     {
-        for ($i = 0; $i < 10; $i++) {
-            DB::table('books')->insert([
-                'title' => "book$i",
-                'price' => rand(10, 30),
-                'author_id'=>rand(1, 10),
-                'category_id'=>rand(1, 10),
-            ]);
-        }
+//        for ($i = 0; $i < 10; $i++) {
+//            DB::table('books')->insert([
+//                'title' => "book$i",
+//                'price' => rand(10, 30),
+//                'author_id'=>rand(1, 10),
+//                'category_id'=>rand(1, 10),
+//            ]);
+//        }
+         Book::factory()->count(10)->create();
+
+
     }
 }

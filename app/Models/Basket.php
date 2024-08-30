@@ -9,9 +9,10 @@ class Basket extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['user_id'];
 
-    public function book()
+    public function basket_items()
     {
-        return $this->belongsTo(Book::class);
+        return $this->hasMany(Basket_items::class);
     }
 }

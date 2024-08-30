@@ -56,6 +56,9 @@
                         <a class="nav-link" href="{{route('home.index')}}">Home</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" href="{{route('admin.index')}}">Admin</a>
+                    </li>
+                    <li class="nav-item">
                         <button onclick="document.getElementById('logout-form').submit();" class="btn ">
                             Logout
                         </button>
