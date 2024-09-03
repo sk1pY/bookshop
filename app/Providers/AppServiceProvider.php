@@ -3,7 +3,7 @@
 namespace App\Providers;
 
 use App\Models\Basket;
-use App\Models\Basket_items;
+use App\Models\BasketItem;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
@@ -24,9 +24,18 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         View::composer('*', function ($view) {
-            $basket = Basket::where(['user_id' => Auth::id()])->first();
-            $bookInBasket = Basket_items::where(['basket_id' => $basket->id])->count();
-            $view->with('bookInBasket', $bookInBasket);
+            if (Auth::guard()->check()) {
+                $basket = Basket::where(['user_id' => Auth::id()])->first();
+                if(!$basket){
+                    $bookInBasket = 0;
+                }else{
+                    $bookInBasket = BasketItem::where(['basket_id' => $basket->id])->count();
+                }
+
+                $view->with('bookInBasket', $bookInBasket);
+
+            }
+
         });
     }
 }

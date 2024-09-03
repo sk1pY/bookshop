@@ -45,11 +45,25 @@
                                                 href="{{ route('books.book', ['id' => $book->id]) }}">{{ $book->title }}</a>
                                         </h5>
                                         <div>
-                                            <a href="{{ route('books.author', ['id' => $book->author->id]) }}">{{ $book->author->name }}</a>
+                                            Автор: <a href="{{ route('books.author', ['id' => $book->author->id]) }}">{{ $book->author->name }}</a>
+
+                                        </div>
+                                        <div class="mb-3">
+                                            Отзывы: {{ $book->commentaries_count }}
+                                            Рейтинг: {{ $book->avgRating }}
+
+                                        </div>
+                                        <div>
 
                                         </div>
                                         @auth
                                         <div class="d-flex justify-content-center align-items-center">
+                                            <form action="{{route('bookmark.add',$book->id)}}" method="post">
+                                                @csrf
+                                                <button style=" width:160px;height: 30px;" class="btn btn-outline-success d-flex justify-content-center align-items-center"> В избранное</button>
+                                            </form>
+                                        </div>
+                                            <div class="d-flex justify-content-center align-items-center">
                                             <form action="{{route('basket.add',$book->id)}}" method="post">
                                                 @csrf
                                                 <input type="text" hidden name="book_id" value="{{$book->id}}">

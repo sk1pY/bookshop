@@ -7,6 +7,7 @@ use App\Models\Basket;
 use App\Models\Basket_items;
 use App\Models\Book;
 use App\Models\Category;
+use App\Models\Commentary;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Http\Request;
@@ -20,12 +21,9 @@ class BookController extends Controller
     {
         $users = DB::select('select * from books');
         $categories = Category::all();
-        $books = Book::all();
-        $basket = Basket::where(['user_id' => Auth::id()])->first();
-
-        $bookInBasket = Basket_items::where(['basket_id'=> $basket -> id])->count();
-      //  dd($bookInBasket);
-        return view('index', compact('books', 'categories', 'bookInBasket'));
+        $books = Book::withCount(['commentaries'])->get();
+       // dd($books);
+        return view('index', compact('books', 'categories', ));
     }
 
     public function author($id){
@@ -33,9 +31,12 @@ class BookController extends Controller
       return view('author',compact('booksOfAuthor'));
     }
     public function book($id){
+
         // если в маргрутах указать book и параметрах метода Book $book то это заменяет $book = Book::find($id);
         $book = Book::find($id);
-        return view('book',compact('book'));
+        $commentaries = Commentary::where('book_id',$id)->orderBy('created_at','desc')->get();
+
+        return view('book',compact('book','commentaries'));
     }
 
     public function categoryBooks($id)

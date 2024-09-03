@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Book extends Model
 {
     use HasFactory;
-    protected $fillable = ['title','price','author_id','category_id'];
+    protected $fillable = ['title','price','author_id','category_id','avgRating'];
 
 
     public function author()
@@ -22,7 +22,11 @@ class Book extends Model
     }
     public function basket_items()
     {
-        return $this->hasMany(Basket_items::class);
+        return $this->hasMany(BasketItem::class);
+    }
+
+    public function commentaries(){
+        return $this->hasMany(Commentary::class);
     }
 
 

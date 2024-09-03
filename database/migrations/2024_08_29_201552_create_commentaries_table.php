@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('commentaries', function (Blueprint $table) {
             $table->id();
+            $table->string('text',255);
+            $table->integer('rating');
+            $table->foreignId('book_id')->constrained();
             $table->timestamps();
         });
     }

@@ -41,7 +41,7 @@
 
 
                                 <form action="">
-                                    <input type="text" value="{{$basket->count}}"
+                                    <input type="text" value="{{$basket->quantity}}"
                                            style="width:30px; text-align: center; Border: none;">
                                 </form>
 
@@ -52,7 +52,7 @@
                                 </button>
                             </form>
                         </div>
-                        Цена: {{ $basket-> book ->price * $basket-> count  }}
+                        Цена: {{ $basket-> book ->price * $basket-> quantity  }}
                     </td>
                 </tr>
             @endforeach
@@ -68,14 +68,8 @@
             <input class="btn btn-success" type="submit">
         </form>
     </div>
-        <div class="col-6">
-            Сделать заказ
-            <form action="">
-                <input type="text">
-                <input type="text">
-                <input type="submit">
-            </form>
-        </div>
+
+
     </div>
     </div>
 

@@ -5,7 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Basket_items extends Model
+
+class BasketItem extends Model
 {
     use HasFactory;
     protected $fillable = ['book_id','basket_id'];
@@ -17,7 +18,7 @@ class Basket_items extends Model
 
     public function user()
     {
-        return $this->belongsTo(Book::class);
+        return $this->belongsTo(User::class);
     }
 
     public function basket()

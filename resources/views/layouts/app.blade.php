@@ -53,7 +53,7 @@
                 @endguest
                 @auth
                     <li class="nav-item">
-                        <a class="nav-link" href="{{route('home.index')}}">Home</a>
+                        <a class="nav-link" href="{{route('home.index')}}">Мой профиль</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{route('admin.index')}}">Admin</a>

@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('basket_id')->constrained('baskets');
+            $table->foreignId('user_id')->constrained('users');
+            $table->float('price')->default(0);
             $table->timestamps();
         });
     }

@@ -13,6 +13,8 @@ class Basket extends Model
 
     public function basket_items()
     {
-        return $this->hasMany(Basket_items::class);
+        return $this->hasMany(BasketItem::class);
     }
+
+
 }
