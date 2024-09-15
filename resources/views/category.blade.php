@@ -32,20 +32,8 @@
                     </ul>
                 </div>
                 <div class="col-md-9">
-                    <form action="{{ route('books.index') }}" id="filterForm" method="get"  >
-                        @csrf
-                    <label for="rating">Фильтр: </label>
-                    <select id="rating" name="filter" form="filterForm" onchange="this.form.submit()">
-
-                        <option value="">Выберите фильтр</option>
-                        <option value="cheap" {{ request('filter') === 'cheap' ? 'selected' : '' }} >Сначала дешевые</option>
-                        <option value="expensive" {{ request('filter') === 'expensive' ? 'selected' : '' }}>Сначала дорогие</option>
-                        <option value="rating">По рейтингу</option>
-                        <option value="popularity">По популярности</option>
-                    </select></form>
                     <div class="row row-cols-1 row-cols-md-4 g-4">
-
-                        @forelse(@$books as $book)
+                        @foreach($books as $book)
                             <div class="col-2">
                                 <div class="card">
                                     <div class="mt-3 d-flex justify-content-center align-items-center image-container">
@@ -69,26 +57,24 @@
 
                                         </div>
                                         @auth
-                                        <div class="d-flex justify-content-center align-items-center">
-                                            <form action="{{route('bookmark.add',$book->id)}}" method="post">
-                                                @csrf
-                                                <button style=" width:160px;height: 30px;" class="btn btn-outline-success d-flex justify-content-center align-items-center"> В избранное</button>
-                                            </form>
-                                        </div>
                                             <div class="d-flex justify-content-center align-items-center">
-                                            <form action="{{route('basket.add',$book->id)}}" method="post">
-                                                @csrf
-                                                <input type="text" hidden name="book_id" value="{{$book->id}}">
-                                                <button style=" width:160px;height: 30px;" class="btn btn-outline-success d-flex justify-content-center align-items-center"> В корзину</button>
-                                            </form>
-                                        </div>
+                                                <form action="{{route('bookmark.add',$book->id)}}" method="post">
+                                                    @csrf
+                                                    <button style=" width:160px;height: 30px;" class="btn btn-outline-success d-flex justify-content-center align-items-center"> В избранное</button>
+                                                </form>
+                                            </div>
+                                            <div class="d-flex justify-content-center align-items-center">
+                                                <form action="{{route('basket.add',$book->id)}}" method="post">
+                                                    @csrf
+                                                    <input type="text" hidden name="book_id" value="{{$book->id}}">
+                                                    <button style=" width:160px;height: 30px;" class="btn btn-outline-success d-flex justify-content-center align-items-center"> В корзину</button>
+                                                </form>
+                                            </div>
                                         @endauth
                                     </div>
                                 </div>
                             </div>
-                        @empty
-                            <p>нет книг</p>
-                        @endforelse
+                        @endforeach
                     </div>
                 </div>
             </div>

@@ -12,6 +12,10 @@ class User extends Authenticatable
     use HasFactory, Notifiable;
 
 
+    protected $casts = [
+        'birthday' => 'date',
+    ];
+
     /**
      * The attributes that are mass assignable.
      *
@@ -19,8 +23,12 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'surname',
         'email',
         'password',
+        'birthday',
+        'gender',
+        'phone'
     ];
 
     /**

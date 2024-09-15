@@ -7,6 +7,7 @@ use App\Models\BasketItem;
 use App\Models\Book;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -14,6 +15,7 @@ class BasketItemController extends Controller
 {
     public function index()
     {
+
         $basket = Basket::where(['user_id' => Auth::id()])->first();
         if ($basket) {
             $booksInBasket = BasketItem::where(['basket_id' => $basket->id])->get();
@@ -48,10 +50,15 @@ class BasketItemController extends Controller
     {
         $basketUser = Basket::where(['user_id' => Auth::id()])->first();
         $bookInBasket = BasketItem::where('book_id', $id)->first();
-
         if ($bookInBasket->quantity == 1) {
             $bookInBasket->delete();
+            if (BasketItem::where('basket_id', $basketUser->id)->count() == 0) {
+                $basketUser->delete();
+            }
+            return redirect()->route('basket.index');
+
         }
+
         $bookInBasket->decrement('quantity');
         $basketUser->price -= $bookInBasket->book->price;
         $basketUser->save();
@@ -62,7 +69,20 @@ class BasketItemController extends Controller
 
     public function orderAdd(Request $request)
     {
-        $OrderUser = Order::Create(['user_id' => Auth::id(),'price' => Auth::user() -> basket -> price]);
+
+        $VALIDARTOR = $request->validate([
+            'name' => 'string',
+            'surname' => 'required|string',
+            'address' => 'required|string',
+            'phone' => 'required|string',
+        ]);
+        Auth::user()->update([
+            'name' => $VALIDARTOR['name'],
+            'surname' => $VALIDARTOR['surname'],
+            'address' => $VALIDARTOR['address'],
+            'phone' => $VALIDARTOR['phone'],
+        ]);
+        $OrderUser = Order::Create(['user_id' => Auth::id(), 'price' => Auth::user()->basket->price, 'status' => 'Новый заказ']);
         $basketJson = $request->input('basket');
         $baskets = json_decode($basketJson);
         //КОЛЛЕКЦИЯ КНИГ КОТОРЫЕ ЗАКАЗАЛ ЮЗЕР
@@ -75,9 +95,8 @@ class BasketItemController extends Controller
                 'order_id' => $OrderUser->id,
             ]);
         }
-        //Удалить все книги которые были в корзине юзера
         BasketItem::where('basket_id', Auth::user()->basket->id)->delete();
-        Auth::user() -> basket ->delete();
+        Auth::user()->basket->delete();
         return redirect()->route('basket.index');
     }
 }

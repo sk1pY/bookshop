@@ -1,80 +1,20 @@
 @extends('layouts.app')
 @section('content')
-    <a href="{{ route('books.index') }}">home</a>
-    <h1>СПИСОК ЗАКАЗОВ</h1>
-
-    <table class="table">
-        <thead>
-        <tr>
-            <th scope="col">id</th>
-            <th scope="col">User</th>
-            <th scope="col">Title</th>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach($getBooks as $book)
-
-            <tr>
-            <th scope="row">{{$book-> id}}</th>
-            <td>{{$book-> user -> name}}</td>
-                <td>
-                    @foreach($book->order_items as $item)
-                        {{ $item->book->title }}<br>
-                    @endforeach
-                </td>
-        </tr>
-        @endforeach
-
-        </tbody>
-    </table>
-    <h1>ADMIN</h1>
-    {{--ADD BOOK--}}
-    <form action="{{route('admin.addBook')}}" method="post">
-        @csrf
-        Title<input type="text" name="title">
-        price<input type="text" name="price">
-
-        <select class="form-select" name="category_id">
-            @if(count($categories) > 0)
-                @foreach($categories as $category)
-                    <option>{{$category-> name}}</option>
-                @endforeach
-            @else
-                <option>Без категории</option>
-            @endif
-        </select>
-        <select class="form-select" name="author_id">
-            @if(count($authors) > 0)
-                @foreach($authors as $author)
-                    <option>{{$author-> name}}</option>
-                @endforeach
-            @else
-                <option>Без Автора</option>
-            @endif
-        </select>
-        <input type="submit">
-    </form>
-    {{--ADD CATEGORY--}}
-    <form action="{{ route('admin.addCategory') }}" method="post">
-        @csrf
-        <input type="text" name="category_name">
-        <input type="submit">
-    </form>
-
-    @foreach( $books as $book )
-        <h1>{{$book -> title}}</h1>
-        <form action="{{ route('admin.deleteBook', $book->id)}}" method="post">
-            @csrf
-            @method('delete')
-            <input type="submit" value="delete">
-        </form>
-        <form action="{{ route('admin.updateBook',$book->id)}}" method="post">
-            @csrf
-            @method('put')
-            <input name="title" value="{{$book->title}}">
-            <input type="submit" value="edit">
-        </form>
-
-    @endforeach
+<div class="row mt-3">
+    <div class="col-3">
+        <div class="d-flex flex-column">
+            <div><a href="{{ route('admin.addBookView')}}">добавить книгу</a></div>
+            <div><a href="{{ route('admin.addCategoryView') }}">добавить категорию</a></div>
+            <div><a href="{{ route('admin.orders')}}">заказы</a></div>
+            <div><a href="{{ route('admin.books')}}">все книги</a></div>
+        </div>
+    </div>
+    <div class="col-9">
+        @yield('orders')
+        @yield('bookAdd')
+        @yield('categoryAdd')
+        @yield('books')
+    </div>
+</div>
 
 @endsection

@@ -19,7 +19,8 @@
     </select>
     @foreach($commentaries as $commentary)
         <div class="d-flex flex-column">
-            <div><p>{{$commentary -> text}}</p>
+            <div><p>{{$commentary -> user -> name}}</p>
+                <p>{{$commentary -> text}}</p>
                 <p>оценка {{ $commentary->rating }}</p>
             <form action="{{route('comment.delete',$commentary->id)}}" method="post">
                 @csrf

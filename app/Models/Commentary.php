@@ -9,9 +9,14 @@ class Commentary extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['text','book_id','rating'];
+    protected $fillable = ['text','book_id','rating','user_id'];
 
     public function book(){
         return $this->belongsTo(Book::class);
+    }
+
+    public function user(){
+
+        return $this->belongsTo(User::class);
     }
 }

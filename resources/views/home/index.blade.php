@@ -1,25 +1,23 @@
 @extends('layouts.app')
 @section('content')
-    <h1>Личный данные</h1>
-    <p>имя: {{$user -> name}}</p>
-    <p>почта: {{$user -> email}}</p>
+    <div class="row mt-3">
+        <div class="col-3">
+            <div class="d-flex flex-column">
+                <div><a href="{{ route('home.bought')}}">Мои заказы</a></div>
+                <div><a href="{{ route('home.bookmark') }}">Избранные товары</a></div>
+                <div><a href="{{ route('home.info')}}">Личный данные</a></div>
+                <div><a href="{{ route('home.commentaries')}}">Мои отзывы</a></div>
+            </div>
+        </div>
+        <div class="col-9">
 
-    <h1>мои заказы</h1>
-    @foreach( $orders as $order )
+                @yield('myorders')
+                @yield('info')
+                @yield('bookmark')
+                @yield('commentaries')
 
-        @foreach($order -> order_items as $item)
-            {{$item -> book ->title}}
-        @endforeach
-        <p>{{ $order -> price }}</p>
-    @endforeach
-    <h1>Мои закладки</h1>
-    @foreach($bookmarks as $bookmark)
-        {{$bookmark -> book -> title}}
-        <form action="{{ route('bookmark.delete',['id' => $bookmark->id])}}" method="post">
-            @csrf
-            @method('delete')
-            <input type="submit" value="удалить">
-        </form>
-    @endforeach
+        </div>
+    </div>
+
 @endsection
 

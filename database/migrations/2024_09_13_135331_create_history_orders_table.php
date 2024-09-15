@@ -11,12 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('commentaries', function (Blueprint $table) {
+        Schema::create('history_orders', function (Blueprint $table) {
             $table->id();
-            $table->string('text',255);
-            $table->integer('rating');
-            $table->foreignId('book_id')->constrained();
-            $table->foreignId('user_id')->constrained();
+            $table->foreignId('order_id')->constrained('orders');
             $table->timestamps();
         });
     }
@@ -26,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('commentaries');
+        Schema::dropIfExists('history_orders');
     }
 };

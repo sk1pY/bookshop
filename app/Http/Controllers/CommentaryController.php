@@ -12,7 +12,7 @@ class CommentaryController extends Controller
 
     public function commentAdd(Request $request, $id)
     {
-        $comment = Commentary::create(['text' => request('text'), 'book_id' => $id, 'rating' => request('rating')]);
+        $comment = Commentary::create(['text' => request('text'), 'book_id' => $id, 'rating' => request('rating'),'user_id'=>Auth::id()]);
 
 
         $avgRating = Commentary::with('book')->avg('rating');
