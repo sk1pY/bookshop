@@ -22,4 +22,7 @@ class Order extends Model
     {
         return $this->hasMany(OrderItem::class);
     }
+
+    public function books(){
+        return $this->belongsTo(Book::class);    }
 }

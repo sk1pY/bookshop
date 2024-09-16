@@ -10,6 +10,7 @@ use App\Models\Category;
 use App\Models\Historyorder;
 use App\Models\Historyorders;
 use App\Models\Order;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -20,6 +21,10 @@ class AdminController extends Controller
     {
 
         return view('admin.index', );
+    } public function users()
+    {
+        $users = User::get();
+        return view('admin.users', compact('users'));
     }
 
     public function orders()
@@ -69,7 +74,7 @@ class AdminController extends Controller
         ]);
 
         $book->update(['title' => $validatedData['title']]);
-        return redirect()->route('admin.index');
+        return redirect()->route('admin.books');
 
     }
     public function addCategoryView()

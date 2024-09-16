@@ -1,11 +1,7 @@
 <?php
 
 namespace Database\Factories;
-
-use App\Models\Author;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Author>
@@ -20,7 +16,8 @@ class AuthorFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->name(),
+            'name' => fake('ru_RU')->firstName(),
+            'surname' => fake('ru_RU')->lastName(),
         ];
     }
 }

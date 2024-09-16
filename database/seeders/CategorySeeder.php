@@ -16,8 +16,15 @@ class CategorySeeder extends Seeder
      */
     public function run(): void
     {
-        Category::factory()
-            ->count(5)
-            ->create();
+        $arr = ['Бестселлеры', 'Нехудожественная литература', 'Художественная литература', 'Детские книги', 'Ужасы, мистика', 'Бизнес-литература', 'Учебная литература','Поэзия','Изучения иностранных языков'];
+//        Category::factory()
+//            ->count(5)
+//            ->create();
+        for ($i = 0; $i < count($arr); $i++) {
+            Category::create([
+                'name' => $arr[array_rand($arr)],
+            ]);
+        }
+
     }
 }

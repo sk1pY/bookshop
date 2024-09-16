@@ -40,7 +40,7 @@
                                               style="margin-right: 10px;">
                                             @csrf
                                             @method('delete')
-                                            <button class="btn btn-light"><i class="bi bi-dash-lg"></i>
+                                            <button class="btn btn-light">-
                                             </button>
                                         </form>
 
@@ -54,7 +54,7 @@
                                               style="margin-left: 10px;">
                                             @csrf
                                             <input type="text" hidden name="book_id" value="{{$basket->book->id}}">
-                                            <button class="btn btn-light"><i class="bi bi-plus-lg"></i>
+                                            <button class="btn btn-light">+
                                             </button>
                                         </form>
                                     </div>

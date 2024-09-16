@@ -16,9 +16,6 @@
             @endif
             <div class="row">
                 <div class="col-md-2">
-                    @auth()
-                        <h1 style="color: orange" >Привет {{Auth::user()->name}}</h1>
-                    @endauth
                     <h4>Категории</h4>
 
                     <ul class="list-unstyled">

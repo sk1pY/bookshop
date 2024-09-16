@@ -3,6 +3,8 @@
     <h1>Личный данные</h1>
     <div class="d-flex align-items-center gap-3">
         <p>Имя: {{ $user->name }}</p>
+        <p>Фамилия: {{ $user->surname }}</p>
+        <p>Адрес доставки: {{ $user->address }}</p>
         <p>Пол: {{ $user->gender !== null ? $user->gender : 'не указано' }}</p>
         <p>Дата рождения: {{ $user->birthday !== null ? $user->birthday->format('d-m-Y') : 'не указана' }}</p>
         <form action="{{ route('home.infoUpdate',['id' => $user->id ])}}" method="post">

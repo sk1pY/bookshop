@@ -6,8 +6,11 @@ use App\Models\Author;
 use App\Models\Basket;
 use App\Models\Basket_items;
 use App\Models\Book;
+use App\Models\Bookmark;
 use App\Models\Category;
 use App\Models\Commentary;
+use App\Models\Order;
+use App\Models\OrderItem;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Http\Request;
@@ -20,6 +23,8 @@ class BookController extends Controller
 {
     public function index(Request $request)
     {
+        $bookmarkTaskUser = Bookmark::where('user_id', Auth::id())->pluck('book_id')->toArray();
+
         $categories = Category::all();
         $query = Book::withCount(['commentaries']);
 
@@ -37,7 +42,7 @@ class BookController extends Controller
 
         }
         $books = $query->get();
-        return view('index', compact('books', 'categories',));
+        return view('index', compact('books', 'categories','bookmarkTaskUser'));
     }
 
     public function author($id)
@@ -48,12 +53,16 @@ class BookController extends Controller
 
     public function book($id)
     {
+        //id books которые юзер купил
+        $orders = Order::where('user_id', Auth::id())->where('status', 'Получен')->pluck('id');
+        $booksIds = OrderItem::whereIn('order_id', $orders)->pluck('book_id')->unique()->toarray();
+        //
+        $bought = in_array($id, $booksIds);
 
-        // если в маргрутах указать book и параметрах метода Book $book то это заменяет $book = Book::find($id);
         $book = Book::find($id);
         $commentaries = Commentary::where('book_id', $id)->orderBy('created_at', 'desc')->get();
 
-        return view('book', compact('book', 'commentaries'));
+        return view('book', compact('book', 'commentaries','bought'));
     }
 
     public function categoryBooks($id)

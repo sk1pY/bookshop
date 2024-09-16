@@ -29,7 +29,8 @@ class AppServiceProvider extends ServiceProvider
                 if(!$basket){
                     $bookInBasket = 0;
                 }else{
-                    $bookInBasket = BasketItem::where(['basket_id' => $basket->id])->count();
+                    $bookInBasket = BasketItem::where(['basket_id' => $basket->id])->pluck('quantity')->toArray();
+                    $bookInBasket = array_sum($bookInBasket);
                 }
 
                 $view->with('bookInBasket', $bookInBasket);

@@ -26,7 +26,7 @@ Route::delete('/basket/delete/{id}', [BasketItemController::class, 'delete'])->n
 //ЗАКАЗЫ
 Route::post('basket/orderAdd', [BasketItemController::class, 'orderAdd'])->name('basket.order');
 //ЗАКЛАДКИ
-Route::post('/bookmarkAdd/{id}',[BookmarkController::class,'bookmarkAdd'])->name('bookmark.add');
+Route::post('/bookmark/add',[BookmarkController::class,'bookmarkAdd'])->name('bookmark.add');
 Route::delete('/bookmarkDelete/{id}',[BookmarkController::class,'bookmarkDelete'])->name('bookmark.delete');
 
 //HOME PROFILE
@@ -46,8 +46,9 @@ Route::get('/home/order/{id}',[OrderController::class.'aboutOrder'])->name('home
 Route::get('/admin',[AdminController::class,'index'])->name('admin.index');
 Route::get('/admin/books',[AdminController::class,'books'])->name('admin.books');
 Route::get('/admin/orders',[AdminController::class,'orders'])->name('admin.orders');
+Route::get('/admin/users',[AdminController::class,'users'])->name('admin.users');
 Route::get('/admin/addBookView',[AdminController::class,'addBookView'])->name('admin.addBookView');
-Route::post('/admin/addBook',[AdminContrsoller::class,'addBook'])->name('admin.addBook');
+Route::post('/admin/addBook',[AdminController::class,'addBook'])->name('admin.addBook');
 Route::delete('/admin/deleteBook/{idBook}',[AdminController::class,'deleteBook'])->name('admin.deleteBook');
 Route::put('/admin/updateBook/{idBook}',[AdminController::class,'updateBook'])->name('admin.updateBook');
 Route::post('/admin/addCategory',[AdminController::class,'addCategory'])->name('admin.addCategory');
