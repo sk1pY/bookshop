@@ -16,9 +16,11 @@ return new class extends Migration
             $table->string('title',50);
             $table->string('description',1000);
             $table->float('price');
-            $table->foreignId('author_id')->constrained('authors');
-            $table->foreignId('category_id')->constrained('categories');
-            $table->foreignId('stock')->default(0);
+            $table->float('priceBeforeDiscount')->default(0);
+            $table->foreignId('author_id')->constrained('authors')->nullable();
+            $table->foreignId('category_id')->constrained('categories')->nullable();
+            $table->integer('stock')->default(0);
+            $table->integer('discount')->default(0);
             $table->decimal('avgRating',4,2)->default(0);
             $table->timestamps();
         });

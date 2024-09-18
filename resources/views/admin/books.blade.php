@@ -13,7 +13,7 @@
         @foreach( $books as $book )
             <tr>
                 <th scope="row">{{$book -> id}}</th>
-                <td>{{$book -> title}}</td>
+                <td><a href="{{ route('books.book',['id' => $book ->id] )}}">{{$book -> title}}</a></td>
                 <td>
                     <!-- Button trigger modal -->
                     <button type="button" class="btn btn-primary" data-bs-toggle="modal"
