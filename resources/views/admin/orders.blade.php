@@ -19,6 +19,7 @@
                         {{ $item->book->title }}<br>
                     @endforeach
                 </td>
+
                 <td>
                     <form action="{{ route('admin.addStatusOrder', ['id' => $order->id]) }}"
                           id="statusForm{{ $order -> id }}" method="POST">
@@ -28,11 +29,12 @@
                             <option value="новый заказ" {{ $order->status == 'новый заказ'? 'selected' :''}}>Не готов</option>
                             <option value="Готов к выдаче" {{ $order->status == 'Готов к выдаче'? 'selected' :''}}>Готов к выдаче</option>
                             <option value="Получен" {{ $order->status == 'Получен'? 'selected' :''}}>Получен</option>
+                            <option value="Отмена заказа" {{ $order->status == 'Отмена заказа'? 'selected' :''}}>Отмена Заказа</option>
                         </select>
                         <input type="submit" value="Обновить статус">
                     </form>
-
                 </td>
+
             </tr>
         @endforeach
         </tbody>

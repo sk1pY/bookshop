@@ -36,8 +36,8 @@ class BookController extends Controller
                 case 'expensive':
                     $query->orderBy('price', 'desc');
                     break;
-
-
+                case 'rating':
+                    $query->orderBy('avgRating', 'desc');
             }
 
         }
@@ -55,9 +55,9 @@ class BookController extends Controller
     {
         //id books которые юзер купил
         $orders = Order::where('user_id', Auth::id())->where('status', 'Получен')->pluck('id');
-        $booksIds = OrderItem::whereIn('order_id', $orders)->pluck('book_id')->unique()->toarray();
-        //
-        $bought = in_array($id, $booksIds);
+        $bought = Commentary::where(['book_id'=>$id,'user_id'=>Auth::user()->id])->exists();
+
+
 
         $book = Book::find($id);
         $commentaries = Commentary::where('book_id', $id)->orderBy('created_at', 'desc')->get();
@@ -68,9 +68,10 @@ class BookController extends Controller
     public function categoryBooks($id)
     {
         $categories = Category::all();
+        $bookmarkTaskUser = Bookmark::where('user_id', Auth::id())->pluck('book_id')->toArray();
 
         $books = Book::where('category_id', $id)->get();
-        return view('category', compact('books', 'categories'));
+        return view('index', compact('books', 'categories','bookmarkTaskUser'));
     }
 
 }

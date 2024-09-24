@@ -9,7 +9,12 @@ use Illuminate\Support\Facades\Auth;
 class CommentaryController extends Controller
 {
 
-
+    public function commentaries()
+    {
+        $user = Auth::user();
+        $commentaries = Commentary::where('user_id', Auth::id())->get();
+        return view('home.commentaries', compact('commentaries'));
+    }
     public function commentAdd(Request $request, $id)
     {
         $comment = Commentary::create(['text' => request('text'), 'book_id' => $id, 'rating' => request('rating'),'user_id'=>Auth::id()]);
@@ -26,8 +31,8 @@ class CommentaryController extends Controller
     }
     public function commentDelete($id)
     {
-        Commentary::where('id', $id)->delete();
-        return redirect()->route('books.book', $id);
+        Commentary::destroy($id);
+        return redirect()->route('home.commentaries');
 
     }
 }

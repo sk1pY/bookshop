@@ -11,8 +11,11 @@
     @endif
     <form action="{{ route('admin.addAuthor') }}" method="post">
         @csrf
-        Имя <input type="text" name="name">
-        Фамилия <input type="text" name="surname">
+        <div class="input-group mb-3">
+
+        <input  placeholder="Имя" class="form-control" type="text" name="name">
+            <input placeholder="Фамилия" class="form-control " type="text" name="surname">
+        </div>
         <input type="submit">
     </form>
     <table class="table">

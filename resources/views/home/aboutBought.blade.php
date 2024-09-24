@@ -1,5 +1,6 @@
 @extends('home.index')
-@section('myorders')
+@section('сontentAdditional')
+    <div class="col border rounded-5 bg-white ms-4 p-4">
     <h1>Заказ {{ $order->id }}</h1>
     <table class="table table-bordered">
         <thead>
@@ -7,7 +8,7 @@
             <th scope="col">Название книги</th>
             <th scope="col">Цена</th>
             @if($order->status == "Получен")
-            <th scope="col">Оценить товар</th>
+                <th scope="col">Оценить товар</th>
             @endif
         </tr>
         </thead>
@@ -18,11 +19,12 @@
                 <td>{{ $or->book -> title }}</td>
                 <td>{{ $or -> book -> price }}</td>
                 @if($order->status == "Получен")
-                <td>
+                    <td>
 
-                    <form action="{{ route('books.book',['id' => $or->book->id])}}">
-                        <input class="btn btn-primary" type="submit" value="Оценить">
-                    </form></td>
+                        <form action="{{ route('books.book',['id' => $or->book->id])}}">
+                            <input class="btn btn-primary" type="submit" value="Оценить">
+                        </form>
+                    </td>
                 @endif
             </tr>
         @endforeach
@@ -32,5 +34,5 @@
 
 
     <h1>сумма заказа: {{ $order -> price }} $</h1>
-
+    </div>
 @endsection

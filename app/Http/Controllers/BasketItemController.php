@@ -42,7 +42,7 @@ class BasketItemController extends Controller
         $basketUser->save();
 
 
-        return redirect()->route('basket.index');
+        return redirect()->route('books.index')->with('success', 'Книга успешно добавлена в корзину');
 
     }
 
@@ -69,22 +69,23 @@ class BasketItemController extends Controller
 
     public function orderAdd(Request $request)
     {
-
-        $VALIDARTOR = $request->validate([
+        $validated = $request->validate([
             'name' => 'string',
             'surname' => 'required|string',
             'address' => 'required|string',
             'phone' => 'required|string',
         ]);
+
         Auth::user()->update([
-            'name' => $VALIDARTOR['name'],
-            'surname' => $VALIDARTOR['surname'],
-            'address' => $VALIDARTOR['address'],
-            'phone' => $VALIDARTOR['phone'],
+            'name' => $validated['name'],
+            'surname' => $validated['surname'],
+            'address' => $validated['address'],
+            'phone' => $validated['phone'],
         ]);
         $OrderUser = Order::Create(['user_id' => Auth::id(), 'price' => Auth::user()->basket->price, 'status' => 'Новый заказ']);
         $basketJson = $request->input('basket');
         $baskets = json_decode($basketJson);
+
         //КОЛЛЕКЦИЯ КНИГ КОТОРЫЕ ЗАКАЗАЛ ЮЗЕР
         $bask = collect($baskets);
 
@@ -95,6 +96,13 @@ class BasketItemController extends Controller
                 'order_id' => $OrderUser->id,
             ]);
         }
+            $booksStockUpdate =  OrderItem::where(['order_id' => $OrderUser->id])->get();
+            $booksStockUpdate->each(function ($item) {
+                $book = Book::where(['id' => $item->book_id])->first();
+                $book->stock -= $item->quantity;
+                $book->save();
+            });
+
         BasketItem::where('basket_id', Auth::user()->basket->id)->delete();
         Auth::user()->basket->delete();
         return redirect()->route('basket.index');

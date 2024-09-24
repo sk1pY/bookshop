@@ -59,17 +59,7 @@ class HomeController extends Controller
 
     }
 
-    public function bookmark()
-    {
-        $user = Auth::user();
-        $bookmarks = Bookmark::where('user_id', Auth::id())->get();
-        return view('home.bookmark', compact('bookmarks'));
-    }
 
-    public function commentaries()
-    {
-        $user = Auth::user();
-        $commentaries = Commentary::where('user_id', Auth::id())->get();
-        return view('home.commentaries', compact('commentaries'));
-    }
+
+
 }

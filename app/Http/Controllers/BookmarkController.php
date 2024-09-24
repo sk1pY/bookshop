@@ -10,10 +10,12 @@ class BookmarkController extends Controller
 {
 
 
-//    public function bookmarkAdd($id){
-//        Bookmark::create(['user_id'=>Auth::id(),'book_id'=>$id]);
-//        return redirect()->route('books.index')->with('success', 'Книга добавлена в избранное');
-//    }
+    public function bookmark()
+    {
+        $user = Auth::user();
+        $bookmarks = Bookmark::where('user_id', Auth::id())->get();
+        return view('home.bookmark', compact('bookmarks'));
+    }
 
     public function bookmarkAdd(Request $request)
     {

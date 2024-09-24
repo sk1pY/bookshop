@@ -19,7 +19,8 @@ return new class extends Migration
             $table->float('priceBeforeDiscount')->default(0);
             $table->foreignId('author_id')->constrained('authors')->nullable();
             $table->foreignId('category_id')->constrained('categories')->nullable();
-            $table->integer('stock')->default(0);
+            $table->integer('numberOfPurchased')->default(0);
+            $table->integer('stock')->default(100);
             $table->integer('discount')->default(0);
             $table->decimal('avgRating',4,2)->default(0);
             $table->timestamps();

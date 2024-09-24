@@ -9,6 +9,7 @@
             </ul>
         </div>
     @endif
+
     <h1>Скидки на книги</h1>
     <p>Выберите определенного автора или книгу, или введи скидку для всех книг/авторов</p>
     <form action="{{ route('admin.discountAdd') }}" method="post" id="discount">
@@ -75,5 +76,4 @@
             <input class="btn btn-danger" type="submit" value="Удалить все скидки">
         </form>
     @endif
-
 @endsection
