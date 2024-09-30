@@ -1,5 +1,10 @@
 @extends('admin.index')
-@section('orders')
+@section('section')
+    @if ( session('successStatusUpdate') )
+        <div class="alert alert-success d-flex px-4">
+            <div>{{ session('successStatusUpdate') }}</div>
+        </div>
+    @endif
     <table class="table ">
         <thead>
         <tr>

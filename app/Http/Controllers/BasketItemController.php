@@ -35,6 +35,11 @@ class BasketItemController extends Controller
 
         if (!$bookInBasket) {
             $bookInBasket = BasketItem::create(['book_id' => request('book_id'), 'basket_id' => $basketUser->id]);
+            $bookInBasket->increment('quantity');
+            $basketUser->price += $bookInBasket->book->price;
+            $basketUser->save();
+            return redirect()->route('books.index')->with('success', 'Книга успешно добавлена в корзину');
+
         }
 
         $bookInBasket->increment('quantity');
@@ -42,7 +47,7 @@ class BasketItemController extends Controller
         $basketUser->save();
 
 
-        return redirect()->route('books.index')->with('success', 'Книга успешно добавлена в корзину');
+        return redirect()->route('basket.index');
 
     }
 
@@ -55,6 +60,7 @@ class BasketItemController extends Controller
             if (BasketItem::where('basket_id', $basketUser->id)->count() == 0) {
                 $basketUser->delete();
             }
+
             return redirect()->route('basket.index');
 
         }

@@ -1,5 +1,5 @@
 @extends('admin.index')
-@section('users')
+@section('section')
 
     <table class="table">
         <thead>

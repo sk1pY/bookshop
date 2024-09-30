@@ -38,23 +38,25 @@ class HomeController extends Controller
 
     public function infoUpdate(Request $request, $id)
     {
-     //   dd($request->all());
-        $validatedData = $request->validate([
-            'name' => 'string',
-            'birthday' => 'nullable|date',
-            'gender' => 'nullable|string',
-            'phone' => 'nullable|string',
-        ]);
-
-
-        $user = User::find($id);
-        $user->update([
-            'name' => $validatedData['name'],
-            'birthday' => $validatedData['birthday'],
-            'gender' => $validatedData['gender'],
-            'phone' => $validatedData['phone'],
-        ]);
         //dd($request->all());
+        $user = User::findOrFail($id);
+        $validatedData = $request->validate([
+            'name' => 'string|max:255|nullable',
+            'birthday' => 'date|nullable',
+            'gender' => 'string|max:255|nullable',
+            'phone' => 'string|nullable|max:15',
+            'address' => 'string|nullable|max:255',
+        ]);
+
+
+        foreach ($validatedData as $key => $value) {
+            if ($value !== null && $value !== '' && $value !== $user->$key) {
+                $user->$key = $value;
+            }
+        }
+
+        $user->save();
+
         return redirect()->route('home.info');
 
     }

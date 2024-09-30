@@ -1,6 +1,16 @@
 @extends('home.index')
 @section('сontentAdditional')
+
     <div class="col ms-4 mb-4 ">
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
         <div class="row ">
             <div class="col-3 border rounded-5 bg-white p-4">
 
@@ -21,35 +31,45 @@
                                         aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
-                                <form action="{{ route('home.infoUpdate',['id' => $user->id ])}}" method="post">
+                                <form action="{{ route('home.infoUpdate', ['id' => $user->id]) }}" method="post">
                                     @csrf
                                     @method('PATCH')
+
                                     <label for="name">Ваше имя</label>
-                                    <input class="form-control my-3" id="name" type="text" name="name">
+                                    <input class="form-control my-3" id="name" type="text" name="name" value="{{  $user->name }}">
+
+                                    <label for="address">Адрес доставки</label>
+                                    <input class="form-control my-3" id="address" type="text" name="address" value="{{  $user->address }}">
+
                                     <fieldset>
                                         <legend>Выберите ваш пол</legend>
                                         <div>
-                                            <input type="radio" id="huey" name="gender" value="M" checked/>
+                                            <input type="radio" id="choose"   name="gender" value=""  {{ $user->gender === null ? 'checked' : '' }} >
+                                            <label for="choose">Пол не выбран</label>
+                                        </div>
+                                        <div>
+                                            <input type="radio" id="huey" name="gender" value="M" {{ $user->gender == 'M' ? 'checked' : '' }} />
                                             <label for="huey">Мужской</label>
                                         </div>
 
                                         <div>
-                                            <input type="radio" id="dewey" name="gender" value="F"/>
+                                            <input type="radio" id="dewey" name="gender" value="F" {{ $user->gender == 'F' ? 'checked' : '' }} />
                                             <label for="dewey">Женский</label>
                                         </div>
-
                                     </fieldset>
-                                    <label for="date">День рождения</label>
-                                    <input class="form-control my-3" id="date" type="date" name="birthday">
-                                    <label for="phone">Телефон</label>
-                                    <input class="form-control" id="phone" type="text" name="phone">
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close
-                                        </button>
-                                        <button type="submit" class="btn btn-primary">Save changes</button>
-                                    </div>
 
+                                    <label for="date">День рождения</label>
+                                    <input class="form-control my-3" id="date" type="date" name="birthday" value="{{ $user->birthday }}">
+
+                                    <label for="phone">Телефон</label>
+                                    <input class="form-control" id="phone" type="text" name="phone" value="{{  $user->phone }}">
+
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                                        <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+                                    </div>
                                 </form>
+
                             </div>
 
                         </div>

@@ -17,8 +17,9 @@ return new class extends Migration
             $table->string('description',1000);
             $table->float('price');
             $table->float('priceBeforeDiscount')->default(0);
-            $table->foreignId('author_id')->constrained('authors')->nullable();
-            $table->foreignId('category_id')->constrained('categories')->nullable();
+            $table->string('image')->nullable();
+            $table->foreignId('author_id')->nullable()->constrained('authors');
+            $table->foreignId('category_id')->nullable()->constrained('categories');
             $table->integer('numberOfPurchased')->default(0);
             $table->integer('stock')->default(100);
             $table->integer('discount')->default(0);

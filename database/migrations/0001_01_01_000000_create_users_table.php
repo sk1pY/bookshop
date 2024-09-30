@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('name',100)->nullable();
             $table->string('surname',100)->nullable();
-            $table->char('gender',1)->nullable();
-            $table->date('birthday')->nullable(); // Поле для даты рождения
+            $table->char('gender',10)->nullable();
+            $table->date('birthday')->nullable();
             $table->string('email',255)->unique();
             $table->string('phone',255)->nullable();
             $table->string('address',20)->nullable();

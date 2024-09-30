@@ -3,16 +3,19 @@
     <div class="row mt-5">
         <div class="col-4">
             <img
-                src="https://s5-goods.ozstatic.by/480/119/253/101/101253119_0_CHetvertoe_krilo_Rebekka_Yarros.jpg"
+                style="width: 350px;height: 500px"
+                src="{{Storage::url($book->image)}}"
                 alt="Responsive image">
         </div>
         <div class="col-8 ">
             <div style="background-color: #daebe6; color: #10b37e" class="px-1 border rounded-4  d-inline-block">Купили {{ $book->numberOfPurchased }} раз</div>
 
             <h1> {{ $book -> title }}</h1>
+            @if($book->author_id)
             <a href="{{route('books.author',['id' => $book->author->id])}}">
                 <h5> {{ $book -> author -> name .' '. $book -> author -> surname  }}</h5></a>
             <p>
+                @endif
 
                 @php
                     $fullStars = floor($book->avgRating);

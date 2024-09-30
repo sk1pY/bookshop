@@ -1,5 +1,5 @@
 @extends('admin.index')
-@section('discount')
+@section('section')
     @if ($errors->any())
         <div class="alert alert-danger">
             <ul>

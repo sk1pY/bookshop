@@ -29,8 +29,19 @@
     }
 
     a:hover {
+        color:grey ;
+    }
+
+    .dropdown-item:hover {
+        background-color: transparent !important;
         color: grey;
     }
+
+    .dropdown-item:focus, .dropdown-item:active {
+        background-color: transparent !important;
+        color: inherit;
+    }
+
 
     .dropdown-center:hover .dropdown-menu {
         display: block;

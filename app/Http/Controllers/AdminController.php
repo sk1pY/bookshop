@@ -134,7 +134,7 @@ class AdminController extends Controller
     public
     function books()
     {
-        $books = Book::orderBy('created_at', 'desc')->get();
+        $books = Book::orderBy('created_at', 'desc')->paginate(5);
 
         return view('admin.books', compact('books'));
     }
@@ -148,34 +148,39 @@ class AdminController extends Controller
         return view('admin.bookAdd', compact('authors', 'categories'));
     }
 
-    public
-    function addBook(Request $request)
+    public function addBook(Request $request)
     {
+        // dd($request->all());
         $validatedData = $request->validate([
             'title' => 'string|required',
             'description' => 'string|required',
-            'author' => 'string|nullable',
-            'category' => 'string|nullable',
             'price' => 'numeric|required|min:0',
+            'file' => 'required|image|mimes:jpeg,png,jpg,gif,svg',
         ]);
-        $authorId = optional(Author::where('surname', $validatedData['author'])->first())->id;
-        $categoryId = optional(Category::where('name', $validatedData['category'])->first())->id;
+
+        if ($request->hasFile('file')) {
+            $path = $request->file('file')->store('booksImages');
+        }
+
+        $authorId = optional(Author::where('surname', $request->input('author'))->first())->id;
+        $categoryId = optional(Category::where('name', $request->input('category'))->first())->id;
         $book = Book::create([
             'title' => $validatedData['title'],
             'description' => $validatedData['description'],
             'price' => $validatedData['price'],
-            'author_id' => $authorId,
-            'category_id' => $categoryId
+            'author_id' => null,
+            'category_id' => $categoryId,
+            'image' => $path
         ]);
 
-        return redirect()->route('admin.index');
+        return redirect()->route('admin.addBookView')->with('successBookAdd', 'Книга добавлена');
     }
 
     public
     function deleteBook($id)
     {
         Book:: destroy($id);
-        return redirect()->route('admin.index');
+        return redirect()->route('admin.books');
 
     }
 
@@ -192,8 +197,7 @@ class AdminController extends Controller
 
     }
 
-    public
-    function addCategoryView()
+    public function addCategoryView()
     {
 
         return view('admin.categoryAdd');
@@ -206,7 +210,7 @@ class AdminController extends Controller
             'category_name' => 'required|alpha|max:30'
         ]);
         Category::create(['name' => $validatedData['category_name']]);
-        return redirect()->route('admin.index');
+        return redirect()->route('admin.addCategoryView')->with('successCategoryAdd', 'Категория добавлена');
     }
 
     public function addStatusOrder(Request $request, $id)
@@ -231,7 +235,7 @@ class AdminController extends Controller
             });
         }
 
-        return redirect()->route('books.index');
+        return redirect()->route('admin.orders')->with('successStatusUpdate', 'Статус заказа обновлен');
 
     }
 }
