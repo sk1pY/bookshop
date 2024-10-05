@@ -16,8 +16,6 @@
           integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
           crossorigin="anonymous" referrerpolicy="no-referrer"/>
 
-    <!--  Bootstrap Icons -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 
     <title>#BookShop</title>
 </head>
@@ -29,7 +27,7 @@
     }
 
     a:hover {
-        color:grey ;
+        color: grey;
     }
 
     .dropdown-item:hover {
@@ -55,13 +53,17 @@
 
 </style>
 <body>
-<div style="background-color: #f4f4f5;">
+
+<div class="sticky-top">
     @include('nav')
-    <div class="container my-4">
-        @yield('content')
-    </div>
-    @include('footer')
+    @include('navTwo')
 </div>
+<div class="container my-4">
+    @yield('content')
+</div>
+
+@include('footer')
+
 
 
 {{--SEARCH JS--}}

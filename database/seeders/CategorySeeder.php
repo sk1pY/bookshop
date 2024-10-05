@@ -22,7 +22,7 @@ class CategorySeeder extends Seeder
 //            ->create();
         for ($i = 0; $i < count($arr); $i++) {
             Category::create([
-                'name' => $arr[array_rand($arr)],
+                'name' => $arr[$i],
             ]);
         }
 

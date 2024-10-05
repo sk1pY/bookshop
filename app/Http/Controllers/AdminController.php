@@ -14,14 +14,16 @@ use App\Models\OrderItem;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
+use Illuminate\Support\Facades\Storage;
 
 class AdminController extends Controller
 {
     public function index()
     {
 
-        return view('admin.index',);
+        $countOrders = Order::whereIn('status', ['Новый заказ', 'Готов к выдаче'])->count();
+
+        return view('admin.index');
     }
 
     public function addAuthorsView()
@@ -88,7 +90,7 @@ class AdminController extends Controller
         } else {
             $authorPersonalDiscountBooks = Book::get();
         }
-        $discount = $validated['discount'];
+        $discount = $validatedData['discount'];
         $authorPersonalDiscountBooks->each(function ($item) use ($discount) {
             $item->priceBeforeDiscount = $item->price;
             $item->price = $item->price - round($item->price * $discount * 0.01, 2);
@@ -130,6 +132,11 @@ class AdminController extends Controller
 
         return view('admin.orders', compact('orders'));
     }
+    function orderHistory()
+    {
+        $orders = Order::whereIn('status',['Отменен','Получен'])->get();
+        return view('admin.orderHistory',compact('orders'));
+    }
 
     public
     function books()
@@ -155,12 +162,14 @@ class AdminController extends Controller
             'title' => 'string|required',
             'description' => 'string|required',
             'price' => 'numeric|required|min:0',
+            'stock' => 'numeric|required|min:0',
             'file' => 'required|image|mimes:jpeg,png,jpg,gif,svg',
         ]);
 
         if ($request->hasFile('file')) {
-            $path = $request->file('file')->store('booksImages');
-        }
+            $path = $request->file('file')->store('booksImages', 'public');
+            $fileName = basename($path);
+                  }
 
         $authorId = optional(Author::where('surname', $request->input('author'))->first())->id;
         $categoryId = optional(Category::where('name', $request->input('category'))->first())->id;
@@ -168,9 +177,10 @@ class AdminController extends Controller
             'title' => $validatedData['title'],
             'description' => $validatedData['description'],
             'price' => $validatedData['price'],
+            'stock' => $validatedData['stock'],
             'author_id' => null,
             'category_id' => $categoryId,
-            'image' => $path
+            'image' => $fileName
         ]);
 
         return redirect()->route('admin.addBookView')->with('successBookAdd', 'Книга добавлена');
@@ -230,7 +240,7 @@ class AdminController extends Controller
             $booksBoughtUpdate = OrderItem::where(['order_id' => $id])->get();
             $booksBoughtUpdate->each(function ($item) {
                 $book = Book::where(['id' => $item->book_id])->first();
-                $book->stock -= $item->quantity;
+                $book->stock += $item->quantity;
                 $book->save();
             });
         }

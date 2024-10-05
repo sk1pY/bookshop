@@ -5,7 +5,6 @@
         <tr class=" text-center ">
             <th scope="col">Книга</th>
             <th scope="col" >Цена</th>
-
             <th scope="col">Автор</th>
             <th scope="col">В наличии</th>
             <th scope="col">Изменить/Удалить</th>
@@ -13,9 +12,9 @@
         </thead>
 
         @foreach( $books as $book )
-            <tbody class=" text-center ">
+            <tbody class="  ">
             <tr>
-                <td style="width: 200px;"><img alt="logo" src="{{url($book->image) }}" style="width: 50px;">
+                <td style="width: 200px;"><img alt="logo" src="{{ Storage::url('booksImages/'.$book->image) }}  " style="width: 50px;">
                     <a href="{{ route('books.book',['id' => $book ->id] )}}">{{$book -> title}}</a>
                 </td>
                 <td class=" text-center ">
@@ -30,7 +29,7 @@
                         без автора
                     </td>
                 @endif
-            <td>
+            <td class="text-center">
                 {{$book->stock}}
             </td>
                 <td class=" text-center ">

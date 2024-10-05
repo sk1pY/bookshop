@@ -16,11 +16,13 @@
         </div>
     @endif
     <div class="row ">
-        <div class="col-3 border rounded-5 bg-white p-4 h-100" >
-            <div class="row fs-4 text">
+        <div class="col-3 border rounded-5 bg-white p-4 h-100">
+            <div class="row fs-5 text">
                 <div class="col-12">
                     <div class="d-flex justify-content-between align-items-center mb-2">
-                        <a href="{{ route('admin.orders') }}">Активные заказы</a>
+                        <a href="{{ route('admin.orders') }}">Активные заказы
+                            <span class="ms-2 badge rounded-pill text-bg-danger">{{ $countOrders }}</span>
+                        </a>
                         <i class="fa-solid fa-cart-shopping"></i>
                     </div>
                     <div class="d-flex justify-content-between align-items-center mb-2">
@@ -46,15 +48,15 @@
                     <div class="d-flex justify-content-between align-items-center mb-2">
                         <a href="{{ route('admin.discount') }}">Настройка скидок</a>
                         <i class="fa-solid fa-percent"></i>
-                    </div>
+                    </div><div class="d-flex justify-content-between align-items-center mb-2">
+                        <a href="{{ route('admin.orderHistory') }}">История заказов</a>
+                        <i class="fa-solid fa-clock-rotate-left"></i>                    </div>
                 </div>
             </div>
         </div>
 
-            <div class="col border rounded-5 bg-white ms-4 p-4">
-
+        <div class="col border rounded-5 bg-white ms-4 p-4">
             @yield('section')
-
         </div>
     </div>
 

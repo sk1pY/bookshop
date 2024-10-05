@@ -41,8 +41,10 @@ class BookController extends Controller
             }
 
         }
+
         $books = $query->get();
-        return view('index', compact('books', 'categories','bookmarkTaskUser'));
+
+        return view('index', compact('books', 'categories', 'bookmarkTaskUser'));
     }
 
     public function author($id)
@@ -55,14 +57,17 @@ class BookController extends Controller
     {
         //id books которые юзер купил
         $orders = Order::where('user_id', Auth::id())->where('status', 'Получен')->pluck('id');
-        $bought = Commentary::where(['book_id'=>$id,'user_id'=>Auth::user()->id])->exists();
+        $bought = null;
+        if (Auth::check()) {
+            $bought = Commentary::where(['book_id' => $id, 'user_id' => Auth::user()->id])->exists();
 
+        }
 
 
         $book = Book::find($id);
         $commentaries = Commentary::where('book_id', $id)->orderBy('created_at', 'desc')->get();
 
-        return view('book', compact('book', 'commentaries','bought'));
+        return view('book', compact('book', 'commentaries', 'bought'));
     }
 
     public function categoryBooks($id)
@@ -71,7 +76,7 @@ class BookController extends Controller
         $bookmarkTaskUser = Bookmark::where('user_id', Auth::id())->pluck('book_id')->toArray();
 
         $books = Book::where('category_id', $id)->get();
-        return view('index', compact('books', 'categories','bookmarkTaskUser'));
+        return view('index', compact('books', 'categories', 'bookmarkTaskUser'));
     }
 
 }

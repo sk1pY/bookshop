@@ -15,18 +15,19 @@
     <form action="{{ route('admin.discountAdd') }}" method="post" id="discount">
         @csrf
         <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label" >Скидка на книгу/книги %</label>
-            <input type="text" name="discount" class="form-control" id="exampleInputEmail1" placeholder="введите % скидки">
+            <label for="exampleInputEmail1" class="form-label">Скидка на книгу/книги %</label>
+            <input type="text" name="discount" class="form-control" id="exampleInputEmail1"
+                   placeholder="введите % скидки">
         </div>
         {{--    SKIDKA NA KNIGY VIBRAT--}}
-        <select  class="form-select" name="bookName" form="discount">
+        <select class="form-select" name="bookName" form="discount">
             <option value="" selected>Выбрать книгу/Все книги</option>
             @foreach($booksWithoutDiscount as $book)
                 <option value="{{$book->title}}">{{$book->title}}</option>
             @endforeach
         </select>
         {{--    SKIDKA NA KNIGI AUTHORS VIBRAT--}}
-        <select  class="form-select mt-3" name="authorPersonalDiscount" form="discount" id="authorPersonalDiscount">
+        <select class="form-select mt-3" name="authorPersonalDiscount" form="discount" id="authorPersonalDiscount">
             <option value="" selected>Выберите автора/Все авторы</option>
             @foreach($authors as $author)
                 <option value="{{$author->surname}}">{{$author->surname. ' ' .$author->name }}</option>
@@ -50,10 +51,14 @@
             <tr>
                 <th scope="row">{{$book -> id}}</th>
                 <td>{{$book -> title}}</td>
-                <td>{{$book -> author->surname . ' ' . $book -> author->name}}</td>
-                <td>
-                    {{$book -> discount.'%'}}
-                </td>
+                @if($book -> author)
+                <td>{{$book -> author -> surname . ' ' . $book -> author->name}}</td>
+                @else
+                    <td>Без автора</td>
+
+                @endif
+
+                <td>{{$book -> discount.'%'}}</td>
                 <td>
                     <form action="{{ route('admin.discountDelete',['id'=>$book->id])}}" method="post">
                         @csrf

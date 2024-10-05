@@ -8,23 +8,25 @@
     <table class="table ">
         <thead>
         <tr>
-            <th scope="col">id</th>
-            <th scope="col">User</th>
-            <th scope="col">Title</th>
+            <th scope="col">№</th>
+            <th scope="col">Клиент</th>
+            <th scope="col">Дата формирования заказа</th>
+            <th scope="col">#</th>
             <th scope="col">Status</th>
         </tr>
         </thead>
         <tbody>
         @foreach( $orders as $order )
             <tr>
-                <th scope="row">{{$order-> id}}</th>
+                <th scope="row">заказ №{{$order-> id}}</th>
                 <td>{{$order-> user -> name}}</td>
                 <td>
-                    @foreach($order->order_items as $item)
-                        {{ $item->book->title }}<br>
-                    @endforeach
-                </td>
 
+                        {{ $order->created_at->format('F j, Y, g:i a') }}
+                </td>
+            <td>
+                <a href ="{{ route('admin.order',['id'=>$order->id]) }}" class="btn btn-secondary">Подробнее</a>
+            </td>
                 <td>
                     <form action="{{ route('admin.addStatusOrder', ['id' => $order->id]) }}"
                           id="statusForm{{ $order -> id }}" method="POST">

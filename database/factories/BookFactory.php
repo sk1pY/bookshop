@@ -22,15 +22,17 @@ class BookFactory extends Factory
      */
     public function definition(): array
     {
-        $imageFiles = Storage::files('public/seedBooks');
+        $imageFiles = Storage::files('public/booksImages');
         $randomImage = $imageFiles[array_rand($imageFiles)];
-        $imageUrl = Storage::url($randomImage);
+
+        $fileName = basename($randomImage);
+
 
         return [
             'title' => fake()->sentence(1),
             'description' => fake()->text(1000),
             'price' => fake()->randomFloat(2, 5, 100),
-            'image' => $imageUrl,
+            'image' => $fileName,
 
             'author_id' => Author::inRandomOrder()->first()->id,
             'category_id' => Category::inRandomOrder()->first()->id

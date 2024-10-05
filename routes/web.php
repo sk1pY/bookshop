@@ -21,12 +21,12 @@ Route::get('/', [BookController::class, 'index'])->name('books.index');
 Route::get('/author/{id}', [BookController::class, 'author'])->name('books.author');
 Route::get('/book/{id}', [BookController::class, 'book'])->name('books.book');
 Route::get('/category/{id}', [BookController::class, 'categoryBooks'])->name('books.categoryBooks');
+
+//КОРЗИНА
+Route::post('basket/orderAdd', [BasketItemController::class, 'orderAdd'])->name('basket.order');
 Route::get('/basket', [BasketItemController::class, 'index'])->name('basket.index');
 Route::post('/basket/add/{id}', [BasketItemController::class, 'addToBasket'])->name('basket.add');
 Route::delete('/basket/delete/{id}', [BasketItemController::class, 'delete'])->name('basket.delete');
-
-//ЗАКАЗЫ
-Route::post('basket/orderAdd', [BasketItemController::class, 'orderAdd'])->name('basket.order');
 
 //ЗАКЛАДКИ
 Route::post('/bookmark/add',[BookmarkController::class,'bookmarkAdd'])->name('bookmark.add');
@@ -42,12 +42,14 @@ Route::patch('/profile/infoUpdate/{id}',[HomeController::class,'infoUpdate'])->n
 
 
 //ПодробнееОбЗаказе
-Route::get('/home/order/{id}',[OrderController::class.'aboutOrder'])->name('home.order');
+//Route::get('/home/order/{id}',[OrderController::class,'aboutOrderHome'])->name('home.order');
+Route::get('/admin/order/{id}',[OrderController::class,'aboutOrderAdmin'])->name('admin.order');
 
 //ADMIN
 Route::get('/admin',[AdminController::class,'index'])->name('admin.index');
 Route::get('/admin/books',[AdminController::class,'books'])->name('admin.books');
 Route::get('/admin/orders',[AdminController::class,'orders'])->name('admin.orders');
+Route::get('/admin/orderHistory',[AdminController::class,'orderHistory'])->name('admin.orderHistory');
 Route::get('/admin/users',[AdminController::class,'users'])->name('admin.users');
 Route::get('/admin/authors',[AdminController::class,'addAuthorsView'])->name('admin.addAuthorsView');
 Route::post('/admin/addAuthor',[AdminController::class,'addAuthor'])->name('admin.addAuthor');

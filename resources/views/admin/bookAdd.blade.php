@@ -49,6 +49,8 @@
                 <textarea class="form-control" id="description" type="text" name="description" >{{old('description')}}</textarea>
                 <label for="price" class="form-label">Цена</label>
                 <input class="form-control" id="price" type="text" name="price" value="{{old('price')}}">
+                <label for="stock" class="form-label">Количество</label>
+                <input class="form-control" id="stock" type="text" name="stock" value="{{old('stock')}}">
                 <input class="my-3 form-control" type="file" name="file" value="{{old('file')}}">
 
                 <input type="submit">

@@ -21,7 +21,7 @@ return new class extends Migration
             $table->foreignId('author_id')->nullable()->constrained('authors');
             $table->foreignId('category_id')->nullable()->constrained('categories');
             $table->integer('numberOfPurchased')->default(0);
-            $table->integer('stock')->default(100);
+            $table->unsignedInteger('stock')->default(3);
             $table->integer('discount')->default(0);
             $table->decimal('avgRating',4,2)->default(0);
             $table->timestamps();
