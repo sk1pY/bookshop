@@ -1,30 +1,61 @@
 @extends('layouts.app')
 @section('content')
-    <div class="row ">
-        <div class="col-2 border rounded-5 bg-white p-4 h-100   ">
-            <div class="d-flex flex-column">
+    <style>
+        .hov:hover {
+            background-color: white;
+        }
+    </style>
+    <div class="row p-4 ">
+        <div class="col-2   h-100  p-3 w-auto">
+            <div class=" w-auto">
 
-            <div class="d-flex align-items-center my-2">
-                <i style="font-size:1.7rem;width: 35px" class="fa-regular fa-user "></i>
-                <a style="font-size: 1.2rem" class="ms-2" href="{{ route('home.info')}}">Профиль</a>
-            </div>
-            <div class="d-flex align-items-center my-2">
-                <i style="font-size:1.7rem;width: 35px" class="fa-regular fa-credit-card "></i>
-                <a style="font-size: 1.2rem" class="  ms-2" href="{{ route('home.bought')}}">Заказы</a>
-            </div>
-            <div class="d-flex align-items-center my-2">
+                <a href="{{ route('home.info') }}" class="hov d-flex align-items-center  rounded-pill p-3"
+                   style="text-decoration: none;">
+                    <i style="font-size: 1.5rem; width: 35px;" class="fa-regular fa-user"></i>
+                    <span style="font-size: 1rem" class="ms-2">Профиль</span>
+                </a>
 
-                <i style="font-size:1.7rem;width: 35px" class="fa-regular fa-bookmark"></i>
-                <a style="font-size: 1.2rem" class="ms-2" href="{{ route('home.bookmark')}}">Избранное</a>
-            </div>
-            <div class="d-flex align-items-center my-2">
+                <a href="{{ route('home.bought')}}" class="hov d-flex align-items-center   rounded-pill p-3">
+                    <i style="font-size:1.5rem;width: 35px" class="fa-regular fa-credit-card "></i>
+                    <span style="font-size: 1rem" class="ms-2">Заказы</span>
+                </a>
+                <a href="{{ route('home.bookmark')}}" class="hov d-flex align-items-center  rounded-pill p-3">
 
-                <i style="font-size:1.7rem;width: 35px" class="fa-regular fa-comment"></i>
-                <a style="font-size: 1.2rem" class="ms-2" href="{{ route('home.commentaries')}}">Отзывы</a>
+                    <i style="font-size:1.5rem;width: 35px" class="fa-regular fa-bookmark"></i>
+                    <span style="font-size: 1rem" class="ms-2">Избранное</span>
+                </a>
+                <a href="{{ route('home.commentaries')}}" class="hov d-flex align-items-center rounded-pill p-3">
+
+                    <i style="font-size:1.5rem;width: 35px" class="fa-regular fa-comment"></i>
+                    <span style="font-size: 1rem" class="ms-2">Отзывы</span>
+                </a>
+                <hr>
+                <a href="#" class="hov d-flex align-items-center  rounded-pill p-3">
+
+                    <i style="font-size:1.5rem;width: 35px" class="fa-regular fa-newspaper"></i>
+                    <span style="font-size: 1rem" class="ms-2">Новости</span>
+                </a>
+                <a href="#" class="hov d-flex align-items-center rounded-pill p-3">
+
+                    <i style="font-size:1.5rem;width: 35px" class="fa-regular fa-circle-question"></i>
+                    <span style="font-size: 1rem" class="ms-2">Помощь</span>
+                </a>
+                <a href="#" class="hov d-flex align-items-center  rounded-pill p-3">
+
+                    <i style="font-size:1.5rem;width: 35px" class="fa-regular fa-building"></i>
+                    <span style="font-size: 1rem" class="ms-2">О компании</span>
+                </a>
+                <a href="#" class="hov d-flex align-items-center   rounded-pill p-3">
+
+                    <i style="font-size:1.5rem;width: 35px" class="fa-solid fa-briefcase"></i>
+                    <span style="font-size: 1rem" class="ms-2" href="#">Вакансии</span>
+                </a>
             </div>
         </div>
+        <div class="col p-3">
+            @yield('сontentAdditional')
+        </div>
     </div>
-    @yield('сontentAdditional')
-    </div>
+
 @endsection
 

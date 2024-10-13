@@ -25,7 +25,6 @@ class BookController extends Controller
     {
         $bookmarkTaskUser = Bookmark::where('user_id', Auth::id())->pluck('book_id')->toArray();
 
-        $categories = Category::all();
         $query = Book::withCount(['commentaries']);
 
         if ($request->filled('filter')) {
@@ -44,8 +43,9 @@ class BookController extends Controller
 
         $books = $query->get();
 
-        return view('index', compact('books', 'categories', 'bookmarkTaskUser'));
+        return view('index', compact('books', 'bookmarkTaskUser'));
     }
+
 
     public function author($id)
     {

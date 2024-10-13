@@ -1,6 +1,5 @@
 @extends('home.index')
 @section('сontentAdditional')
-    <div class="col border rounded-5 bg-white ms-4 p-4">
         <h1>Мои отзывы</h1>
 
 
@@ -53,5 +52,5 @@
             </tbody>
         </table>
 
-    </div>
+
 @endsection

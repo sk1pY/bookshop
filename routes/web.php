@@ -31,9 +31,9 @@ Route::delete('/basket/delete/{id}', [BasketItemController::class, 'delete'])->n
 //ЗАКЛАДКИ
 Route::post('/bookmark/add',[BookmarkController::class,'bookmarkAdd'])->name('bookmark.add');
 Route::delete('/bookmarkDelete/{id}',[BookmarkController::class,'bookmarkDelete'])->name('bookmark.delete');
-Route::get('/profile/bookmark',[BookmarkController::class,'bookmark'])->name('home.bookmark');
 
 //HOME PROFILE
+Route::get('/profile/bookmark',[BookmarkController::class,'bookmark'])->name('home.bookmark');
 Route::get('/profile',[HomeController::class,'index'])->name('home.index');
 Route::get('/profile/bought',[HomeController::class,'bought'])->name('home.bought');
 Route::get('/profile/bought/{order}',[HomeController::class,'aboutBought'])->name('home.aboutBought');

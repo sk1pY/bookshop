@@ -41,7 +41,7 @@ class BasketItemController extends Controller
             $basketItems->increment('quantity');
             $basketUser->price += $basketItems->book->price;
             $basketUser->save();
-            return redirect()->route('books.index');
+            return redirect()->route('books.index')->with('success','Успешно добавлена в корзину');
         }
         //если книга есть и  проеряет чтобы по стоку было меньше
         elseif ($bookInBasketItems->quantity < $stock) {

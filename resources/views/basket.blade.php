@@ -23,12 +23,12 @@
         @if($booksInBasket === null)
             <h1>Basket is empty</h1>
         @else
-            <div class="col-5 border rounded-5 bg-white ms-4 p-4">
+            <div class="col-6 border rounded-5 bg-white ms-4 p-4 table-responsive">
                 <h1 class="fw-normal">Корзина</h1>
-                <table class="table " style="width: 500px">
+                <table class="table table-bordered " style="width: 500px">
                     <thead>
                     <tr>
-                        <th scope="col">название книги</th>
+                        <th scope="col">Книга</th>
                         <th scope="col">количество</th>
                     </tr>
                     </thead>
@@ -36,7 +36,17 @@
 
                     @foreach( $booksInBasket as $basket)
                         <tr>
-                            <td>{{ $basket -> book -> title }}</td>
+                            <td>
+                                <div class="d-flex">
+                                    <img style="width: 80px" src="{{ Storage::url('booksImages/' . $basket->book -> image) }}" alt="">
+                                    <div class="d-flex align-items-center ms-3">
+                                        <a href="{{route('books.book',['id'=> $basket->book->id])}}">
+                                            {{ $basket->book->title }}
+                                        </a>
+                                    </div>
+
+                                </div>
+                            </td>
                             <td>
                                 <div class="row">
 

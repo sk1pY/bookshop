@@ -1,6 +1,5 @@
 @extends('home.index')
 @section('сontentAdditional')
-    <div class="col border rounded-5 bg-white ms-4 p-4">
     <h1>Мои закладки</h1>
     <div class="row g-4">
         @forelse($bookmarks as $bookmark)
@@ -50,5 +49,5 @@
             <p>Нет избранных книг</p>
         @endforelse
     </div>
-    </div>
+
 @endsection

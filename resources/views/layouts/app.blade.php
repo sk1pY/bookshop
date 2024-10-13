@@ -15,20 +15,27 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
           integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
           crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
 
 
     <title>#BookShop</title>
 </head>
-<style>
+<style  >
+    body {
+        font-family: 'Inter', sans-serif;
+
+    }
+
+    .drowdownnav:hover {
+        background-color: #f4f4f5;
+        text: black;
+    }
 
     a {
         color: black;
         text-decoration: none;
     }
 
-    a:hover {
-        color: grey;
-    }
 
     .dropdown-item:hover {
         background-color: transparent !important;
@@ -51,20 +58,27 @@
         top: 100px;
     }
 
+    body {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    html {
+        margin: 0;
+        padding: 0;
+    }
+
+
 </style>
-<body>
+<body style="width: 1200px;">
 
 <div class="sticky-top">
-    @include('nav')
-    @include('navTwo')
+    @include('header.nav')
 </div>
-<div class="container my-4">
+<div class="container">
     @yield('content')
 </div>
-
-@include('footer')
-
-
+    @include('footer.footer')
 
 {{--SEARCH JS--}}
 <script type="text/javascript">

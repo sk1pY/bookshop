@@ -15,7 +15,7 @@
             <div class="col-3 border rounded-5 bg-white p-4">
 
                 <div class="d-flex align-items-center">
-                    <p class=" fs-5  text mb-0">{{ $user->name. ' ' .$user->surname   }}</p>
+                    <p class=" fs-5  text mb-0">{{ $user->name  }}</p>
                     <i data-bs-target="#exampleModal" type="button" data-bs-toggle="modal"
                        class="fa-solid fa-pencil ms-3    ms-auto"></i>
                 </div>
@@ -89,8 +89,23 @@
                 <p class="mb-0 text-body-tertiary">{{ $user->address !== null ? $user->address : 'не указан' }}</p>
             </div>
 
-
         </div>
+{{--            <div class="mt-4 w-25 border rounded-5 p-4 d-flex flex-column">--}}
+
+{{--                <div class="d-flex align-items-center my-2 drowdownnav rounded-pill p-2">--}}
+{{--                    <i style="font-size:1.7rem;width: 35px" class="fa-regular fa-user "></i>--}}
+{{--                    <a style="font-size: 1rem" class="ms-2" href="">Сменить пароль</a>--}}
+{{--                </div>--}}
+{{--                <div class="d-flex align-items-center my-2 drowdownnav rounded-pill p-2">--}}
+{{--                    <i style="font-size:1.7rem;width: 35px" class="fa-regular fa-credit-card "></i>--}}
+{{--                    <a style="font-size: 1rem" class="  ms-2" href="">Выйти из аккаунта</a>--}}
+{{--                </div>--}}
+{{--                <div class="d-flex align-items-center my-2 drowdownnav rounded-pill p-2">--}}
+
+{{--                    <i style="font-size:1.7rem;width: 35px" class="fa-regular fa-bookmark"></i>--}}
+{{--                    <a style="font-size: 1rem" class="ms-2" href="">Удалить аккаунт</a>--}}
+{{--                </div>--}}
+{{--            </div>--}}
     </div>
 
 @endsection

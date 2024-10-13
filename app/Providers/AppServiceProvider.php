@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Models\Basket;
 use App\Models\BasketItem;
+use App\Models\Category;
 use App\Models\Order;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
@@ -52,10 +53,13 @@ class AppServiceProvider extends ServiceProvider
                 $view->with('countOrdersforUser', $countOrdersforUser);
             }
         });
-        View::composer('nav', function ($view) {
+        View::composer('header.nav', function ($view) {
             if (Auth::guard()->check()) {
                 $notifOrders = Order::where(['status' => 'Готов к выдаче', 'user_id' => Auth::user()->id])->pluck('id')->toArray();
-                $view->with('notifOrders', $notifOrders);
+                $categories = Category::all();
+
+                $view->with('notifOrders', $notifOrders)
+                    ->with('categories', $categories);
             }
         });
     }

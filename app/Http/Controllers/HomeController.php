@@ -17,9 +17,18 @@ class HomeController extends Controller
         return view('home.index');
     }
 
-    public function bought()
+    public function bought(Request $request)
     {
-        $orders = Order::where('user_id', Auth::id())->get();
+        $status = $request->query('status','all');
+
+        if($status == 'all'){
+            $orders = Order::orderBy('created_at','desc')->get();
+
+        }elseif($status == 'delivered'){
+            $orders = Order::where('status', 'Получен')->get();
+
+        }
+
         return view('home.bought', compact('orders'));
     }
 
@@ -29,6 +38,7 @@ class HomeController extends Controller
         $orderItems = OrderItem::where('order_id', $id)->get();
         return view('home.aboutBought', compact('order','orderItems'));
     }
+
 
     public function info()
     {

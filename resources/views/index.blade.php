@@ -17,12 +17,13 @@
         </div>
     @endif
     {{-----------------------------------------------}}
-    <div class="row my-4">
-        <div class="col-2 border rounded-5 bg-white p-4 h-100  ">
-            @include('category')
-        </div>
+    <div class="row my-2">
+{{--        <div class="col-2 border rounded-5 bg-white p-4 h-100  ">--}}
+{{--            @include('category')--}}
+{{--        </div>--}}
         <div class="col">
-            <div class=" border rounded-5 bg-white ms-4 p-4">
+
+            <div class="  bg-white ms-4 p-4">
                 {{--слайдшоу--}}
                 <div id="demo" class="carousel slide" data-bs-ride="carousel">
                     <div class="carousel-indicators">
@@ -80,10 +81,10 @@
                 </div>
                 {{--FILTER--}}
                 {{--BOOKS--}}
-                <div class="row row-cols-1 row-cols-md-4 g-4">
+                <div class="row row-cols-1 row-cols-md-5 g-5">
                     @forelse($books as $book)
                         <div class="col">
-                            <div class="card border-0">
+                            <div class="card border-0 " style="height: 459px;width: 214px">
                                 @auth
                                 {{-- BOOKMARK --}}
                                 <div style="cursor: pointer" class="d-flex justify-content-end bookmark-button m-3 fs-4"
@@ -108,13 +109,15 @@
                                                 <div class="fw-bold" style="font-size: 1.5rem">{{$book->price}} р.</div>
                                             @endif
                                         </div>
-                                        <h5 class="card-title pt-0 mb-0">{{ $book->title }}</h5>
+                                        <span class="card-title pt-0 mb-0">
+                                            {{ substr($book->title,0,18)}}
+                                        </span>
                                     </div>
                                 </a>
                                 <div class="card-body ">
-                                    <div>
+                                    <div style="font-size: 0.8rem">
                                         @if($book->author_id)
-                                            Автор: <a href="{{ route('books.author', ['id' => $book->author->id]) }}">
+                                            <a href="{{ route('books.author', ['id' => $book->author->id]) }}">
                                                 {{ $book->author->surname . ' ' . $book->author->name }}</a>
                                         @else
                                             <div>без автора</div>

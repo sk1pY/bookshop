@@ -1,10 +1,23 @@
 @extends('home.index')
 @section('сontentAdditional')
-    <div class="col border rounded-5 bg-white ms-4 p-4">
-    <h1>Мои заказы</h1>
+    <form action="{{ route('home.bought') }}" method="get">
+
+        <div class="d-flex mb-3">
+            <div class="ms-2 me-2" >
+                <button  class="btn btn-dark" value="all" name="status" >Все заказы</button>
+
+            </div>
+            <div class="ms-2 me-2">
+                <button class="btn btn-dark"  value="delivered" name="status">Готовые заказы</button>
+
+            </div>
+        </div>
+    </form>
+
+
     @foreach( $orders as $order )
         <a href="{{ route('home.aboutBought',['order' => $order->id]) }}">
-            <div class="border border-2 m-1 p-2">
+            <div class=" border rounded-4 bg-white p-4 mb-3">
                 Заказ: {{ $order->id }}
                 <p>цена: {{ $order -> price }}</p>
                 <p>Статус заказа: {{ $order -> status }}</p>
@@ -20,5 +33,5 @@
             </div>
         </a>
     @endforeach
-    </div>
+
 @endsection
