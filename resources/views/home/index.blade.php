@@ -35,7 +35,7 @@
                     <i style="font-size:1.5rem;width: 35px" class="fa-regular fa-newspaper"></i>
                     <span style="font-size: 1rem" class="ms-2">Новости</span>
                 </a>
-                <a href="#" class="hov d-flex align-items-center rounded-pill p-3">
+                <a href="#" class="hov d-flex align-items-center rounded-pill p-3 ">
 
                     <i style="font-size:1.5rem;width: 35px" class="fa-regular fa-circle-question"></i>
                     <span style="font-size: 1rem" class="ms-2">Помощь</span>

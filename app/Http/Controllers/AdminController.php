@@ -20,9 +20,7 @@ class AdminController extends Controller
 {
     public function index()
     {
-
         $countOrders = Order::whereIn('status', ['Новый заказ', 'Готов к выдаче'])->count();
-
         return view('admin.index');
     }
 
@@ -132,10 +130,11 @@ class AdminController extends Controller
 
         return view('admin.orders', compact('orders'));
     }
+
     function orderHistory()
     {
-        $orders = Order::whereIn('status',['Отменен','Получен'])->get();
-        return view('admin.orderHistory',compact('orders'));
+        $orders = Order::whereIn('status', ['Отменен', 'Получен'])->get();
+        return view('admin.orderHistory', compact('orders'));
     }
 
     public
@@ -157,7 +156,6 @@ class AdminController extends Controller
 
     public function addBook(Request $request)
     {
-        // dd($request->all());
         $validatedData = $request->validate([
             'title' => 'string|required',
             'description' => 'string|required',
@@ -169,7 +167,7 @@ class AdminController extends Controller
         if ($request->hasFile('file')) {
             $path = $request->file('file')->store('booksImages', 'public');
             $fileName = basename($path);
-                  }
+        }
 
         $authorId = optional(Author::where('surname', $request->input('author'))->first())->id;
         $categoryId = optional(Category::where('name', $request->input('category'))->first())->id;
@@ -230,18 +228,20 @@ class AdminController extends Controller
 
         if ($orderStatus->status == 'Получен') {
             $booksBoughtUpdate = OrderItem::where(['order_id' => $id])->get();
+
+            //ПРОХОДИТ ПО КНИГАМ КОТОРЫЕ БЫЛИ КУПЛЕНЫ И ПРИБАВЛЯЕМ КОЛ-ВО ПРОДАНЫХ
             $booksBoughtUpdate->each(function ($item) {
-                $book = Book::where(['id' => $item->book_id])->first();
-                $book->numberOfPurchased += $item->quantity;
-                $book->save();
+                $book = Book::where(['id' => $item->book_id])
+                    ->increment('numberOfPurchased',$item->quantity);
             });
         }
         if ($orderStatus->status == 'Отмена заказа') {
             $booksBoughtUpdate = OrderItem::where(['order_id' => $id])->get();
+
+            //ПРОХОДИТ ПО КНИГАМ КОТОРЫЕ БЫЛИ ОТМЕНЕНЫ И ПРИБАВЛЯЕМ К СТОКУ
             $booksBoughtUpdate->each(function ($item) {
-                $book = Book::where(['id' => $item->book_id])->first();
-                $book->stock += $item->quantity;
-                $book->save();
+                $book = Book::where(['id' => $item->book_id])
+                    ->increment('stock',$item->quantity);
             });
         }
 

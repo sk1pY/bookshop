@@ -56,11 +56,13 @@ class AppServiceProvider extends ServiceProvider
         View::composer('header.nav', function ($view) {
             if (Auth::guard()->check()) {
                 $notifOrders = Order::where(['status' => 'Готов к выдаче', 'user_id' => Auth::user()->id])->pluck('id')->toArray();
-                $categories = Category::all();
 
-                $view->with('notifOrders', $notifOrders)
-                    ->with('categories', $categories);
+                $view->with('notifOrders', $notifOrders);
             }
+            $categories = Category::all();
+
+            $view ->with('categories', $categories);
+
         });
     }
 }

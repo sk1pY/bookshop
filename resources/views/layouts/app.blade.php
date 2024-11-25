@@ -23,7 +23,9 @@
 <style  >
     body {
         font-family: 'Inter', sans-serif;
-
+        font-weight: 400;
+        font-size: 14px;
+        width: 100%;margin: 0;padding: 0;
     }
 
     .drowdownnav:hover {

@@ -84,7 +84,7 @@
                 <div class="row row-cols-1 row-cols-md-5 g-5">
                     @forelse($books as $book)
                         <div class="col">
-                            <div class="card border-0 " style="height: 459px;width: 214px">
+                                <div class="card border-0 " style="height: 459px;width: 214px">
                                 @auth
                                 {{-- BOOKMARK --}}
                                 <div style="cursor: pointer" class="d-flex justify-content-end bookmark-button m-3 fs-4"

@@ -2,6 +2,8 @@
     .atext:hover{
         color:red;
     }
+
+
 </style>
 
 
@@ -53,7 +55,7 @@
                             <button class="btn  dropdown-toggle" type="button" data-bs-toggle="dropdown"
                                     aria-expanded="false">
 
-                                <i class="fa-regular fa-bell">
+                                <i class="fa-regular fa-bell fs-6">
                                     <span class=" badge rounded-pill text-bg-danger">
                                         {{ $countOrdersforUser }}
                                     </span>
@@ -72,46 +74,48 @@
                     <li class="nav-item ">
                         {{--                        DROPDOWN MENU--}}
                         <div class="dropdown-center">
-                            <button class="nav-link d-flex flex-column align-items-center btn  " type="button"
+                            <button class="nav-link d-flex flex-column align-items-center btn" type="button"
                                     data-bs-toggle="dropdown"
                                     aria-expanded="false">
 
-                                <i class="fa-solid fa-user"></i>{{Auth::user()->name}}
+                                <i class="fa-solid fa-user fs-4"></i>{{Auth::user()->name}}
                             </button>
                             <ul class="dropdown-menu  p-2 w-auto">
                                 <li class="d-flex align-items-center p-2 drowdownnav rounded-pill">
-                                    <i class="fa-solid fa-user me-2" style="font-size:1.4rem;width: 35px"></i>
-                                    <a style="font-size: 0.8rem" class="dropdown-item p-0 ms-2"
+                                    <i class="fa-solid fa-user me-2"
+                                       style="font-size:1.4rem;width: 35px"></i>
+                                    <a style="font-size: 0.8rem" class="dropdown-item p-0 ms-auto"
                                        href="{{ route('home.info') }}">Мои данные</a>
                                 </li>
                                 <li class="d-flex align-items-center p-2 drowdownnav rounded-pill ">
                                     <i class="fa-solid fa-screwdriver-wrench me-2"
                                        style="font-size:1.4rem;width: 35px"></i>
-                                    <a style="font-size: 0.8rem" class="dropdown-item p-0 ms-2"
+                                    <a style="font-size: 0.8rem" class="dropdown-item p-0 ms-auto "
                                        href="{{ route('admin.index') }}">Админ панель</a>
                                 </li>
 
                                 <li class="d-flex align-items-center p-2 drowdownnav rounded-pill">
-                                    <i class="fa-solid fa-cart-shopping me-2"                                        style="font-size:1.4rem;width: 35px"></i>
-
-                                    <a style="font-size: 0.8rem" class="dropdown-item p-0 ms-2"
+                                    <i class="fa-solid fa-cart-shopping me-2"                                                 style="font-size:1.4rem;width: 35px"></i>
+                                    <a style="font-size: 0.8rem;" class="dropdown-item p-0 ms-auto"
                                        href="{{ route('home.bought') }}">Мои заказы</a>
                                 </li>
                                 <li class="p-2 d-flex align-items-center drowdownnav rounded-pill">
-                                    <i class="fa-regular fa-bookmark me-2" style="font-size:1.4rem;width: 35px"></i>
-                                    <a style="font-size: 0.8rem" class="dropdown-item p-0 ms-2"
+                                    <i class="fa-regular fa-bookmark me-2"
+                                       style="font-size:1.4rem;width: 35px"></i>
+                                    <a style="font-size: 0.8rem" class="dropdown-item p-0 ms-auto"
                                        href="{{ route('home.bookmark') }}">Избранные
                                         товары</a>
                                 </li>
                                 <li class="p-2 d-flex align-items-center  drowdownnav rounded-pill">
-                                    <i class="fa-regular fa-comment me-2" style="font-size:1.4rem;width: 35px"></i>
-                                    <a style="font-size: 0.8rem" class="dropdown-item p-0 ms-2"
+                                    <i class="fa-regular fa-comment me-2"
+                                       style="font-size:1.4rem;width: 35px"></i>
+                                    <a style="font-size: 0.8rem" class="dropdown-item p-0 ms-auto"
                                        href="{{ route('home.commentaries') }}">Мои отзывы</a>
                                 </li>
                                 <li class="p-2 d-flex align-items-center drowdownnav rounded-pill">
                                     <i class="fa-solid fa-right-from-bracket me-2"
                                        style="font-size:1.4rem;width: 35px"></i>
-                                    <button style="font-size: 0.8rem" class="dropdown-item p-0 ms-2"
+                                    <button style="font-size: 0.8rem" class="dropdown-item p-0 ms-auto"
                                             onclick="document.getElementById('logout-form').submit();">Выйти
                                     </button>
                                 </li>
@@ -123,24 +127,24 @@
                         @csrf
                     </form>
 
-                    <li class="nav-item" style="font-size: 1rem;">
-                        <a class="nav-link d-flex flex-column align-items-center"
-                           href="{{ route('home.bought') }}">
-                            <i class="fa-solid fa-bag-shopping"></i>
-                            <span>Заказы</span>
-                        </a>
-                    </li>
+                        <li class="nav-item" >
+                            <a class="nav-link d-flex flex-column align-items-center"
+                               href="{{ route('home.bought') }}">
+                                <i class="fa-solid fa-bag-shopping fs-4" ></i>
+                                <span>Заказы</span>
+                            </a>
+                        </li>
                     <li class="nav-item">
                         <a class="nav-link d-flex flex-column align-items-center"
                            href="{{ route('home.bookmark') }}">
-                            <i class="fa-regular fa-heart"></i>
+                            <i class="fa-regular fa-heart fs-4"></i>
                             <span>Избранное</span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link d-flex flex-column align-items-center"
                            href="{{ route('basket.index') }}">
-                            <i class="fa-solid fa-basket-shopping"></i>
+                            <i class="fa-solid fa-basket-shopping fs-4"></i>
                             <span>Корзина: {{ $bookInBasket }}</span>
                         </a>
                     </li>

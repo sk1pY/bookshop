@@ -20,7 +20,7 @@ class BookmarkController extends Controller
     public function bookmarkAdd(Request $request)
     {
         $taskId = $request->input('bookmark_id');
-        $bookmark = Bookmark::where(['user_id' => Auth::id(),'book_id' => $taskId])->first();
+        $bookmark = Bookmark::with('book.author')->where(['user_id' => Auth::id(),'book_id' => $taskId])->first();
         if($bookmark){
             $bookmark->delete();
             return response()->json(['success' => true, 'bookmark' => false]);
