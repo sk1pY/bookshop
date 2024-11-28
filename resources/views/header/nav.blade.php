@@ -1,12 +1,3 @@
-<style>
-    .atext:hover{
-        color:red;
-    }
-
-
-</style>
-
-
 <nav style="background-color: white" class="navbar navbar-expand-lg  ">
     <div class="container">
         <a style="font-size: 2rem; color:red" class="fw-bold navbar-brand" href="{{ route('books.index') }}">#BookShop

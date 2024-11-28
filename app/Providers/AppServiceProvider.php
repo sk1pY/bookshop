@@ -7,6 +7,7 @@ use App\Models\BasketItem;
 use App\Models\Category;
 use App\Models\Order;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
@@ -25,6 +26,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Route::pattern('id','[0-9]+');
+        Route::pattern('','[0-9]+');
+
         View::composer('*', function ($view) {
             if (Auth::guard()->check()) {
                 $basket = Basket::where(['user_id' => Auth::id()])->first();

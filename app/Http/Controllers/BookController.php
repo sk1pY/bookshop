@@ -57,12 +57,10 @@ class BookController extends Controller
     {
         //id books которые юзер купил
         $orders = Order::where('user_id', Auth::id())->where('status', 'Получен')->pluck('id');
-        $bought = null;
-        if (Auth::check()) {
-            $bought = Commentary::where(['book_id' => $id, 'user_id' => Auth::user()->id])->exists();
+        $book_id = OrderItem::whereIn('order_id', $orders)->pluck('book_id')->toArray();
 
-        }
 
+        in_array($id,$book_id) ? $bought= true : $bought = false;
 
         $book = Book::find($id);
         $commentaries = Commentary::where('book_id', $id)->orderBy('created_at', 'desc')->get();
@@ -73,10 +71,12 @@ class BookController extends Controller
     public function categoryBooks($id)
     {
         $categories = Category::all();
+        $category = Category::find($id);
         $bookmarkTaskUser = Bookmark::where('user_id', Auth::id())->pluck('book_id')->toArray();
 
         $books = Book::where('category_id', $id)->get();
-        return view('index', compact('books', 'categories', 'bookmarkTaskUser'));
+
+        return view('categoryBooks', compact( 'books', 'category', 'bookmarkTaskUser'));
     }
 
 }

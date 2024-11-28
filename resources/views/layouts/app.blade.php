@@ -12,6 +12,8 @@
             integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
             crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="{{ asset('js/bookmark.js') }}"></script>
+    <script src="{{ asset('js/search.js') }}"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
           integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
           crossorigin="anonymous" referrerpolicy="no-referrer"/>
@@ -69,7 +71,12 @@
         margin: 0;
         padding: 0;
     }
-
+    .bg-red-bookmark {
+        color: #ff0000;
+    }
+    .atext:hover{
+        color:red;
+    }
 
 </style>
 <body style="width: 1200px;">
@@ -84,31 +91,7 @@
 
 {{--SEARCH JS--}}
 <script type="text/javascript">
-    $(document).ready(function () {
-        $('#search').on('keyup', function () {
-            var value = $(this).val();
-            $.ajax({
-                type: 'get',
-                url: '{{ route('live.search') }}',
-                data: {'search': value},
-                success: function (data) {
-                    $('.search-result').html(data).show();
-                }
-            });
-        });
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-        $(document).click(function (event) {
-            let target = $(event.target);
-            if (!target.closest('#search').length && !target.closest('.search-result').length) {
-                $('.search-result').hide();
-            }
-        });
 
-    });
 </script>
 </body>
 </html>

@@ -6,7 +6,7 @@
             <div class="col-12 col-md-3">
                 <div class="card h-100">
                     <div class="mt-3 d-flex justify-content-center align-items-center image-container">
-                        <img src="https://s5-goods.ozstatic.by/480/119/253/101/101253119_0_CHetvertoe_krilo_Rebekka_Yarros.jpg"
+                        <img src="{{Storage:: url('booksImages/'.$bookmark->book->image) }}"
                              alt="Responsive image" class="img-fluid" style="height: 170px;">
                     </div>
                     <div class="card-body ">
@@ -30,6 +30,16 @@
                                         <button style="width: 200px; background-color: red; color: white"
                                                 class="rounded-pill btn d-flex justify-content-center align-items-center">
                                             В корзину
+                                        </button>
+                                    </form>
+                                </div>
+                                <div class="d-flex justify-content-center align-items-center mt-2">
+                                    <form action="{{ route('bookmark.delete', ['id' => $bookmark->id]) }}" method="post">
+                                        @csrf
+                                        @method('delete')
+                                        <button style="width: 200px; background-color: red; color: white"
+                                                class="rounded-pill btn d-flex justify-content-center align-items-center">
+                                            Удалить закладку
                                         </button>
                                     </form>
                                 </div>

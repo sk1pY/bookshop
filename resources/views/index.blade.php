@@ -1,10 +1,5 @@
 @extends('layouts.app')
 @section('content')
-    <style>
-        .bg-red-bookmark {
-            color: #ff0000;
-        }
-    </style>
     @if (session('success'))
         <div class="alert alert-success d-flex px-4">
             <div>{{ session('success') }}</div>
@@ -16,11 +11,7 @@
             {{ session('error') }}
         </div>
     @endif
-    {{-----------------------------------------------}}
     <div class="row my-2">
-{{--        <div class="col-2 border rounded-5 bg-white p-4 h-100  ">--}}
-{{--            @include('category')--}}
-{{--        </div>--}}
         <div class="col">
 
             <div class="  bg-white ms-4 p-4">
@@ -35,21 +26,21 @@
                         <div class="carousel-item active">
                             <a href="#" class=" ">
                                 <img
-                                    src="{{Storage::url('booksImages/1.jpg')}}"
+                                    src="{{asset('imageSlide/1.jpg')}}"
                                     alt="#" class="d-block" style="width:100%; height:340px">
                             </a>
                         </div>
                         <div class="carousel-item">
                             <a href="#">
                                 <img
-                                    src="{{Storage::url('booksImages/2.jpg')}}"
+                                    src="{{asset('imageSlide/2.jpg')}}"
                                     alt="Chicago" class="d-block" style="width:100%; height:340px">
                             </a>
                         </div>
                         <div class="carousel-item">
                             <a href="#">
                                 <img
-                                    src="{{Storage::url('booksImages/3.jpg')}}"
+                                    src="{{asset('imageSlide/3.jpg')}}"
                                     alt="New York" class="d-block" style="width:100%; height:340px">
                             </a>
                         </div>
@@ -154,35 +145,4 @@
                 {{--BOOKS--}}
             </div>
         </div>
-        <script>
-            $(document).ready(function () {
-                $('.bookmark-button').on('click', function () {
-                    var taskId = $(this).data('bookmark-id');
-                    var bookmarkButton = $(this).find('.fa-heart');
-
-                    $.ajax({
-                        url: '/bookmark/add',
-                        method: 'POST',
-                        data: {
-                            bookmark_id: taskId
-                        },
-                        success: function (response) {
-                            if (response.success) {
-                                if (response.bookmark) {
-                                    bookmarkButton.addClass('fa-solid bg-red-bookmark');
-                                } else {
-                                    bookmarkButton.removeClass('fa-solid ');
-                                }
-                            } else {
-                                $('#message').text(response.message).css('color', 'red');
-                            }
-                        },
-                        error: function (xhr, status, error) {
-                            console.error('Произошла ошибка при добавлении/удалении закладки');
-                        }
-                    });
-                });
-            });
-
-        </script>
 @endsection
