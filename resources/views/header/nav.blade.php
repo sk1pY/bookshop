@@ -10,7 +10,7 @@
             <ul class="dropdown-menu p-2 w-auto" >
                 @foreach($categories as $category)
                     <li style="font-size: 1rem" class=" text">
-                        <a class="atext dropdown-item" href="{{route('books.categoryBooks',['id' => $category->id])}}">{{ $category->name }}</a>
+                        <a class="atext dropdown-item" href="{{route('categories.public.show',['category' => $category->id])}}">{{ $category->name }}</a>
                     </li>
                 @endforeach
             </ul>
@@ -76,7 +76,7 @@
                                     <i class="fa-solid fa-user me-2"
                                        style="font-size:1.4rem;width: 35px"></i>
                                     <a style="font-size: 0.8rem" class="dropdown-item p-0 ms-auto"
-                                       href="{{ route('home.info') }}">Мои данные</a>
+                                       href="{{ route('home.info.index') }}">Мои данные</a>
                                 </li>
                                 <li class="d-flex align-items-center p-2 drowdownnav rounded-pill ">
                                     <i class="fa-solid fa-screwdriver-wrench me-2"
@@ -88,20 +88,20 @@
                                 <li class="d-flex align-items-center p-2 drowdownnav rounded-pill">
                                     <i class="fa-solid fa-cart-shopping me-2"                                                 style="font-size:1.4rem;width: 35px"></i>
                                     <a style="font-size: 0.8rem;" class="dropdown-item p-0 ms-auto"
-                                       href="{{ route('home.bought') }}">Мои заказы</a>
+                                       href="{{ route('home.orders.index') }}">Мои заказы</a>
                                 </li>
                                 <li class="p-2 d-flex align-items-center drowdownnav rounded-pill">
                                     <i class="fa-regular fa-bookmark me-2"
                                        style="font-size:1.4rem;width: 35px"></i>
                                     <a style="font-size: 0.8rem" class="dropdown-item p-0 ms-auto"
-                                       href="{{ route('home.bookmark') }}">Избранные
+                                       href="{{ route('home.bookmarks.index') }}">Избранные
                                         товары</a>
                                 </li>
                                 <li class="p-2 d-flex align-items-center  drowdownnav rounded-pill">
                                     <i class="fa-regular fa-comment me-2"
                                        style="font-size:1.4rem;width: 35px"></i>
                                     <a style="font-size: 0.8rem" class="dropdown-item p-0 ms-auto"
-                                       href="{{ route('home.commentaries') }}">Мои отзывы</a>
+                                       href="{{ route('home.commentaries.index') }}">Мои отзывы</a>
                                 </li>
                                 <li class="p-2 d-flex align-items-center drowdownnav rounded-pill">
                                     <i class="fa-solid fa-right-from-bracket me-2"
@@ -120,14 +120,14 @@
 
                         <li class="nav-item" >
                             <a class="nav-link d-flex flex-column align-items-center"
-                               href="{{ route('home.bought') }}">
+                               href="{{ route('home.orders.index') }}">
                                 <i class="fa-solid fa-bag-shopping fs-4" ></i>
                                 <span>Заказы</span>
                             </a>
                         </li>
                     <li class="nav-item">
                         <a class="nav-link d-flex flex-column align-items-center"
-                           href="{{ route('home.bookmark') }}">
+                           href="{{ route('home.bookmarks.index') }}">
                             <i class="fa-regular fa-heart fs-4"></i>
                             <span>Избранное</span>
                         </a>

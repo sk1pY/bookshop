@@ -32,7 +32,7 @@ class CommentaryController extends Controller
     public function commentDelete($id)
     {
         Commentary::destroy($id);
-        return redirect()->route('home.commentaries');
+        return redirect()->route('home.commentaries.index');
 
     }
 }

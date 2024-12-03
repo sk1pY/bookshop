@@ -18,8 +18,8 @@ return new class extends Migration
             $table->float('price');
             $table->float('priceBeforeDiscount')->default(0);
             $table->string('image')->nullable();
-            $table->foreignId('author_id')->nullable()->constrained('authors');
-            $table->foreignId('category_id')->nullable()->constrained('categories');
+            $table->foreignId('author_id')->nullable()->constrained('authors')->cascadeOnDelete();
+            $table->foreignId('category_id')->nullable()->constrained('categories')->cascadeOnDelete();
             $table->integer('numberOfPurchased')->default(0);
             $table->unsignedInteger('stock')->default(3);
             $table->integer('discount')->default(0);

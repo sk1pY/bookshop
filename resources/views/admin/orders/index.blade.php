@@ -1,5 +1,5 @@
-@extends('admin.index')
-@section('section')
+@extends('admin.layouts.index')
+@section('content')
     @if ( session('successStatusUpdate') )
         <div class="alert alert-success d-flex px-4">
             <div>{{ session('successStatusUpdate') }}</div>
@@ -25,10 +25,10 @@
                         {{ $order->created_at->format('F j, Y, g:i a') }}
                 </td>
             <td>
-                <a href ="{{ route('admin.order',['id'=>$order->id]) }}" class="btn btn-secondary">Подробнее</a>
+                <a href ="{{ route('admin.orders.show',['id'=>$order->id]) }}" class="btn btn-secondary">Подробнее</a>
             </td>
                 <td>
-                    <form action="{{ route('admin.addStatusOrder', ['id' => $order->id]) }}"
+                    <form action="{{ route('admin.orders.status.update', ['id' => $order->id]) }}"
                           id="statusForm{{ $order -> id }}" method="POST">
                         @csrf
                         @method('PATCH')

@@ -1,7 +1,7 @@
-@extends('admin.index')
-@section('section')
+@extends('admin.layouts.index')
+@section('content')
 
-    <table class="table ">
+    <table class="table table-sm table-bordered table-striped">
         <thead>
         <tr>
             <th scope="col">№</th>
@@ -19,7 +19,7 @@
                     {{ $order->updated_at->format('F j, Y, g:i a') }}
                 </td>
                 <td>
-                    <a href="{{ route('admin.order',['id'=>$order->id]) }}" class="btn btn-secondary">Подробнее</a>
+                    <a href="{{ route('admin.orders.show',['id'=>$order->id]) }}" class="btn btn-secondary">Подробнее</a>
                 </td>
 
 

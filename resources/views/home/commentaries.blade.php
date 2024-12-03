@@ -38,7 +38,7 @@
 
                     <td>{{$commentary -> text}}</td>
                     <td>
-                        <form action="{{ route('comment.delete',['id'=>$commentary->id])}}" method="post"
+                        <form action="{{ route('comment.destroy',['id'=>$commentary->id])}}" method="post"
                               id>
                             @csrf
                             @method('delete')

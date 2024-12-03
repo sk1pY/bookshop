@@ -47,11 +47,6 @@ class BookController extends Controller
     }
 
 
-    public function author($id)
-    {
-        $booksOfAuthor = Book::where('author_id', $id)->get();
-        return view('author', compact('booksOfAuthor'));
-    }
 
     public function book($id)
     {
@@ -68,15 +63,6 @@ class BookController extends Controller
         return view('book', compact('book', 'commentaries', 'bought'));
     }
 
-    public function categoryBooks($id)
-    {
-        $categories = Category::all();
-        $category = Category::find($id);
-        $bookmarkTaskUser = Bookmark::where('user_id', Auth::id())->pluck('book_id')->toArray();
 
-        $books = Book::where('category_id', $id)->get();
-
-        return view('categoryBooks', compact( 'books', 'category', 'bookmarkTaskUser'));
-    }
 
 }

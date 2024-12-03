@@ -1,11 +1,11 @@
-@extends('admin.index')
-@section('section')
+@extends('admin.layouts.index')
+@section('content')
     @if ( session('successCategoryAdd') )
         <div class="alert alert-success d-flex px-4">
             <div>{{ session('successCategoryAdd') }}</div>
         </div>
     @endif
-<form action="{{ route('admin.addCategory') }}" method="POST">
+<form action="{{ route('admin.categories.store') }}" method="POST">
     @csrf
     <div class="d-flex mb-2">
         <input class="form-control w-25 me-2" type="text" name="category_name">

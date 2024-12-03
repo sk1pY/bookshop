@@ -31,7 +31,7 @@
                                         aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
-                                <form action="{{ route('home.infoUpdate', ['id' => $user->id]) }}" method="post">
+                                <form action="{{ route('home.info.update', ['id' => $user->id]) }}" method="post">
                                     @csrf
                                     @method('PATCH')
 

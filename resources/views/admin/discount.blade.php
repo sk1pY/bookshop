@@ -1,5 +1,5 @@
-@extends('admin.index')
-@section('section')
+@extends('admin.layouts.index')
+@section('content')
     @if ($errors->any())
         <div class="alert alert-danger">
             <ul>
@@ -12,7 +12,7 @@
 
     <h1>Скидки на книги</h1>
     <p>Выберите определенного автора или книгу, или введи скидку для всех книг/авторов</p>
-    <form action="{{ route('admin.discountAdd') }}" method="post" id="discount">
+    <form action="{{ route('admin.discount.store') }}" method="post" id="discount">
         @csrf
         <div class="mb-3">
             <label for="exampleInputEmail1" class="form-label">Скидка на книгу/книги %</label>
@@ -60,7 +60,7 @@
 
                 <td>{{$book -> discount.'%'}}</td>
                 <td>
-                    <form action="{{ route('admin.discountDelete',['id'=>$book->id])}}" method="post">
+                    <form action="{{ route('admin.discount.destroy',['id'=>$book->id])}}" method="post">
                         @csrf
                         @method('delete')
                         <input class="btn btn-danger" type="submit" value="Удалить">
@@ -70,12 +70,8 @@
         @endforeach
         </tbody>
     </table>
-    {{--    <form action="{{ route('admin.addBookDiscount')}}" method="post">--}}
-    {{--        @csrf--}}
-    {{--        <input class="btn btn-danger" type="submit" value="Удалить">--}}
-    {{--    </form>--}}
     @if(count($booksWithDiscount) > 0)
-        <form action="{{ route('admin.discountDeleteAll')}}" method="post">
+        <form action="{{ route('admin.discount.destroyAll')}}" method="post">
             @csrf
             @method('delete')
             <input class="btn btn-danger" type="submit" value="Удалить все скидки">

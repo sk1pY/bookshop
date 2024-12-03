@@ -21,38 +21,10 @@ class AdminController extends Controller
     public function index()
     {
         $countOrders = Order::whereIn('status', ['Новый заказ', 'Готов к выдаче'])->count();
-        return view('admin.index');
+        return view('admin.layouts.index');
     }
 
-    public function addAuthorsView()
-    {
-        $authors = Author::all();
-        return view('admin.authorAdd', compact('authors'));
-    }
 
-    public function addAuthor(Request $request)
-    {
-        $validated = $request->validate([
-            'name' => 'required|alpha|max:30',
-            'surname' => 'required|alpha|max:30',
-        ], [
-            'name.required' => 'напишите имя автора',
-            'surname.required' => 'напишите фамилию автора',
-            '*.alpha' => 'только буквы'
-        ]);
-        Author:: create([
-            'name' => $validated['name'],
-            'surname' => $validated['surname'],
-        ]);
-
-        return redirect()->route('admin.addAuthorsView');
-    }
-
-    public function deleteAuthor($id)
-    {
-        Author::destroy($id);
-        return redirect()->route('admin.addAuthorsView');
-    }
 
     public function users()
     {
@@ -95,7 +67,7 @@ class AdminController extends Controller
             $item->discount = $discount;
             $item->save();
         });
-        return redirect()->route('admin.discount');
+        return redirect()->route('admin.discount.index');
     }
 
 
@@ -109,143 +81,23 @@ class AdminController extends Controller
             $item->discount = 0;
             $item->save();
         });
-        return redirect()->route('admin.discount');
+        return redirect()->route('admin.discount.destroyAll');
 
     }
 
     public function discountDelete($id)
     {
+
         $item = Book::findorfail($id);
         $item->price = $item->priceBeforeDiscount;
         $item->discount = 0;
         $item->save();
-        return redirect()->route('admin.discount');
+        return redirect()->route('admin.discount.index');
 
     }
 
-    public
-    function orders()
-    {
-        $orders = Order::whereIn('status', ['Новый заказ', 'Готов к выдаче'])->get();
 
-        return view('admin.orders', compact('orders'));
-    }
 
-    function orderHistory()
-    {
-        $orders = Order::whereIn('status', ['Отменен', 'Получен'])->get();
-        return view('admin.orderHistory', compact('orders'));
-    }
 
-    public
-    function books()
-    {
-        $books = Book::orderBy('created_at', 'desc')->paginate(5);
 
-        return view('admin.books', compact('books'));
-    }
-
-    public
-    function addBookView()
-    {
-        $authors = Author::all();
-        $categories = Category::all();
-
-        return view('admin.bookAdd', compact('authors', 'categories'));
-    }
-
-    public function addBook(Request $request)
-    {
-        $validatedData = $request->validate([
-            'title' => 'string|required',
-            'description' => 'string|required',
-            'price' => 'numeric|required|min:0',
-            'stock' => 'numeric|required|min:0',
-            'file' => 'required|image|mimes:jpeg,png,jpg,gif,svg',
-        ]);
-
-        if ($request->hasFile('file')) {
-            $path = $request->file('file')->store('booksImages', 'public');
-            $fileName = basename($path);
-        }
-
-        $authorId = optional(Author::where('surname', $request->input('author'))->first())->id;
-        $categoryId = optional(Category::where('name', $request->input('category'))->first())->id;
-        $book = Book::create([
-            'title' => $validatedData['title'],
-            'description' => $validatedData['description'],
-            'price' => $validatedData['price'],
-            'stock' => $validatedData['stock'],
-            'author_id' => null,
-            'category_id' => $categoryId,
-            'image' => $fileName
-        ]);
-
-        return redirect()->route('admin.addBookView')->with('successBookAdd', 'Книга добавлена');
-    }
-
-    public
-    function deleteBook($id)
-    {
-        Book:: destroy($id);
-        return redirect()->route('admin.books');
-
-    }
-
-    public
-    function updateBook($id, Request $request)
-    {
-        $book = Book::find($id);
-        $validatedData = $request->validate([
-            'title' => 'required|string|max:255'
-        ]);
-
-        $book->update(['title' => $validatedData['title']]);
-        return redirect()->route('admin.books');
-
-    }
-
-    public function addCategoryView()
-    {
-
-        return view('admin.categoryAdd');
-    }
-
-    public
-    function addCategory(Request $request)
-    {
-        $validatedData = $request->validate([
-            'category_name' => 'required|alpha|max:30'
-        ]);
-        Category::create(['name' => $validatedData['category_name']]);
-        return redirect()->route('admin.addCategoryView')->with('successCategoryAdd', 'Категория добавлена');
-    }
-
-    public function addStatusOrder(Request $request, $id)
-    {
-        $orderStatus = Order::findOrFail($id);
-        $orderStatus->update(['status' => $request->input('status')]);
-
-        if ($orderStatus->status == 'Получен') {
-            $booksBoughtUpdate = OrderItem::where(['order_id' => $id])->get();
-
-            //ПРОХОДИТ ПО КНИГАМ КОТОРЫЕ БЫЛИ КУПЛЕНЫ И ПРИБАВЛЯЕМ КОЛ-ВО ПРОДАНЫХ
-            $booksBoughtUpdate->each(function ($item) {
-                $book = Book::where(['id' => $item->book_id])
-                    ->increment('numberOfPurchased',$item->quantity);
-            });
-        }
-        if ($orderStatus->status == 'Отмена заказа') {
-            $booksBoughtUpdate = OrderItem::where(['order_id' => $id])->get();
-
-            //ПРОХОДИТ ПО КНИГАМ КОТОРЫЕ БЫЛИ ОТМЕНЕНЫ И ПРИБАВЛЯЕМ К СТОКУ
-            $booksBoughtUpdate->each(function ($item) {
-                $book = Book::where(['id' => $item->book_id])
-                    ->increment('stock',$item->quantity);
-            });
-        }
-
-        return redirect()->route('admin.orders')->with('successStatusUpdate', 'Статус заказа обновлен');
-
-    }
 }

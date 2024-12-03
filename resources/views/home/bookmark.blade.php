@@ -12,7 +12,7 @@
                     <div class="card-body ">
                         <div style="font-size: 0.8rem">
                             @if($bookmark->book->author_id)
-                                <a href="{{ route('books.author', ['id' => $bookmark->book->author->id]) }}">
+                                <a href="{{ route('author.index', ['id' => $bookmark->book->author->id]) }}">
                                     {{ $bookmark->book->author->surname . ' ' . $bookmark->book->author->name }}</a>
                             @else
                                 <div>без автора</div>
@@ -34,7 +34,7 @@
                                     </form>
                                 </div>
                                 <div class="d-flex justify-content-center align-items-center mt-2">
-                                    <form action="{{ route('bookmark.delete', ['id' => $bookmark->id]) }}" method="post">
+                                    <form action="{{ route('home.bookmarks.destroy', ['id' => $bookmark->id]) }}" method="post">
                                         @csrf
                                         @method('delete')
                                         <button style="width: 200px; background-color: red; color: white"

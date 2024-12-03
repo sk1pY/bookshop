@@ -79,7 +79,7 @@
                                 @auth
                                 {{-- BOOKMARK --}}
                                 <div style="cursor: pointer" class="d-flex justify-content-end bookmark-button m-3 fs-4"
-                                     data-bookmark-id="{{ $book->id }}">
+                                     data-bookmark-id="{{ $book->id }} ">
                                     <i class="fa-regular fa-heart bg-red-bookmark {{
                         in_array($book->id, $bookmarkTaskUser) ? 'fa-solid' : '' }}"></i>
                                 </div>
@@ -108,7 +108,7 @@
                                 <div class="card-body ">
                                     <div style="font-size: 0.8rem">
                                         @if($book->author_id)
-                                            <a href="{{ route('books.author', ['id' => $book->author->id]) }}">
+                                            <a href="{{ route('author.index', ['id' => $book->author->id]) }}">
                                                 {{ $book->author->surname . ' ' . $book->author->name }}</a>
                                         @else
                                             <div>без автора</div>
@@ -145,4 +145,40 @@
                 {{--BOOKS--}}
             </div>
         </div>
+    <script>
+        $(document).ready(function () {
+
+            $('.bookmark-button').on('click', function () {
+                var taskId = $(this).data('bookmark-id');
+                var bookmarkButton = $(this).find('.fa-heart');
+
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    url: 'home/bookmarks' ,
+                    method: 'POST',
+                    data: {
+                        bookmark_id: taskId
+                    },
+                    success: function (response) {
+                        if (response.success) {
+                            if (response.bookmark) {
+                                bookmarkButton.addClass('fa-solid bg-red-bookmark');
+                            } else {
+                                bookmarkButton.removeClass('fa-solid ');
+                            }
+                        } else {
+                            $('#message').text(response.message).css('color', 'red');
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Произошла ошибка при добавлении/удалении закладки');
+                    }
+                });
+            })
+        });
+
+
+    </script>
 @endsection

@@ -1,10 +1,14 @@
     $(document).ready(function () {
+
     $('.bookmark-button').on('click', function () {
         var taskId = $(this).data('bookmark-id');
         var bookmarkButton = $(this).find('.fa-heart');
 
         $.ajax({
-            url: '/bookmark',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            url: '/bookmark' ,
             method: 'POST',
             data: {
                 bookmark_id: taskId

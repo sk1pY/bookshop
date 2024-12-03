@@ -1,23 +1,26 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Home;
 
+use App\Http\Controllers\Controller;
 use App\Models\Bookmark;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
 
 class BookmarkController extends Controller
 {
 
 
-    public function bookmark()
+    public function index()
     {
         $user = Auth::user();
         $bookmarks = Bookmark::where('user_id', Auth::id())->get();
         return view('home.bookmark', compact('bookmarks'));
     }
 
-    public function bookmarkAdd(Request $request)
+    public function store(Request $request)
     {
         $taskId = $request->input('bookmark_id');
         $bookmark = Bookmark::with('book.author')->where(['user_id' => Auth::id(),'book_id' => $taskId])->first();
@@ -32,8 +35,8 @@ class BookmarkController extends Controller
 
     }
 
-    public function bookmarkDelete($id){
-        Bookmark::where('id', $id) ->delete();
-        return redirect()->route('home.bookmark');
+    public function destroy($id){
+        Bookmark::destroy($id);
+        return redirect()->route('home.bookmarks.destroy');
     }
 }

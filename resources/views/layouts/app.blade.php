@@ -12,8 +12,8 @@
             integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
             crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script src="{{ asset('js/bookmark.js') }}"></script>
-    <script src="{{ asset('js/search.js') }}"></script>
+{{--    <script src="{{ asset('js/bookmark.js')}}?v={{ filemtime(public_path('js/search.js')) }}"></script>--}}
+    <script src="{{ asset('js/search.js') }}?v={{ filemtime(public_path('js/search.js')) }}"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
           integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
           crossorigin="anonymous" referrerpolicy="no-referrer"/>
@@ -28,6 +28,8 @@
         font-weight: 400;
         font-size: 14px;
         width: 100%;margin: 0;padding: 0;
+        overflow-x: hidden;
+
     }
 
     .drowdownnav:hover {
@@ -88,10 +90,5 @@
     @yield('content')
 </div>
     @include('footer.footer')
-
-{{--SEARCH JS--}}
-<script type="text/javascript">
-
-</script>
 </body>
 </html>

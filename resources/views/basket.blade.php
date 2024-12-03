@@ -94,7 +94,7 @@
                     <label for="address">Адрес доставки</label>
                     <input class="mb-3 form-control" id="address" name="address" type="text"
                            value="{{ Auth::user()->address }}">
-                    <input class="btn btn-danger w-25" type="submit" value="Сделать заказ">
+                    <input class="btn btn-danger w-25 w-auto" type="submit" value="Сделать заказ">
                 </form>
 
             </div>

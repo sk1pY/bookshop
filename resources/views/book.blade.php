@@ -14,7 +14,7 @@
 
             <h1> {{ $book -> title }}</h1>
             @if($book->author_id)
-                <a href="{{route('books.author',['id' => $book->author->id])}}">
+                <a href="{{route('author.index',['id' => $book->author->id])}}">
                     <h5> {{ $book -> author -> name .' '. $book -> author -> surname  }}</h5></a>
                 <p>
                     @endif
@@ -68,7 +68,7 @@
                 {{--            БЛОК НАПИСАНИЕ КОМЕНТА--}}
                 <div class="panel">
                     <div class="panel-body">
-                        <form action="{{ route('comment.add',['id'=>$book->id])  }}" id="commentaryForm" method="post">
+                        <form action="{{ route('comment.store',['id'=>$book->id])  }}" id="commentaryForm" method="post">
                             @csrf
                             <textarea name="text" class="form-control" rows="2"
                                       placeholder="What are you thinking?"></textarea>

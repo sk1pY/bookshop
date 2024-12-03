@@ -1,26 +1,31 @@
 <?php
 
-use App\Http\Controllers\BasketController;
-use App\Http\Controllers\BookController;
+use App\Http\Controllers\Admin\AuthorController as AdminAuthController;
+use App\Http\Controllers\Admin\BookController as AdminBookController;
+use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
+use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\AdminController;
-use Illuminate\Support\Facades\Route;
-use Laravel\Fortify\Features;
-use Laravel\Fortify\Fortify;
+use App\Http\Controllers\AuthorController;
 use App\Http\Controllers\BasketItemController;
+use App\Http\Controllers\BookController;
 use App\Http\Controllers\CommentaryController;
+use App\Http\Controllers\Home\BookmarkController as HomeBookmarkController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\BookmarkController;
-use App\Http\Controllers\OrderController;
 use App\Http\Controllers\SearchController;
+use Illuminate\Support\Facades\Route;
 
 //SEARCH
 Route::get('/search', [SearchController::class, 'search'])->name('live.search');
 
+//Автор
+Route::get('/author/{id}', [AuthorController::class, 'index'])->name('author.index');
+
 //КНИГИ
 Route::get('/', [BookController::class, 'index'])->name('books.index');
-Route::get('/author/{id}', [BookController::class, 'author'])->name('books.author');
 Route::get('/book/{id}', [BookController::class, 'book'])->name('books.book');
-Route::get('/category/{id}', [BookController::class, 'categoryBooks'])->name('books.categoryBooks');
+
+//КАТЕГОРИИ
+Route::get('/category/{category}', [\App\Http\Controllers\UserCategoryController::class, 'categoryBooks'])->name('categories.public.show');
 
 //КОРЗИНА
 Route::prefix('basket')->group(function () {
@@ -31,52 +36,48 @@ Route::prefix('basket')->group(function () {
 });
 
 
-//ЗАКЛАДКИ
-Route::prefix('bookmark')->group(function () {
-    Route::post('/', [BookmarkController::class, 'bookmarkAdd'])->name('bookmark.add');
-    Route::delete('/{id}', [BookmarkController::class, 'bookmarkDelete'])->name('bookmark.delete');
-});
-
-
 //HOME PROFILE
-Route::name('home.')->prefix('profile')->group(function () {
-    Route::get('/bookmark', [BookmarkController::class, 'bookmark'])->name('bookmark');
+Route::name('home.')->prefix('home')->group(function () {
     Route::get('/', [HomeController::class, 'index'])->name('index');
-    Route::get('/bought', [HomeController::class, 'bought'])->name('bought');
-    Route::get('/bought/{order}', [HomeController::class, 'aboutBought'])->name('aboutBought');
-    Route::get('/info', [HomeController::class, 'info'])->name('info');
-    Route::patch('/info/{id}', [HomeController::class, 'infoUpdate'])->name('infoUpdate');
+    Route::get('/bookmarks', [HomeBookmarkController::class, 'index'])->name('bookmarks.index');
+    Route::post('/bookmarks', [HomeBookmarkController::class, 'store'])->name('bookmarks.store');
+    Route::post('/bookmarks', [HomeBookmarkController::class, 'store'])->name('bookmarks.store');
+    Route::delete('/bookmarks/{id}', [HomeBookmarkController::class, 'destroy'])->name('bookmarks.destroy');
+    Route::get('/orders', [HomeController::class, 'orders'])->name('orders.index');
+    Route::get('/orders/{order}', [HomeController::class, 'about_orders'])->name('orders.show');
+    Route::get('/info', [HomeController::class, 'info'])->name('info.index');
+    Route::patch('/info/{id}', [HomeController::class, 'infoUpdate'])->name('info.update');
+    Route::get('/commentaries', [CommentaryController::class, 'commentaries'])->name('commentaries.index');
 });
-
-//ПодробнееОбЗаказе
-//Route::get('/home/order/{id}',[OrderController::class,'aboutOrderHome'])->name('home.order');
-Route::get('/admin/order/{id}', [OrderController::class, 'aboutOrderAdmin'])->name('admin.order');
-
-//ADMIN
-Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
-Route::get('/admin/books', [AdminController::class, 'books'])->name('admin.books');
-Route::get('/admin/orders', [AdminController::class, 'orders'])->name('admin.orders');
-Route::get('/admin/orderHistory', [AdminController::class, 'orderHistory'])->name('admin.orderHistory');
-Route::get('/admin/users', [AdminController::class, 'users'])->name('admin.users');
-Route::get('/admin/authors', [AdminController::class, 'addAuthorsView'])->name('admin.addAuthorsView');
-Route::post('/admin/addAuthor', [AdminController::class, 'addAuthor'])->name('admin.addAuthor');
-Route::delete('/admin/deleteAuthor/{id}', [AdminController::class, 'deleteAuthor'])->name('admin.deleteAuthor');
-Route::get('/admin/discount', [AdminController::class, 'discount'])->name('admin.discount');
-Route::post('/admin/addDiscount', [AdminController::class, 'discountAdd'])->name('admin.discountAdd');
-Route::delete('/admin/discountDeleteAll', [AdminController::class, 'discountDeleteAll'])->name('admin.discountDeleteAll');
-Route::delete('/admin/discountDelete/{id},', [AdminController::class, 'discountDelete'])->name('admin.discountDelete');
-Route::get('/admin/addBookView', [AdminController::class, 'addBookView'])->name('admin.addBookView');
-Route::post('/admin/addBook', [AdminController::class, 'addBook'])->name('admin.addBook');
-Route::delete('/admin/deleteBook/{idBook}', [AdminController::class, 'deleteBook'])->name('admin.deleteBook');
-Route::put('/admin/updateBook/{idBook}', [AdminController::class, 'updateBook'])->name('admin.updateBook');
-Route::post('/admin/addCategory', [AdminController::class, 'addCategory'])->name('admin.addCategory');
-Route::get('/admin/addCategoryView', [AdminController::class, 'addCategoryView'])->name('admin.addCategoryView');
-Route::patch('/admin/addStatusOrder/{id}', [AdminController::class, 'addStatusOrder'])->name('admin.addStatusOrder');
 
 //Commentaries
-Route::get('/profile/commentaries', [CommentaryController::class, 'commentaries'])->name('home.commentaries');
-Route::post('/book/{id}/comment', [CommentaryController::class, 'commentAdd'])->name('comment.add');
-Route::delete('/book/comment/{id}', [CommentaryController::class, 'commentDelete'])->name('comment.delete');
+Route::post('/book/{id}/comment', [CommentaryController::class, 'commentAdd'])->name('comment.store');
+Route::delete('/book/comment/{id}', [CommentaryController::class, 'commentDelete'])->name('comment.destroy');
+
+//ADMIN-PANEL
+Route::name('admin.')->prefix('admin')->group(function () {
+    Route::get('/', [AdminController::class, 'index'])->name('index');
+    //Books
+    Route::resource('books', AdminBookController::class)->except('show', 'edit');
+    //Categories
+    Route::resource('categories', AdminCategoryController::class);
+    //Users
+    Route::get('/users', [AdminController::class, 'users'])->name('users.index');
+    //Orders
+    Route::get('/orders', [AdminOrderController::class, 'orders'])->name('orders.index');
+    Route::get('/orders/history', [AdminOrderController::class, 'orderHistory'])->name('orders.history');
+    Route::patch('/orders/{id}/status', [AdminOrderController::class, 'addStatusOrder'])->name('orders.status.update');
+    Route::get('/orders/{id}', [AdminOrderController::class, 'aboutOrderAdmin'])->name('orders.show');
+    //Authors
+    Route::resource('authors', AdminAuthController::class);
+    //Discount
+    Route::get('/discount', [AdminController::class, 'discount'])->name('discount.index');
+    Route::post('/discount', [AdminController::class, 'discountAdd'])->name('discount.store');
+    Route::delete('/discount', [AdminController::class, 'discountDeleteAll'])->name('discount.destroyAll');
+    Route::delete('/discount/{id}', [AdminController::class, 'discountDelete'])->name('discount.destroy');
+    //Interface
+    Route::get('/interface', [\App\Http\Controllers\Admin\InterfaceController::class, 'index'])->name('interface.index');
+});
 
 //404
 //Route::fallback(function () {
@@ -84,6 +85,4 @@ Route::delete('/book/comment/{id}', [CommentaryController::class, 'commentDelete
 //        return '404 maaan';
 //});
 
-Route::post('/example', function () {
-    return response() -> download('kek.pdf');
-});
+

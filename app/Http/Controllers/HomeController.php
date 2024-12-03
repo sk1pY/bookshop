@@ -17,7 +17,7 @@ class HomeController extends Controller
         return view('home.index');
     }
 
-    public function bought(Request $request)
+    public function orders(Request $request)
     {
         $status = $request->query('status','all');
 
@@ -29,14 +29,14 @@ class HomeController extends Controller
 
         }
 
-        return view('home.bought', compact('orders'));
+        return view('home.orders', compact('orders'));
     }
 
-    public function aboutBought($id)
+    public function about_orders($id)
     {
         $order = Order::find($id);
         $orderItems = OrderItem::where('order_id', $id)->get();
-        return view('home.aboutBought', compact('order','orderItems'));
+        return view('home.about_order', compact('order','orderItems'));
     }
 
 
@@ -67,19 +67,10 @@ class HomeController extends Controller
 
         $user->save();
 
-        return redirect()->route('home.info');
+        return redirect()->route('home.info.index');
 
     }
 
-
-    public function test_list_page_shows_all_assignments()
-    {
-        $assignment = Assignment::create([
-            'title' => 'My great assignment',
-        ]);
-        $this->get('/assignments')
-            ->assertSee('My great assignment');
-    }
 
 
 }
