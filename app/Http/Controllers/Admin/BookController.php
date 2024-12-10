@@ -46,22 +46,20 @@ class BookController extends Controller
 
         ]);
 
+        $fileName = null;
         if ($request->hasFile('file')) {
             $path = $request->file('file')->store('booksImages', 'public');
             $fileName = basename($path);
         }
 
-        $authorId = optional(Author::where('surname', $request->input('author'))->first())->id;
-        $categoryId = optional(Category::where('name', $request->input('category'))->first())->id;
-        $book = Book::create([
-            'title' => $validatedData['title'],
-            'description' => $validatedData['description'],
-            'price' => $validatedData['price'],
-            'stock' => $validatedData['stock'],
-            'author_id' => null,
+        $authorId = Author::where('surname', $request->input('author'))->first()?->id;
+        $categoryId = Category::where('name', $request->input('category'))->first()?->id;
+
+        Book::create(array_merge($validatedData,[
+            'author_id' => $authorId,
             'category_id' => $categoryId,
             'image' => $fileName
-        ]);
+        ]));
 
         return redirect()->route('admin.books.index')->with('successBookAdd', 'Книга добавлена');
     }

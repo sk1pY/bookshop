@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('book_id')->constrained('books')->onDelete('cascade');
             $table->foreignId('basket_id')->constrained('baskets')->onDelete('cascade');
-            $table->integer('quantity')->default(0);
+            $table->integer('quantity');
             $table->timestamps();
         });
     }

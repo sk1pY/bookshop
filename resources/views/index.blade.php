@@ -118,7 +118,7 @@
                                         Отзывы: {{ $book->commentaries_count }}
                                         <i style="color:#ff9100" class="ms-2 me-1 fa-solid fa-star"></i>{{ $book->avgRating }}
                                     </div>
-                                    @auth
+
                                         @if($book->stock > 0)
                                             <div class="d-flex justify-content-center align-items-center">
                                                 <form action="{{ route('basket.add', ['id' => $book->id]) }}" method="post">
@@ -134,7 +134,6 @@
                                                 <span>нет в наличии</span>
                                             </div>
                                         @endif
-                                    @endauth
                                 </div>
                             </div>
                         </div>

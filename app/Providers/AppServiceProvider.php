@@ -18,7 +18,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->singleton('basket', function () {
+            return Auth::check() ? Basket::firstOrCreate(['user_id' => Auth::id()]) : null;
+        });
     }
 
     /**
@@ -29,25 +31,30 @@ class AppServiceProvider extends ServiceProvider
         Route::pattern('id','[0-9]+');
         Route::pattern('','[0-9]+');
 
+//        View::composer('*', function ($view) {
+//            if (Auth::guard()->check()) {
+//                $basket = Basket::where(['user_id' => Auth::id()])->first();
+//                if (!$basket) {
+//                    $bookInBasket = 0;
+//                } else {
+//                    $bookInBasket = BasketItem::where(['basket_id' => $basket->id])->pluck('quantity')->toArray();
+//                    $bookInBasket = array_sum($bookInBasket);
+//                }
+//
+//                $view->with('bookInBasket', $bookInBasket);
+//            }
+//        });
+
         View::composer('*', function ($view) {
             if (Auth::guard()->check()) {
-                $basket = Basket::where(['user_id' => Auth::id()])->first();
-                if (!$basket) {
-                    $bookInBasket = 0;
-                } else {
-                    $bookInBasket = BasketItem::where(['basket_id' => $basket->id])->pluck('quantity')->toArray();
-                    $bookInBasket = array_sum($bookInBasket);
-                }
+                //create basket after auth uuser
+                $basket = Basket::firstOrCreate(['user_id' => Auth::id()])->first();
 
-                $view->with('bookInBasket', $bookInBasket);
-
-            }
-
-        });
-        View::composer('*', function ($view) {
-            if (Auth::guard()->check()) {
                 $countOrders = Order::whereIn('status', ['Новый заказ', 'Готов к выдаче'])->count();
-                $view->with('countOrders', $countOrders);
+                $view->with([
+                    'countOrders' => $countOrders,
+                    'basket' => $basket
+                ]);
             }
         });
         View::composer('*', function ($view) {

@@ -7,10 +7,11 @@
                     aria-expanded="false">
                 Категории книг
             </button>
-            <ul class="dropdown-menu p-2 w-auto" >
+            <ul class="dropdown-menu p-2 w-auto">
                 @foreach($categories as $category)
                     <li style="font-size: 1rem" class=" text">
-                        <a class="atext dropdown-item" href="{{route('categories.public.show',['category' => $category->id])}}">{{ $category->name }}</a>
+                        <a class="atext dropdown-item"
+                           href="{{route('categories.public.show',['category' => $category->id])}}">{{ $category->name }}</a>
                     </li>
                 @endforeach
             </ul>
@@ -33,12 +34,12 @@
             {{--          END  SEARCH--}}
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0 ">
                 @guest
-                    <li class="nav-item ">
-                        <a class="nav-link" href="{{ route('login') }}">Login</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('register') }}">Register</a>
-                    </li>
+                <li class="nav-item mt-3">
+                    <a class="nav-link" href="{{ route('login') }}">Войти</a>
+                </li>
+                <li class="nav-item mt-3">
+                    <a class="nav-link" href="{{ route('register') }}">Регистрация</a>
+                </li>
                 @endguest
                 @auth
                     <li class="nav-item">
@@ -48,16 +49,17 @@
 
                                 <i class="fa-regular fa-bell fs-6">
                                     <span class=" badge rounded-pill text-bg-danger">
-                                        {{ $countOrdersforUser }}
+                                                                               {{ $countOrdersforUser }}
+
                                     </span>
 
                                 </i>
                             </button>
                             <ul class="dropdown-menu">
-                                @foreach($notifOrders as $not)
-                                    <li><a class="dropdown-item" href="{{route('home.aboutBought',$not)}}">Ваш заказ
-                                            №{{$not}} готов к получению</a></li>
-                                @endforeach
+                                                                @foreach($notifOrders as $not)
+                                                                    <li><a class="dropdown-item" href="{{route('home.orders.show',$not)}}">Ваш заказ
+                                                                            №{{$not}} готов к получению</a></li>
+                                                                @endforeach
                             </ul>
                         </div>
 
@@ -69,7 +71,7 @@
                                     data-bs-toggle="dropdown"
                                     aria-expanded="false">
 
-                                <i class="fa-solid fa-user fs-4"></i>{{Auth::user()->name}}
+                                <i class="fa-solid fa-user fs-4"></i>{{Auth::user()?Auth::user()->name:'guest'}}
                             </button>
                             <ul class="dropdown-menu  p-2 w-auto">
                                 <li class="d-flex align-items-center p-2 drowdownnav rounded-pill">
@@ -86,7 +88,7 @@
                                 </li>
 
                                 <li class="d-flex align-items-center p-2 drowdownnav rounded-pill">
-                                    <i class="fa-solid fa-cart-shopping me-2"                                                 style="font-size:1.4rem;width: 35px"></i>
+                                    <i class="fa-solid fa-cart-shopping me-2" style="font-size:1.4rem;width: 35px"></i>
                                     <a style="font-size: 0.8rem;" class="dropdown-item p-0 ms-auto"
                                        href="{{ route('home.orders.index') }}">Мои заказы</a>
                                 </li>
@@ -118,13 +120,13 @@
                         @csrf
                     </form>
 
-                        <li class="nav-item" >
-                            <a class="nav-link d-flex flex-column align-items-center"
-                               href="{{ route('home.orders.index') }}">
-                                <i class="fa-solid fa-bag-shopping fs-4" ></i>
-                                <span>Заказы</span>
-                            </a>
-                        </li>
+                    <li class="nav-item">
+                        <a class="nav-link d-flex flex-column align-items-center"
+                           href="{{ route('home.orders.index') }}">
+                            <i class="fa-solid fa-bag-shopping fs-4"></i>
+                            <span>Заказы</span>
+                        </a>
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link d-flex flex-column align-items-center"
                            href="{{ route('home.bookmarks.index') }}">
@@ -132,15 +134,16 @@
                             <span>Избранное</span>
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link d-flex flex-column align-items-center"
-                           href="{{ route('basket.index') }}">
-                            <i class="fa-solid fa-basket-shopping fs-4"></i>
-                            <span>Корзина: {{ $bookInBasket }}</span>
-                        </a>
-                    </li>
-
                 @endauth
+                <li class="nav-item">
+                    <a class="nav-link d-flex flex-column align-items-center"
+                       href="{{ route('basket.index') }}">
+                        <i class="fa-solid fa-basket-shopping fs-4"></i>
+                        <span>Корзина</span>
+                    </a>
+                </li>
+
+
             </ul>
         </div>
 
@@ -149,7 +152,8 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-white ">
     <div class="container">
         <a class="navbar-brand" href="#">Акции</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">

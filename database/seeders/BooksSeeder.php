@@ -10,6 +10,6 @@ class BooksSeeder extends Seeder
      */
     public function run(): void
     {
-        Book::factory()->count(50)->create();
+        Book::factory()->count(5)->create();
     }
 }

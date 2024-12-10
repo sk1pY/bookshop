@@ -13,6 +13,7 @@ class BookController extends Controller
      */
     public function index()
     {
+
         return Book::all();
     }
 
@@ -21,7 +22,21 @@ class BookController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'title' => 'string|required',
+            'description' => 'string|required',
+            'price' => 'numeric|required|min:0',
+            'stock' => 'numeric|required|min:0',
+        ]);
+
+        if ($validated->fails()) {
+            $errors = $validated->errors();
+            return response()->json(['errors' => $errors->all()], 422);
+
+        }
+        Book::create($validated);
+
+        return response()->json('Book added successfully');
     }
 
     /**
@@ -29,23 +44,49 @@ class BookController extends Controller
      */
     public function show(string $id)
     {
-       $book = Book::find($id);
-       return $book;
+        $book = Book::find($id);
+        if (!$book) {
+            return response()->json(['message' => 'book not found'], 404);
+
+        }
+        return $book;
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request,Book $book)
     {
-        //
+        $validated = $request->validate([
+            'title' => 'string|required',
+            'description' => 'string|required',
+            'price' => 'numeric|required|min:0',
+            'stock' => 'numeric|required|min:0',
+        ]);
+
+        $book->update($validated);
+        return response()->json('Book updated successfully');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Book $book)
     {
-        //
+        $book->delete();
+        return response()->json('Book deleted successfully');
+    }
+
+    public function stock(Book $book)
+    {
+        return $book->stock;
+    }
+
+    public function commentaries(Book $book)
+    {
+        if ($book->commentaries->isEmpty()) {
+            return response()->json(['message' => 'There are no comments yet'], 404);
+        }
+        return $book->commentaries()->get();
     }
 }

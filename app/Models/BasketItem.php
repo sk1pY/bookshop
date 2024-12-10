@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 class BasketItem extends Model
 {
     use HasFactory;
-    protected $fillable = ['book_id','basket_id'];
+    protected $fillable = ['book_id','basket_id','quantity'];
 
     public function book()
     {
