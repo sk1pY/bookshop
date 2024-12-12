@@ -6,6 +6,7 @@ use App\Models\Basket;
 use App\Models\BasketItem;
 use App\Models\Category;
 use App\Models\Order;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\View;
@@ -28,6 +29,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Carbon::setLocale('ru');
         Route::pattern('id','[0-9]+');
         Route::pattern('','[0-9]+');
 

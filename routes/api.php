@@ -20,3 +20,7 @@
     //COMMENTARIES
 
 
+    //ПУНКТЫ САМОВЫВОЗА
+    Route::get('v1/address',[\App\Http\Controllers\Api\v1\AddressController::class,'index'])->name('address.index');
+
+

@@ -68,14 +68,15 @@
                 {{--            БЛОК НАПИСАНИЕ КОМЕНТА--}}
                 <div class="panel">
                     <div class="panel-body">
-                        <form action="{{ route('comment.store',['id'=>$book->id])  }}" id="commentaryForm" method="post">
+                        <form action="{{ route('comment.store',['id'=>$book->id])  }}" id="commentaryForm"
+                              method="post" class="d-flex gap-3">
                             @csrf
                             <textarea name="text" class="form-control" rows="2"
-                                      placeholder="What are you thinking?"></textarea>
+                                      placeholder="Какие ваши впечатления о книге?"></textarea>
                             <button class="btn btn-sm btn-primary pull-right" type="submit"><i
-                                    class="fa fa-pencil fa-fw"></i> Share
+                                    class="fa fa-pencil fa-fw"></i> Отправить
                             </button>
-                            <select style="width: 160px" class="form-select " id="rating" name="rating"
+                            <select style="width: 160px" class="form-control p-0" id="rating" name="rating"
                                     form="commentaryForm">
                                 <option value="5" selected>⭐⭐⭐⭐⭐</option>
                                 <option value="4">⭐⭐⭐⭐</option>
@@ -86,7 +87,7 @@
                         </form>
 
                         @else
-                        <h5 class="mt-5">Вы не приобрели данный товар для его оценки</h5>
+                            <h5 class="mt-5">Вы не приобрели данный товар для его оценки</h5>
                         @endif
 
                         @forelse($commentaries as $commentary)
@@ -98,17 +99,20 @@
                                             <div
                                                 class="commented-section mt-2">
                                                 <div class="d-flex flex-row align-items-center commented-user">
-                                                    <h5 class="mr-2">{{$commentary->user->name}}</h5><span
-                                                        class="dot mb-1"></span><span
-                                                        class="ms-2">{{ $commentary->created_at->diffforhumans()}}</span>
+                                                    <span class="text fs-5">
+                                                        {{$commentary->user->name}}
+                                                    </span>
+                                                        <span style="margin-left:12px;font-size: 0.9rem;">{{ $commentary->created_at->diffforhumans()}}</span>
+                                                    <span style="margin-left:12px;font-size: 0.9rem;">{{ $commentary->rating}}⭐</span>
+
                                                 </div>
+
                                                 <div class="comment-text-sm"><span>{{$commentary->text}}</span>
                                                 </div>
                                                 <div
                                                     class="reply-section">
                                                     <div class="my-3 d-flex flex-row align-items-center voting-icons">
                                                         <i class="fa-regular fa-heart"></i>
-
                                                     </div>
                                                 </div>
                                             </div>

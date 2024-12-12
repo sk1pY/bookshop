@@ -33,6 +33,7 @@ Route::prefix('basket')->group(function () {
     Route::post('/add-to-order', [BasketItemController::class, 'orderAdd'])->name('basket.order');
     Route::post('/add-to-basket/{id}', [BasketItemController::class, 'addToBasket'])->name('basket.add');
     Route::delete('/delete/{id}', [BasketItemController::class, 'delete'])->name('basket.delete');
+    Route::delete('/delete_all_book/{book}', [BasketItemController::class, 'delete_from_basket'])->name('basket.deleteAll');
 });
 
 
@@ -42,9 +43,10 @@ Route::name('home.')->prefix('home')->group(function () {
     Route::get('/bookmarks', [HomeBookmarkController::class, 'index'])->name('bookmarks.index');
     Route::post('/bookmarks', [HomeBookmarkController::class, 'store'])->name('bookmarks.store');
     Route::post('/bookmarks', [HomeBookmarkController::class, 'store'])->name('bookmarks.store');
-    Route::delete('/bookmarks/{id}', [HomeBookmarkController::class, 'destroy'])->name('bookmarks.destroy');
+    Route::delete('/bookmarks/{bookmark}', [HomeBookmarkController::class, 'destroy'])->name('bookmarks.destroy');
     Route::get('/orders', [HomeController::class, 'orders'])->name('orders.index');
     Route::get('/orders/{order}', [HomeController::class, 'about_orders'])->name('orders.show');
+    Route::delete('/orders/{order}', [\App\Http\Controllers\Home\OrderController::class, 'cancel_order'])->name('orders.destroy');
     Route::get('/info', [HomeController::class, 'info'])->name('info.index');
     Route::patch('/info/{id}', [HomeController::class, 'infoUpdate'])->name('info.update');
     Route::get('/commentaries', [CommentaryController::class, 'commentaries'])->name('commentaries.index');
@@ -77,6 +79,11 @@ Route::name('admin.')->prefix('admin')->group(function () {
     Route::delete('/discount/{id}', [AdminController::class, 'discountDelete'])->name('discount.destroy');
     //Interface
     Route::get('/interface', [\App\Http\Controllers\Admin\InterfaceController::class, 'index'])->name('interface.index');
+
+    Route::get('/addresses',[AdminController::class, 'addresses'])->name('addresses.index');
+    Route::post('/addresses',[AdminController::class, 'addresses_store'])->name('addresses.store');
+    Route::patch('/addresses/{address}',[AdminController::class, 'addresses_update'])->name('addresses.update');
+    Route::delete('/addresses/{address}',[AdminController::class, 'addresses_destroy'])->name('addresses.destroy');
 });
 
 //404

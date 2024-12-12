@@ -38,7 +38,7 @@
                                     <label for="name">Ваше имя</label>
                                     <input class="form-control my-3" id="name" type="text" name="name" value="{{  $user->name }}">
 
-                                    <label for="address">Адрес доставки</label>
+                                    <label for="address">Адрес самовывоза</label>
                                     <input class="form-control my-3" id="address" type="text" name="address" value="{{  $user->address }}">
 
                                     <fieldset>
@@ -79,7 +79,7 @@
                 {{--            <p>Дата рождения: {{ $user->birthday !== null ? $user->birthday->format('d-m-Y') : 'не указана' }}</p>--}}
                 <div class="d-flex flex-column">
                     <p class="mb-1 text-body-tertiary">{{ $user->email !== null ? $user->email : 'не указана' }}</p>
-                    <p class="mb-0 text-body-tertiary">+{{ $user->phone !== null ? $user->phone : 'не указан' }}</p>
+                    <p class="mb-0 text-body-tertiary">{{ $user->phone !== null ? $user->phone : 'не указан' }}</p>
                 </div>
 
 

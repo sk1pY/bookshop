@@ -34,7 +34,7 @@
                                     </form>
                                 </div>
                                 <div class="d-flex justify-content-center align-items-center mt-2">
-                                    <form action="{{ route('home.bookmarks.destroy', ['id' => $bookmark->id]) }}" method="post">
+                                    <form action="{{ route('home.bookmarks.destroy', ['bookmark' => $bookmark->id]) }}" method="post">
                                         @csrf
                                         @method('delete')
                                         <button style="width: 200px; background-color: red; color: white"

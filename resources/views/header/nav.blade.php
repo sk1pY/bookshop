@@ -1,16 +1,20 @@
 <nav style="background-color: white" class="navbar navbar-expand-lg  ">
     <div class="container">
+
         <a style="font-size: 2rem; color:red" class="fw-bold navbar-brand" href="{{ route('books.index') }}">#BookShop
             <i class="fa-solid fa-book"></i> </a>
         <div class="dropdown">
             <button class="btn btn-danger dropdown-toggle" type="button" data-bs-toggle="dropdown"
                     aria-expanded="false">
                 Категории книг
+
             </button>
+
             <ul class="dropdown-menu p-2 w-auto">
+
                 @foreach($categories as $category)
-                    <li style="font-size: 1rem" class=" text">
-                        <a class="atext dropdown-item"
+                    <li style="font-size: 1rem" class=" ">
+                        <a class="text dropdown-item"
                            href="{{route('categories.public.show',['category' => $category->id])}}">{{ $category->name }}</a>
                     </li>
                 @endforeach
@@ -20,6 +24,8 @@
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
+        {{--        <button id="btnSwitch" class="btn  ">Dark mode</button>--}}
+
         <div class="collapse navbar-collapse" id="navbarNav">
             {{--            SEARCH--}}
             <div class="d-flex justify-content-center align-items-center  search-container mx-4" style="width: 300px;">
@@ -33,14 +39,7 @@
             </div>
             {{--          END  SEARCH--}}
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0 ">
-                @guest
-                <li class="nav-item mt-3">
-                    <a class="nav-link" href="{{ route('login') }}">Войти</a>
-                </li>
-                <li class="nav-item mt-3">
-                    <a class="nav-link" href="{{ route('register') }}">Регистрация</a>
-                </li>
-                @endguest
+
                 @auth
                     <li class="nav-item">
                         <div class="dropdown mt-2">
@@ -56,27 +55,30 @@
                                 </i>
                             </button>
                             <ul class="dropdown-menu">
-                                                                @foreach($notifOrders as $not)
-                                                                    <li><a class="dropdown-item" href="{{route('home.orders.show',$not)}}">Ваш заказ
-                                                                            №{{$not}} готов к получению</a></li>
-                                                                @endforeach
+                                @foreach($notifOrders as $not)
+                                    <li><a class="dropdown-item" href="{{route('home.orders.show',$not)}}">Ваш заказ
+                                            №{{$not}} готов к получению</a></li>
+                                @endforeach
                             </ul>
                         </div>
 
                     </li>
+                    {{--                        DROPDOWN MENU--}}
+
                     <li class="nav-item ">
-                        {{--                        DROPDOWN MENU--}}
+
                         <div class="dropdown-center">
-                            <button class="nav-link d-flex flex-column align-items-center btn" type="button"
+                            <button class="nav-link d-flex flex-column align-items-center" type="button"
                                     data-bs-toggle="dropdown"
                                     aria-expanded="false">
+                                <i class="bi bi-person fs-3 p-0 text-center" ></i>
+                                <span>{{Auth::user()?Auth::user()->name:'guest'}}</span>
 
-                                <i class="fa-solid fa-user fs-4"></i>{{Auth::user()?Auth::user()->name:'guest'}}
                             </button>
                             <ul class="dropdown-menu  p-2 w-auto">
+
                                 <li class="d-flex align-items-center p-2 drowdownnav rounded-pill">
-                                    <i class="fa-solid fa-user me-2"
-                                       style="font-size:1.4rem;width: 35px"></i>
+                                    <i class="bi bi-person" style="font-size:1.4rem;width: 35px"></i>
                                     <a style="font-size: 0.8rem" class="dropdown-item p-0 ms-auto"
                                        href="{{ route('home.info.index') }}">Мои данные</a>
                                 </li>
@@ -123,14 +125,14 @@
                     <li class="nav-item">
                         <a class="nav-link d-flex flex-column align-items-center"
                            href="{{ route('home.orders.index') }}">
-                            <i class="fa-solid fa-bag-shopping fs-4"></i>
+                            <i class="bi bi-bag fs-3 " style="height: 40px; width: 30px"></i>
                             <span>Заказы</span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link d-flex flex-column align-items-center"
                            href="{{ route('home.bookmarks.index') }}">
-                            <i class="fa-regular fa-heart fs-4"></i>
+                            <i class="bi bi-heart fs-3 " style="height: 40px; width: 30px"></i>
                             <span>Избранное</span>
                         </a>
                     </li>
@@ -138,11 +140,18 @@
                 <li class="nav-item">
                     <a class="nav-link d-flex flex-column align-items-center"
                        href="{{ route('basket.index') }}">
-                        <i class="fa-solid fa-basket-shopping fs-4"></i>
+                        <i class="bi bi-cart fs-3 " style="height: 40px; width: 30px"></i>
                         <span>Корзина</span>
                     </a>
                 </li>
-
+                @guest
+                    <li class="nav-item mt-3">
+                        <a class="nav-link" href="{{ route('login') }}">Войти</a>
+                    </li>
+                    <li class="nav-item mt-3">
+                        <a class="nav-link" href="{{ route('register') }}">Регистрация</a>
+                    </li>
+                @endguest
 
             </ul>
         </div>

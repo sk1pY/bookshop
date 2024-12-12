@@ -26,7 +26,7 @@
         </div>
     <div class="col-4 bg-white rounded-3">
         <p>Имя: {{$user->name}}</p>
-        <p>Адрес доставки: {{$user->address}}</p>
+        <p>Адрес самовывоза: {{$user->address}}</p>
         <p>Номер телефона: {{$user->phone}}</p>
     </div>
     </div>

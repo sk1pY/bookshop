@@ -7,6 +7,7 @@ use App\Models\Basket;
 use App\Models\Basket_items;
 use App\Models\Book;
 use App\Models\Category;
+use App\Models\DeliveryAddress;
 use App\Models\Historyorder;
 use App\Models\Historyorders;
 use App\Models\Order;
@@ -96,7 +97,37 @@ class AdminController extends Controller
 
     }
 
+    public function addresses(){
 
+        $addresses = DeliveryAddress::all();
+        return view('admin.addresses',compact('addresses'));
+
+    }
+    public function addresses_store(Request $request){
+
+        DeliveryAddress::create([
+            'address' => $request->input('address'),
+        ]);
+
+        return redirect()->route('admin.addresses.index');
+
+    }
+    public function addresses_update(Request $request,DeliveryAddress $address){
+
+        $address->update([
+            'address' => $request->input('address'),
+        ]);
+
+        return redirect()->route('admin.addresses.index');
+
+    }
+    public function addresses_destroy(DeliveryAddress $address){
+
+        $address->delete();
+
+        return redirect()->route('admin.addresses.index');
+
+    }
 
 
 

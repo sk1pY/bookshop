@@ -5,12 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\Basket;
 use App\Models\BasketItem;
 use App\Models\Book;
+use App\Models\DeliveryAddress;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use function PHPSTORM_META\map;
+use function PHPUnit\Framework\isEmpty;
 
 class BasketItemController extends Controller
 {
@@ -19,6 +21,7 @@ class BasketItemController extends Controller
         $basket = app('basket');
         $total_price = 0;
         $books_session = collect(session()->get('books', []));
+        $books = collect(session()->get('books', []));
         $books_auth = [];
 
         // ЕСЛИ ЮЗЕР НЕ АВТОРИЗОВАН, КНИГИ БЕРУТСЯ ИЗ СЕССИИ
@@ -53,8 +56,9 @@ class BasketItemController extends Controller
                 ->values();
         }
 
+        $addresses = DeliveryAddress::all();
 
-        return view('basket', compact('books', 'total_price'));
+        return view('basket', compact('books', 'total_price', 'addresses'));
     }
 
 
@@ -110,7 +114,7 @@ class BasketItemController extends Controller
                 return redirect()->route('basket.index');
 
             } elseif ($basket_item_book->quantity == $stock) {
-                return redirect()->route('basket.index')->with('basket', 'Выбрано максимальное количество книг');
+                return redirect()->route('basket.index')->with('error', 'Выбрано максимальное количество книг');
             }
         } else {
             $books = collect(session()->get('books', []));
@@ -129,7 +133,7 @@ class BasketItemController extends Controller
                 return $item;
             });
             if ($stock) {
-                return redirect()->route('basket.index')->with('basket', 'Выбрано максимальное количество книг');
+                return redirect()->route('basket.index')->with('error', 'Выбрано максимальное количество книг');
             }
             if (!$book_exist) {
                 $book = Book::find($id);
@@ -189,52 +193,65 @@ class BasketItemController extends Controller
         return redirect()->route('basket.index');
     }
 
+    public function delete_from_basket(Book $book){
+        $basket = app('basket');
+
+        BasketItem::where(['book_id'=> $book->id,'basket_id' => $basket->id])->delete();
+        return redirect()->route('basket.index');
+
+    }
     public function orderAdd(Request $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|alpha|string',
-            'surname' => 'required|alpha|string',
-            'address' => 'required|string',
-            'phone' => 'required|string',
-        ]);
-
-        Auth::user()->update([
-            'name' => $validated['name'],
-            'surname' => $validated['surname'],
-            'address' => $validated['address'],
-            'phone' => $validated['phone'],
-        ]);
-        $order_user = Order::create([
-            'user_id' => Auth::id(),
-            'price' => $request->input('total_price'),
-            'status' => 'Новый заказ'
-        ]);
-        $basketJson = $request->input('basket');
-        $basket = collect(json_decode($basketJson));
-        //КОЛЛЕКЦИЯ КНИГ КОТОРЫЕ ЗАКАЗАЛ ЮЗЕР
-
-        foreach ($basket as $basket_item) {
-            OrderItem::create([
-                'book_id' => $basket_item->id,
-                'quantity' => $basket_item->quantity,
-                'order_id' => $order_user->id,
+         //  dd($request->all());
+            $validated = $request->validate([
+                'name' => 'required|alpha|string',
+                'surname' => 'required|alpha|string',
+                'address' => 'required|string',
+                'phone' => ['required', 'regex:/^\+375(25|29|33|44|17)\d{7}$/'],
+            ], [
+                'phone.regex' => 'Номер телефона должен начинаться с +375 и содержать 7 цифр после кода оператора.'
             ]);
+        if ($request->input('basket') !== []) {
+
+
+            Auth::user()->update($validated);
+
+            $order_user = Order::create([
+                'user_id' => Auth::id(),
+                'price' => $request->input('total_price'),
+                'address' => $request->input('address'),
+                'status' => 'Новый заказ'
+            ]);
+            $basketJson = $request->input('basket');
+            $basket = collect(json_decode($basketJson));
+
+            //КОЛЛЕКЦИЯ КНИГ КОТОРЫЕ ЗАКАЗАЛ ЮЗЕР
+            foreach ($basket as $basket_item) {
+                OrderItem::create([
+                    'book_id' => $basket_item->id,
+                    'quantity' => $basket_item->quantity,
+                    'order_id' => $order_user->id,
+                ]);
+            }
+
+            $booksStockUpdate = OrderItem::where(['order_id' => $order_user->id])->get();
+
+            $booksStockUpdate->each(function ($item) {
+                $book = Book::where(['id' => $item->book_id])->first();
+                $book->stock -= $item->quantity;
+                $book->save();
+            });
+
+            if ($basket = Auth::user()->basket) {
+                BasketItem::where('basket_id', $basket->id)->delete();
+                $basket->delete();
+                $request->session()->forget('books');
+
+            }
+        } else {
+            return redirect()->route('basket.index')->with('error', 'Корзина пуста');
         }
 
-        $booksStockUpdate = OrderItem::where(['order_id' => $order_user->id])->get();
-
-        $booksStockUpdate->each(function ($item) {
-            $book = Book::where(['id' => $item->book_id])->first();
-            $book->stock -= $item->quantity;
-            $book->save();
-        });
-
-        if ($basket = Auth::user()->basket) {
-            BasketItem::where('basket_id', $basket->id)->delete();
-            $basket->delete();
-            $request->session()->forget('books');
-
-        }
 
         return redirect()->route('basket.index')->with('success', 'Заказ успешно оформлен');
     }

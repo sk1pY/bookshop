@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Order extends Model
 {
     use HasFactory;
-    protected $fillable = ['status','user_id','basket_id','price'];
+    protected $fillable = ['status','user_id','basket_id','price','address'];
     public function basket()
     {
         return $this->BelongsTo(Basket::class);

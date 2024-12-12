@@ -1,5 +1,10 @@
 @extends('home.index')
 @section('сontentAdditional')
+    @if (session('success'))
+        <div class="alert alert-success d-flex px-4">
+            <div>{{ session('success') }}</div>
+        </div>
+    @endif
     <form action="{{ route('home.orders.index') }}" method="get">
 
         <div class="d-flex mb-3">
@@ -21,9 +26,9 @@
                 <p>цена: {{ $order -> price }}</p>
                 <p>Статус заказа: {{ $order -> status }}</p>
                 @if($order->status == "Новый заказ"  )
-                    <form action="{{ route('admin.orders.status.update',['id'=>$order->id]) }}" method="post">
+                    <form action="{{ route('home.orders.destroy',['order'=>$order->id]) }}" method="post">
                         @csrf
-                        @method('patch')
+                        @method('delete')
                         <input name="status" type="hidden" value="Отмена заказа">
                         <input class="btn btn-danger" type="submit" value="Отменить заказ">
                     </form>

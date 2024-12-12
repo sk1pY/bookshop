@@ -13,13 +13,13 @@
         <thead>
         <tr class="text-center align-middle">
             <th scope="col" class="col-5">Книга</th>
-            <th  scope="col" class="col-1">Цена</th>
+            <th scope="col" class="col-1">Цена</th>
             <th scope="col" class="col-2">Автор</th>
             <th scope="col" class="col-1">В наличии</th>
-            <th  scope="col" class="col-1">Удалить/изменить</th>
+            <th scope="col" class="col-1">Удалить/изменить</th>
         </tr>
         </thead>
-        <tbody >
+        <tbody>
         @foreach( $books as $book )
             <tr class="align-middle">
                 <td>
@@ -37,7 +37,7 @@
                     {{$book->stock}}
                 </td>
                 <td class="text-center d-flex ">
-                    <button type="button" class="btn btn-sm   " data-bs-toggle="modal"
+                    <button type="button" class="btn btn-sm" data-bs-toggle="modal"
                             data-bs-target="#update.{{$book->id}}">
                         <i class="bi bi-pencil-square"></i>
                     </button>
@@ -87,7 +87,8 @@
 
                                 <input id="stock" class="form-control" name="stock" value="{{$book->stock}}">
                                 <input type="file" name="image">
-                                <img src="{{ Storage::url('booksImages/'.$book->image) }}" alt="123" style="width: 40px;height: 40px;">
+                                <img src="{{ Storage::url('booksImages/'.$book->image) }}" alt="123"
+                                     style="width: 40px;height: 40px;">
                                 <div class="modal-footer">
                                     <button type="submit" class="btn btn-success">Принять
                                     </button>

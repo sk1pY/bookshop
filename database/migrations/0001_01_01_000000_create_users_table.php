@@ -19,7 +19,7 @@ return new class extends Migration
             $table->date('birthday')->nullable();
             $table->string('email',255)->unique();
             $table->string('phone',255)->nullable();
-            $table->string('address',20)->nullable();
+            $table->string('address')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
