@@ -12,6 +12,8 @@ use App\Http\Controllers\CommentaryController;
 use App\Http\Controllers\Home\BookmarkController as HomeBookmarkController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\SearchController;
+use App\Models\Bookmark;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 //SEARCH
@@ -22,10 +24,14 @@ Route::get('/author/{id}', [AuthorController::class, 'index'])->name('author.ind
 
 //КНИГИ
 Route::get('/', [BookController::class, 'index'])->name('books.index');
-Route::get('/book/{id}', [BookController::class, 'book'])->name('books.book');
+Route::get('/book/{book}', [BookController::class, 'book'])->name('books.book');
+
 
 //КАТЕГОРИИ
 Route::get('/category/{category}', [\App\Http\Controllers\UserCategoryController::class, 'categoryBooks'])->name('categories.public.show');
+Route::get('/bestsellers',[BookController::class,'category_bestsellers'])->name('bestsellers');
+Route::get('/newest',[BookController::class,'category_newest'])->name('newest');
+Route::get('/sale',[BookController::class,'category_sale'])->name('sale');
 
 //КОРЗИНА
 Route::prefix('basket')->group(function () {

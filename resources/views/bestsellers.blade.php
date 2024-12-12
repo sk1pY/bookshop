@@ -1,6 +1,24 @@
 @extends('layouts.app')
 @section('content')
-        <h1>{{$author->name.' '. $author->surname}}</h1>
+    <h1>Bestsellers</h1>
+    {{--FILTER--}}
+    <div class="my-4">
+        <form  id="filterForm" method="get">
+            @csrf
+            <select class="form-select w-25" id="rating" name="filter" form="filterForm"
+                    onchange="this.form.submit()">
+
+                <option value="">Выберите фильтр</option>
+                <option value="cheap" {{ request('filter') === 'cheap' ? 'selected' : '' }} >Сначала дешевые
+                </option>
+                <option value="expensive" {{ request('filter') === 'expensive' ? 'selected' : '' }}>Сначала
+                    дорогие
+                </option>
+                <option value="rating" {{ request('filter') === 'rating' ? 'selected' : '' }}>По рейтингу
+                </option>
+            </select></form>
+    </div>
+    {{--FILTER--}}
     {{--BOOKS--}}
     <div class="row row-cols-1 row-cols-md-5 g-5">
         @forelse($books as $book)
@@ -8,16 +26,20 @@
                 <div class="card border-0 " style="height: 459px;width: 214px">
                     @auth
                         {{-- BOOKMARK --}}
+
                         <div style="cursor: pointer" class="d-flex justify-content-end bookmark-button m-3 fs-4"
                              data-bookmark-id="{{ $book->id }}">
+
                             <i class="fa-regular fa-heart bg-red-bookmark {{
                         in_array($book->id, $bookmarkTaskUser) ? 'fa-solid' : '' }}"></i>
                         </div>
                     @endauth
                     {{-- BOOKMARK --}}
-                    <a href="{{ route('books.book', ['book' => $book->id]) }}" style="text-decoration: none; color: inherit;">
+                    <a href="{{ route('books.book', ['book' => $book->id]) }}"
+                       style="text-decoration: none; color: inherit;">
                         <div class="d-flex justify-content-center align-items-center image-container">
-                            <img src="{{ Storage::url('booksImages/' . $book->image) }}" alt="Responsive image" class="img-fluid" style="height: 170px">
+                            <img src="{{ Storage::url('booksImages/' . $book->image) }}" alt="Responsive image"
+                                 class="img-fluid" style="height: 170px">
                         </div>
                         <div class="card-body pb-0 pt-0">
                             <div class="d-flex mt-2">
@@ -30,9 +52,13 @@
                                     <div class="fw-bold" style="font-size: 1.5rem">{{$book->price}} р.</div>
                                 @endif
                             </div>
-                            <span class="card-title pt-0 mb-0">
+                            <span class=" card-title pt-0 mb-0">
                                             {{ substr($book->title,0,18)}}
                                         </span>
+
+                        </div>
+                        <div style="background-color: #daebe6; color: #10b37e" class=" ms-2 px-1 border rounded-4  d-inline-block">
+                            Купили {{ $book->numberOfPurchased }} раз
                         </div>
                     </a>
                     <div class="card-body ">
@@ -73,5 +99,4 @@
         @endforelse
     </div>
     {{--BOOKS--}}
-
-@endsection
+@endsection('content')

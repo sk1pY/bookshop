@@ -1,11 +1,12 @@
 @extends('home.index')
 @section('сontentAdditional')
-    <h1>Заказ {{ $order->id }}</h1>
+    <h4>Заказ №{{ $order->id }}</h4>
     <table class="table table-bordered">
         <thead>
         <tr>
-            <th scope="col">Название книги</th>
-            <th scope="col">Цена</th>
+            <th scope="col">Книга</th>
+            <th scope="col">Сумма</th>
+            <th scope="col">Адрес самовывоза</th>
             @if($order->status == "Получен")
                 <th scope="col">Оценить товар</th>
             @endif
@@ -15,8 +16,12 @@
         @foreach($orderItems as $or)
 
             <tr>
-                <td>{{ $or->book -> title }}</td>
+                <td>
+                    <img src="{{ Storage::url('booksImages/'.$or->book->image) }}" alt="404" style="width: 45px; height: 65px">
+
+                <a href="{{route('books.book',['book'=> $or->book->id])}}">{{ $or->book -> title }}</a></td>
                 <td>{{ $or -> book -> price }}</td>
+                <td>{{ $or -> order-> address }}</td>
                 @if($order->status == "Получен")
                     <td>
 
@@ -32,5 +37,4 @@
     </table>
 
 
-    <h1>сумма заказа: {{ $order -> price }} $</h1>
 @endsection

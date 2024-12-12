@@ -1,6 +1,24 @@
 @extends('layouts.app')
 @section('content')
-        <h1>{{$author->name.' '. $author->surname}}</h1>
+    <h1>Новинки</h1>
+    {{--FILTER--}}
+    <div class="my-4">
+        <form  id="filterForm" method="get">
+            @csrf
+            <select class="form-select w-25" id="rating" name="filter" form="filterForm"
+                    onchange="this.form.submit()">
+
+                <option value="">Выберите фильтр</option>
+                <option value="cheap" {{ request('filter') === 'cheap' ? 'selected' : '' }} >Сначала дешевые
+                </option>
+                <option value="expensive" {{ request('filter') === 'expensive' ? 'selected' : '' }}>Сначала
+                    дорогие
+                </option>
+                <option value="rating" {{ request('filter') === 'rating' ? 'selected' : '' }}>По рейтингу
+                </option>
+            </select></form>
+    </div>
+    {{--FILTER--}}
     {{--BOOKS--}}
     <div class="row row-cols-1 row-cols-md-5 g-5">
         @forelse($books as $book)
@@ -33,6 +51,9 @@
                             <span class="card-title pt-0 mb-0">
                                             {{ substr($book->title,0,18)}}
                                         </span>
+                        </div>
+                        <div style="background-color: #daebe6; color: #10b37e" class="ms-2 px-1 border rounded-4  d-inline-block">
+                             Добавлена {{ date('m.d.y',strtotime($book->created_at))}}
                         </div>
                     </a>
                     <div class="card-body ">
@@ -73,5 +94,4 @@
         @endforelse
     </div>
     {{--BOOKS--}}
-
-@endsection
+@endsection('content')

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Bookmark;
 use App\Models\Commentary;
+use App\Models\DeliveryAddress;
 use App\Models\OrderItem;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -43,7 +44,8 @@ class HomeController extends Controller
     public function info()
     {
         $user = Auth::user();
-        return view('home.info', compact('user'));
+        $addresses = DeliveryAddress::all();
+        return view('home.info', compact('user', 'addresses'));
     }
 
     public function infoUpdate(Request $request, $id)

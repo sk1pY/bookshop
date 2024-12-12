@@ -42,9 +42,8 @@ class BasketItemController extends Controller
                     $book->quantity = $item->quantity;
                     return $book;
                 });
-            $total_price = $books_auth->sum(function ($item) {
-                return $item->quantity * $item->price;
-            });
+
+
             // группировка по айди и не больше стока колво книг
             $books = $books_session->merge($books_auth)
                 ->groupBy('id')
@@ -54,6 +53,20 @@ class BasketItemController extends Controller
                     return $firstBook;
                 })
                 ->values();
+            $books->each(function ($book) use ($basket) {
+                $basketitem = BasketItem::where(['book_id' => $book->id, 'basket_id' => $basket->id])->first();
+
+                if ($basketitem) {
+                    $basketitem->update([
+                        'quantity' => $book->quantity,
+                    ]);
+                    $basketitem->save();
+                }
+            });
+            $total_price = $books->sum(function ($item) {
+                return $item->quantity * $item->price;
+            });
+            session()->forget('books');
         }
 
         $addresses = DeliveryAddress::all();
@@ -150,67 +163,70 @@ class BasketItemController extends Controller
 
     public function delete($id)
     {
-        $books = collect(session()->get('books', []));
-        $update = false;
-        $books = $books->map(function ($book) use ($id, &$update) {
-            if ($book->id == $id && $book->quantity > 1) {
-                $book->quantity--;
-                $update = true;
+        if (session()->has('books')) {
 
+            $books = collect(session()->get('books', []));
+            $update = false;
+            $books = $books->map(function ($book) use ($id, &$update) {
+                if ($book->id == $id && $book->quantity > 1) {
+                    $book->quantity--;
+                    $update = true;
+                    return $book;
+                } else {
+                    $book = null;
+                    $update = true;
+                }
                 return $book;
-
-            } else {
-                $book = null;
-                $update = true;
+            })->filter();
+            session(['books' => $books]);
+            if ($update) {
+                return redirect()->route('basket.index');
             }
-            return $book;
-        })->filter();
-
-
-        session(['books' => $books]);
-        if ($update) {
-            return redirect()->route('basket.index');
         }
-
 
         if (Auth::check()) {
 
-            $basketUser = Basket::where(['user_id' => Auth::id()])->first();
+            $basket = app('basket');
 
             $bookInBasket = BasketItem::where('book_id', $id)->first();
+            //dd($bookInBasket);
             if ($bookInBasket->quantity == 1) {
                 $bookInBasket->delete();
-                if (BasketItem::where('basket_id', $basketUser->id)->count() == 0) {
-                    $basketUser->delete();
+                if (BasketItem::where('basket_id', $basket->id)->count() == 0) {
+                    $basket->delete();
                 }
                 return redirect()->route('basket.index');
             }
             $bookInBasket->decrement('quantity');
-            $basketUser->price -= $bookInBasket->book->price;
-            $basketUser->save();
+            $basket->price -= $bookInBasket->book->price;
+            $basket->save();
         }
 
         return redirect()->route('basket.index');
     }
 
-    public function delete_from_basket(Book $book){
+    public function delete_from_basket(Request $request, Book $book)
+    {
         $basket = app('basket');
 
-        BasketItem::where(['book_id'=> $book->id,'basket_id' => $basket->id])->delete();
+        BasketItem::where(['book_id' => $book->id, 'basket_id' => $basket->id])->delete();
+        $request->session()->forget('books');
+
         return redirect()->route('basket.index');
 
     }
+
     public function orderAdd(Request $request)
     {
-         //  dd($request->all());
-            $validated = $request->validate([
-                'name' => 'required|alpha|string',
-                'surname' => 'required|alpha|string',
-                'address' => 'required|string',
-                'phone' => ['required', 'regex:/^\+375(25|29|33|44|17)\d{7}$/'],
-            ], [
-                'phone.regex' => 'Номер телефона должен начинаться с +375 и содержать 7 цифр после кода оператора.'
-            ]);
+        //  dd($request->all());
+        $validated = $request->validate([
+            'name' => 'required|alpha|string',
+            'surname' => 'required|alpha|string',
+            'address' => 'required|string',
+            'phone' => ['required', 'regex:/^\+375(25|29|33|44|17)\d{7}$/'],
+        ], [
+            'phone.regex' => 'Номер телефона должен начинаться с +375 и содержать 7 цифр после кода оператора.'
+        ]);
         if ($request->input('basket') !== []) {
 
 

@@ -25,44 +25,44 @@ class BookController extends Controller
     {
         $bookmarkTaskUser = Bookmark::where('user_id', Auth::id())->pluck('book_id')->toArray();
 
-        $query = Book::withCount(['commentaries']);
 
-        if ($request->filled('filter')) {
-            switch ($request->input('filter')) {
-                case 'cheap':
-                    $query->orderBy('price', 'asc');
-                    break;
-                case 'expensive':
-                    $query->orderBy('price', 'desc');
-                    break;
-                case 'rating':
-                    $query->orderBy('avgRating', 'desc');
-            }
-
-        }
-
-        $books = $query->get();
-
-        return view('index', compact('books', 'bookmarkTaskUser'));
+        return view('index', compact( 'bookmarkTaskUser'));
     }
 
 
 
-    public function book($id)
+    public function book(Book $book)
     {
         //id books которые юзер купил
         $orders = Order::where('user_id', Auth::id())->where('status', 'Получен')->pluck('id');
         $book_id = OrderItem::whereIn('order_id', $orders)->pluck('book_id')->toArray();
 
 
-        in_array($id,$book_id) ? $bought= true : $bought = false;
+        in_array($book->id,$book_id) ? $bought= true : $bought = false;
 
-        $book = Book::find($id);
-        $commentaries = Commentary::where('book_id', $id)->orderBy('created_at', 'desc')->get();
+        $commentaries = Commentary::where('book_id', $book->id)->orderBy('created_at', 'desc')->get();
 
         return view('book', compact('book', 'commentaries', 'bought'));
     }
 
+    public function category_bestsellers(){
+        $bookmarkTaskUser = Bookmark::where('user_id', Auth::id())->pluck('book_id')->toArray();
 
+        $books = \App\Models\Book::orderBy('numberOfPurchased','desc')->get();
+        return view('bestsellers',compact('books','bookmarkTaskUser'));
+    }
+    public function category_newest(){
+        $bookmarkTaskUser = Bookmark::where('user_id', Auth::id())->pluck('book_id')->toArray();
+
+        $books = \App\Models\Book::orderBy('created_at','asc')->get();
+        return view('newest',compact('books','bookmarkTaskUser'));
+    }
+ public function category_sale(){
+        $bookmarkTaskUser = Bookmark::where('user_id', Auth::id())->pluck('book_id')->toArray();
+
+        $books = \App\Models\Book::where('discount','>',0)->get();
+       // dd($books);
+        return view('sale',compact('books','bookmarkTaskUser'));
+    }
 
 }

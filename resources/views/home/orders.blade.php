@@ -9,11 +9,11 @@
 
         <div class="d-flex mb-3">
             <div class="ms-2 me-2" >
-                <button  class="btn btn-dark" value="all" name="status" >Все заказы</button>
+                <button  class="btn btn-outline-dark" value="all" name="status" >Все заказы</button>
 
             </div>
             <div class="ms-2 me-2">
-                <button class="btn btn-dark"  value="delivered" name="status">Готовые заказы</button>
+                <button class="btn btn-outline-dark"  value="delivered" name="status">Готовые заказы</button>
             </div>
         </div>
     </form>
@@ -30,7 +30,7 @@
                         @csrf
                         @method('delete')
                         <input name="status" type="hidden" value="Отмена заказа">
-                        <input class="btn btn-danger" type="submit" value="Отменить заказ">
+                        <input class="btn btn-outline-danger" type="submit" value="Отменить заказ">
                     </form>
                 @endif
 

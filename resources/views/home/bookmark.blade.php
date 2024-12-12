@@ -33,6 +33,11 @@
                                         </button>
                                     </form>
                                 </div>
+                            @else
+                                <div class="d-flex justify-content-center align-items-center">
+                                    <span>нет в наличии</span>
+                                </div>
+                            @endif
                                 <div class="d-flex justify-content-center align-items-center mt-2">
                                     <form action="{{ route('home.bookmarks.destroy', ['bookmark' => $bookmark->id]) }}" method="post">
                                         @csrf
@@ -43,11 +48,7 @@
                                         </button>
                                     </form>
                                 </div>
-                            @else
-                                <div class="d-flex justify-content-center align-items-center">
-                                    <span>нет в наличии</span>
-                                </div>
-                            @endif
+
                         @endauth
                     </div>
                 </div>

@@ -5,7 +5,7 @@
             background-color: white;
         }
     </style>
-    <div class="row p-4 ">
+    <div class="row  ">
         <div class="col-2   h-100  p-3 w-auto">
             <div class=" w-auto">
 

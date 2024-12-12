@@ -89,7 +89,7 @@
                         @else
                             <h5 class="mt-5">Вы не приобрели данный товар для его оценки</h5>
                         @endif
-
+{{--                    COMMENTARIES--}}
                         @forelse($commentaries as $commentary)
                             <div class="w-100 py-4">
                                 <div class="d-flex justify-content-center row  ">

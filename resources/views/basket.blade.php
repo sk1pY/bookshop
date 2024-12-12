@@ -33,7 +33,7 @@
                                 <img style="width: 80px" src="{{ Storage::url('booksImages/' .$book->image) }}"
                                      alt="">
                                 <div class="ms-3">
-                                    <a href="{{route('books.book',['id'=> $book->id])}}">
+                                    <a href="{{route('books.book',['book'=> $book->id])}}">
                                         {{ $book->title }}
                                     </a>
                                 </div>
@@ -104,7 +104,7 @@
                                value="{{ Auth::user()->surname ?? old('surname') }}">
                         <label for="phone">Телефон</label>
                         <input class="mb-3 form-control" id="phone" name="phone" type="text"
-                               value="{{ Auth::user()->phone??old('phone')}} " >
+                               value="{{ Auth::user()->phone?Auth::user()->phone:'+375'}}"  maxlength="13">
                         <label for="address">Самовывоз</label>
                         <select name="address" class="form-select mb-3">
                             @foreach($addresses as $address)

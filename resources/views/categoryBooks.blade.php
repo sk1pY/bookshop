@@ -1,7 +1,24 @@
 @extends('layouts.app')
 @section('content')
     <h1>{{ $category->name }}</h1>
+    {{--FILTER--}}
+    <div class="my-4">
+        <form  id="filterForm" method="get">
+            @csrf
+            <select class="form-select w-25" id="rating" name="filter" form="filterForm"
+                    onchange="this.form.submit()">
 
+                <option value="">Выберите фильтр</option>
+                <option value="cheap" {{ request('filter') === 'cheap' ? 'selected' : '' }} >Сначала дешевые
+                </option>
+                <option value="expensive" {{ request('filter') === 'expensive' ? 'selected' : '' }}>Сначала
+                    дорогие
+                </option>
+                <option value="rating" {{ request('filter') === 'rating' ? 'selected' : '' }}>По рейтингу
+                </option>
+            </select></form>
+    </div>
+    {{--FILTER--}}
         {{--BOOKS--}}
         <div class="row row-cols-1 row-cols-md-5 g-5">
             @forelse($books as $book)
@@ -16,7 +33,7 @@
                             </div>
                         @endauth
                         {{-- BOOKMARK --}}
-                        <a href="{{ route('books.book', ['id' => $book->id]) }}" style="text-decoration: none; color: inherit;">
+                        <a href="{{ route('books.book', ['book' => $book->id]) }}" style="text-decoration: none; color: inherit;">
                             <div class="d-flex justify-content-center align-items-center image-container">
                                 <img src="{{ Storage::url('booksImages/' . $book->image) }}" alt="Responsive image" class="img-fluid" style="height: 170px">
                             </div>

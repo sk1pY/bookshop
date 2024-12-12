@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Models\Basket;
 use App\Models\BasketItem;
+use App\Models\Book;
 use App\Models\Category;
 use App\Models\Order;
 use Carbon\Carbon;
@@ -11,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Http\Request;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -33,6 +35,7 @@ class AppServiceProvider extends ServiceProvider
         Route::pattern('id','[0-9]+');
         Route::pattern('','[0-9]+');
 
+
 //        View::composer('*', function ($view) {
 //            if (Auth::guard()->check()) {
 //                $basket = Basket::where(['user_id' => Auth::id()])->first();
@@ -47,6 +50,7 @@ class AppServiceProvider extends ServiceProvider
 //            }
 //        });
 
+
         View::composer('*', function ($view) {
             if (Auth::guard()->check()) {
                 //create basket after auth uuser
@@ -59,6 +63,29 @@ class AppServiceProvider extends ServiceProvider
                 ]);
             }
         });
+        View::composer(['newest','sale','index','bestsellers'], function ($view,) {
+            $request = app(Request::class);
+            $query = Book::withCount(['commentaries']);
+
+
+            if ($request->filled('filter')) {
+                switch ($request->input('filter')) {
+                    case 'cheap':
+                        $query->orderBy('price', 'asc');
+                        break;
+                    case 'expensive':
+                        $query->orderBy('price', 'desc');
+                        break;
+                    case 'rating':
+                        $query->orderBy('avgRating', 'desc');
+                }
+
+            }
+
+            $books = $query->get();
+            $view->with('books', $books);
+        });
+
         View::composer('*', function ($view) {
             if (Auth::guard()->check()) {
 

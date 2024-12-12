@@ -36,36 +36,50 @@
                                     @method('PATCH')
 
                                     <label for="name">Ваше имя</label>
-                                    <input class="form-control my-3" id="name" type="text" name="name" value="{{  $user->name }}">
+                                    <input class="form-control my-3" id="name" type="text" name="name"
+                                           value="{{  $user->name }}">
 
                                     <label for="address">Адрес самовывоза</label>
-                                    <input class="form-control my-3" id="address" type="text" name="address" value="{{  $user->address }}">
+
+                                    <select name="address" class="form-select mb-3">
+                                        @foreach($addresses as $address)
+                                            <option value="{{$address->address}}">{{$address->address}}</option>
+
+                                        @endforeach
+                                    </select>
 
                                     <fieldset>
                                         <legend>Выберите ваш пол</legend>
                                         <div>
-                                            <input type="radio" id="choose"   name="gender" value=""  {{ $user->gender === null ? 'checked' : '' }} >
+                                            <input type="radio" id="choose" name="gender"
+                                                   value="" {{ $user->gender === null ? 'checked' : '' }} >
                                             <label for="choose">Пол не выбран</label>
                                         </div>
                                         <div>
-                                            <input type="radio" id="huey" name="gender" value="M" {{ $user->gender == 'M' ? 'checked' : '' }} />
+                                            <input type="radio" id="huey" name="gender"
+                                                   value="M" {{ $user->gender == 'M' ? 'checked' : '' }} />
                                             <label for="huey">Мужской</label>
                                         </div>
 
                                         <div>
-                                            <input type="radio" id="dewey" name="gender" value="F" {{ $user->gender == 'F' ? 'checked' : '' }} />
+                                            <input type="radio" id="dewey" name="gender"
+                                                   value="F" {{ $user->gender == 'F' ? 'checked' : '' }} />
                                             <label for="dewey">Женский</label>
                                         </div>
                                     </fieldset>
 
                                     <label for="date">День рождения</label>
-                                    <input class="form-control my-3" id="date" type="date" name="birthday" value="{{ $user->birthday }}">
+                                    <input class="form-control my-3" id="date" type="date" name="birthday"
+                                           value="{{ $user->birthday?date('Y-m-d',strtotime($user->birthday)):'' }}">
 
                                     <label for="phone">Телефон</label>
-                                    <input class="form-control" id="phone" type="text" name="phone" value="{{  $user->phone }}">
+                                    <input class="form-control" id="phone" type="text" name="phone"
+                                           value="{{  $user->phone??'+375' }}"  maxlength="13">
 
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                            Закрыть
+                                        </button>
                                         <button type="submit" class="btn btn-primary">Сохранить изменения</button>
                                     </div>
                                 </form>
@@ -75,8 +89,8 @@
                         </div>
                     </div>
                 </div>
-                {{--            <p>Пол: {{ $user->gender !== null ? $user->gender : 'не указано' }}</p>--}}
-                {{--            <p>Дата рождения: {{ $user->birthday !== null ? $user->birthday->format('d-m-Y') : 'не указана' }}</p>--}}
+                {{--                            <p>Пол: {{ $user->gender !== null ? $user->gender : 'не указано' }}</p>--}}
+                {{--                            <p>Дата рождения: {{ $user->birthday !== null ? $user->birthday->format('d-m-Y') : 'не указана' }}</p>--}}
                 <div class="d-flex flex-column">
                     <p class="mb-1 text-body-tertiary">{{ $user->email !== null ? $user->email : 'не указана' }}</p>
                     <p class="mb-0 text-body-tertiary">{{ $user->phone !== null ? $user->phone : 'не указан' }}</p>
@@ -90,22 +104,19 @@
             </div>
 
         </div>
-{{--            <div class="mt-4 w-25 border rounded-5 p-4 d-flex flex-column">--}}
+        <div class="mt-4 border rounded-5 p-3 w-25">
 
-{{--                <div class="d-flex align-items-center my-2 drowdownnav rounded-pill p-2">--}}
-{{--                    <i style="font-size:1.7rem;width: 35px" class="fa-regular fa-user "></i>--}}
-{{--                    <a style="font-size: 1rem" class="ms-2" href="">Сменить пароль</a>--}}
-{{--                </div>--}}
-{{--                <div class="d-flex align-items-center my-2 drowdownnav rounded-pill p-2">--}}
-{{--                    <i style="font-size:1.7rem;width: 35px" class="fa-regular fa-credit-card "></i>--}}
-{{--                    <a style="font-size: 1rem" class="  ms-2" href="">Выйти из аккаунта</a>--}}
-{{--                </div>--}}
-{{--                <div class="d-flex align-items-center my-2 drowdownnav rounded-pill p-2">--}}
+            <div class="d-flex align-items-center   rounded-pill p-2">
+                <a style="font-size: 1rem" href="">Сменить пароль</a>
+            </div>
+            <div class="d-flex align-items-center   rounded-pill p-2">
+                <a style="font-size: 1rem" href="">Выйти из аккаунта</a>
+            </div>
+            <div class="d-flex align-items-center   rounded-pill p-2">
 
-{{--                    <i style="font-size:1.7rem;width: 35px" class="fa-regular fa-bookmark"></i>--}}
-{{--                    <a style="font-size: 1rem" class="ms-2" href="">Удалить аккаунт</a>--}}
-{{--                </div>--}}
-{{--            </div>--}}
+                <a style="font-size: 1rem" href="">Удалить аккаунт</a>
+            </div>
+        </div>
     </div>
 
 @endsection
