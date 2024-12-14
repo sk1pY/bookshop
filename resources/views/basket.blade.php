@@ -20,7 +20,6 @@
         </div>
     @endif
     <div class="row">
-
         <div class="col-6 rounded-5 bg-white ms-4 p-4 table-responsive">
 
             <table class="table table-sm" style="width: 500px">
@@ -29,7 +28,13 @@
                 @forelse($books as $book)
                     <tr>
                         <td class="align-middle">
+
                             <div class="d-flex w-auto align-items-center">
+                                <div class="form-check" style="transform:scale(1.3);">
+                                    <input class="form-check-input" type="checkbox" id="inlineCheckbox1"
+                                           value="{{ json_encode($book) }}" checked >
+                                    <label class="form-check-label" for="inlineCheckbox1"></label>
+                                </div>
                                 <img style="width: 80px" src="{{ Storage::url('booksImages/' .$book->image) }}"
                                      alt="">
                                 <div class="ms-3">
@@ -92,9 +97,9 @@
             <div class="col">
 
                 <div class="border rounded-5 bg-white ms-4 p-4">
-                    <form class="d-flex flex-column" action="{{ route('basket.order') }}" method="post">
+                    <form id="bookForm" class="d-flex flex-column" action="{{ route('basket.order') }}" method="post">
                         @csrf
-                        <input class="form-control" type="hidden" name="basket" value="{{ json_encode($books) }}">
+                        <input type="hidden" id="basket" name="basket">
                         <input class="form-control" type="hidden" name="total_price" value="{{ $total_price }}">
                         <label for="name">Имя</label>
                         <input class="mb-3 form-control" id="name" name="name" type="text"
@@ -104,7 +109,7 @@
                                value="{{ Auth::user()->surname ?? old('surname') }}">
                         <label for="phone">Телефон</label>
                         <input class="mb-3 form-control" id="phone" name="phone" type="text"
-                               value="{{ Auth::user()->phone?Auth::user()->phone:'+375'}}"  maxlength="13">
+                               value="{{ Auth::user()->phone?Auth::user()->phone:'+375'}}" maxlength="13">
                         <label for="address">Самовывоз</label>
                         <select name="address" class="form-select mb-3">
                             @foreach($addresses as $address)
@@ -130,4 +135,35 @@
             </div>
         @endauth
     </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const selectedBooks = [];
+
+            document.querySelectorAll('.form-check-input').forEach(checkbox => {
+                if (checkbox.checked) {
+                    selectedBooks.push(JSON.parse(checkbox.value));
+                }
+
+                checkbox.addEventListener('change', function () {
+                    const book = JSON.parse(this.value);
+
+                    if (this.checked) {
+                        selectedBooks.push(book);
+                    } else {
+                        const index = selectedBooks.findIndex(item => item.id === book.id);
+                        if (index > -1) {
+                            selectedBooks.splice(index, 1);
+                        }
+                    }
+                    console.log(selectedBooks);
+                });
+            });
+
+            document.getElementById('bookForm').addEventListener('submit', function () {
+                document.getElementById('basket').value = JSON.stringify(selectedBooks);
+            });
+        });
+
+
+    </script>
 @endsection

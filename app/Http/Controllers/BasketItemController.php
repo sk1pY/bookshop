@@ -193,6 +193,7 @@ class BasketItemController extends Controller
             if ($bookInBasket->quantity == 1) {
                 $bookInBasket->delete();
                 if (BasketItem::where('basket_id', $basket->id)->count() == 0) {
+                    $basket->price -= $bookInBasket->book->price;
                     $basket->delete();
                 }
                 return redirect()->route('basket.index');
@@ -218,7 +219,8 @@ class BasketItemController extends Controller
 
     public function orderAdd(Request $request)
     {
-        //  dd($request->all());
+
+       //   dd($request->input('basket'));
         $validated = $request->validate([
             'name' => 'required|alpha|string',
             'surname' => 'required|alpha|string',
@@ -227,22 +229,25 @@ class BasketItemController extends Controller
         ], [
             'phone.regex' => 'Номер телефона должен начинаться с +375 и содержать 7 цифр после кода оператора.'
         ]);
-        if ($request->input('basket') !== []) {
 
+        $books = json_decode($request->input('basket'));
+        $basket = app('basket');
+
+        if($basket->price == 0 ) {
+            return redirect()->route('basket.index')->with('error', 'Корзина пуста');
+        }elseif(empty($books)){
+            return redirect()->route('basket.index')->with('error', 'Выберите книги для покупки');
+        }
 
             Auth::user()->update($validated);
-
             $order_user = Order::create([
                 'user_id' => Auth::id(),
                 'price' => $request->input('total_price'),
                 'address' => $request->input('address'),
                 'status' => 'Новый заказ'
             ]);
-            $basketJson = $request->input('basket');
-            $basket = collect(json_decode($basketJson));
 
-            //КОЛЛЕКЦИЯ КНИГ КОТОРЫЕ ЗАКАЗАЛ ЮЗЕР
-            foreach ($basket as $basket_item) {
+            foreach ($books as $basket_item) {
                 OrderItem::create([
                     'book_id' => $basket_item->id,
                     'quantity' => $basket_item->quantity,
@@ -264,9 +269,6 @@ class BasketItemController extends Controller
                 $request->session()->forget('books');
 
             }
-        } else {
-            return redirect()->route('basket.index')->with('error', 'Корзина пуста');
-        }
 
 
         return redirect()->route('basket.index')->with('success', 'Заказ успешно оформлен');
