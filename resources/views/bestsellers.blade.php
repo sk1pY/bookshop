@@ -4,7 +4,7 @@
     {{--FILTER--}}
     <div class="my-4">
         <form  id="filterForm" method="get">
-            @csrf
+
             <select class="form-select w-25" id="rating" name="filter" form="filterForm"
                     onchange="this.form.submit()">
 
@@ -99,4 +99,7 @@
         @endforelse
     </div>
     {{--BOOKS--}}
+    <div class="mt-4">
+        {{ $books->links('pagination::bootstrap-5') }}
+    </div>
 @endsection('content')

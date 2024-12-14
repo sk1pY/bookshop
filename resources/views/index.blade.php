@@ -56,7 +56,7 @@
                 {{--FILTER--}}
                 <div class="my-4">
                     <form action="{{ route('books.index') }}" id="filterForm" method="get">
-                        @csrf
+
                         <select class="form-select w-25" id="rating" name="filter" form="filterForm"
                                 onchange="this.form.submit()">
 
@@ -148,6 +148,9 @@
                     @endforelse
                 </div>
                 {{--BOOKS--}}
+                <div class="mt-4">
+                    {{ $books->links('pagination::bootstrap-5') }}
+                </div>
             </div>
         </div>
 

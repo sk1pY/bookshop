@@ -36,33 +36,34 @@ class AppServiceProvider extends ServiceProvider
         Route::pattern('','[0-9]+');
 
 
+        View::composer('*', function ($view) {
+            if (Auth::guard()->check()) {
+                $basket = Basket::where(['user_id' => Auth::id()])->first();
+                if (!$basket) {
+                    $bookInBasket = 0;
+                } else {
+                    $bookInBasket = BasketItem::where(['basket_id' => $basket->id])->pluck('quantity')->toArray();
+                    $bookInBasket = array_sum($bookInBasket);
+                }
+
+                $view->with('bookInBasket', $bookInBasket);
+            }
+        });
+
+
 //        View::composer('*', function ($view) {
 //            if (Auth::guard()->check()) {
-//                $basket = Basket::where(['user_id' => Auth::id()])->first();
-//                if (!$basket) {
-//                    $bookInBasket = 0;
-//                } else {
-//                    $bookInBasket = BasketItem::where(['basket_id' => $basket->id])->pluck('quantity')->toArray();
-//                    $bookInBasket = array_sum($bookInBasket);
-//                }
+//                //create basket after auth uuser
+//                $basket = Basket::firstOrCreate(['user_id' => Auth::id()])->first();
 //
-//                $view->with('bookInBasket', $bookInBasket);
+//                $countOrders = Order::whereIn('status', ['Новый заказ', 'Готов к выдаче'])->count();
+//                $view->with([
+//                    'countOrders' => $countOrders,
+//                    'basket' => $basket
+//                ]);
 //            }
 //        });
 
-
-        View::composer('*', function ($view) {
-            if (Auth::guard()->check()) {
-                //create basket after auth uuser
-                $basket = Basket::firstOrCreate(['user_id' => Auth::id()])->first();
-
-                $countOrders = Order::whereIn('status', ['Новый заказ', 'Готов к выдаче'])->count();
-                $view->with([
-                    'countOrders' => $countOrders,
-                    'basket' => $basket
-                ]);
-            }
-        });
         View::composer(['newest','sale','index','bestsellers'], function ($view,) {
             $request = app(Request::class);
             $query = Book::withCount(['commentaries']);
@@ -82,7 +83,7 @@ class AppServiceProvider extends ServiceProvider
 
             }
 
-            $books = $query->get();
+            $books = $query->paginate(10);
             $view->with('books', $books);
         });
 
