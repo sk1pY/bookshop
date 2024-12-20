@@ -16,6 +16,10 @@ use App\Models\Bookmark;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\RolePermissionController;
+
 //SEARCH
 Route::get('/search', [SearchController::class, 'search'])->name('live.search');
 
@@ -27,13 +31,13 @@ Route::get('/', [BookController::class, 'index'])->name('books.index');
 Route::get('/book/{book}', [BookController::class, 'book'])->name('books.book');
 
 
-//КАТЕГОРИИ
+//------------------------------------------------КАТЕГОРИИ------------------------------------------------
 Route::get('/category/{category}', [\App\Http\Controllers\UserCategoryController::class, 'categoryBooks'])->name('categories.public.show');
-Route::get('/bestsellers',[BookController::class,'category_bestsellers'])->name('bestsellers');
-Route::get('/newest',[BookController::class,'category_newest'])->name('newest');
-Route::get('/sale',[BookController::class,'category_sale'])->name('sale');
+Route::get('/bestsellers', [BookController::class, 'category_bestsellers'])->name('bestsellers');
+Route::get('/newest', [BookController::class, 'category_newest'])->name('newest');
+Route::get('/sale', [BookController::class, 'category_sale'])->name('sale');
 
-//КОРЗИНА
+//------------------------------------------------КОРЗИНА------------------------------------------------
 Route::prefix('basket')->group(function () {
     Route::get('/', [BasketItemController::class, 'index'])->name('basket.index');
     Route::post('/add-to-order', [BasketItemController::class, 'orderAdd'])->name('basket.order');
@@ -43,7 +47,7 @@ Route::prefix('basket')->group(function () {
 });
 
 
-//HOME PROFILE
+//------------------------------------------------HOME PROFILE------------------------------------------------
 Route::name('home.')->prefix('home')->group(function () {
     Route::get('/', [HomeController::class, 'index'])->name('index');
     Route::get('/bookmarks', [HomeBookmarkController::class, 'index'])->name('bookmarks.index');
@@ -58,13 +62,26 @@ Route::name('home.')->prefix('home')->group(function () {
     Route::get('/commentaries', [CommentaryController::class, 'commentaries'])->name('commentaries.index');
 });
 
-//Commentaries
+//------------------------------------------------Commentaries------------------------------------------------
 Route::post('/book/{id}/comment', [CommentaryController::class, 'commentAdd'])->name('comment.store');
 Route::delete('/book/comment/{id}', [CommentaryController::class, 'commentDelete'])->name('comment.destroy');
 
-//ADMIN-PANEL
-Route::name('admin.')->prefix('admin')->group(function () {
+//------------------------------------------------ADMIN-PANEL--------------------------------------------//
+Route::name('admin.')->prefix('admin')->middleware(['role:admin'])->group(function () {
     Route::get('/', [AdminController::class, 'index'])->name('index');
+    //Roles and Permission
+    Route::get('/permissions_roles', [RolePermissionController::class, 'index'])->name('permissions_roles.index');
+    Route::put('/permissions_roles/{role}', [RolePermissionController::class, 'update'])->name('permissions_roles.update');
+    Route::put('/role_for_user/{user}', [RolePermissionController::class, 'role_for_user'])->name('role_for_user.update');
+    //
+    Route::post('/permissions', [PermissionController::class, 'store'])->name('permissions.store');
+    Route::delete('/permissions/{permission}', [PermissionController::class, 'destroy'])->name('permissions.destroy');
+    //ROLES
+    Route::post('/roles', [RoleController::class, 'store'])->name('roles.store');
+    Route::delete('/roles/{role}', [RoleController::class, 'destroy'])->name('roles.destroy');
+    //PERMISSION
+    Route::post('/permissions', [PermissionController::class, 'store'])->name('permissions.store');
+    Route::delete('/permissions/{permission}', [PermissionController::class, 'destroy'])->name('permissions.destroy');
     //Books
     Route::resource('books', AdminBookController::class)->except('show', 'edit');
     //Categories
@@ -85,12 +102,12 @@ Route::name('admin.')->prefix('admin')->group(function () {
     Route::delete('/discount/{id}', [AdminController::class, 'discountDelete'])->name('discount.destroy');
     //Interface
     Route::get('/interface', [\App\Http\Controllers\Admin\InterfaceController::class, 'index'])->name('interface.index');
-
-    Route::get('/addresses',[AdminController::class, 'addresses'])->name('addresses.index');
-    Route::post('/addresses',[AdminController::class, 'addresses_store'])->name('addresses.store');
-    Route::patch('/addresses/{address}',[AdminController::class, 'addresses_update'])->name('addresses.update');
-    Route::delete('/addresses/{address}',[AdminController::class, 'addresses_destroy'])->name('addresses.destroy');
+    Route::get('/addresses', [AdminController::class, 'addresses'])->name('addresses.index');
+    Route::post('/addresses', [AdminController::class, 'addresses_store'])->name('addresses.store');
+    Route::patch('/addresses/{address}', [AdminController::class, 'addresses_update'])->name('addresses.update');
+    Route::delete('/addresses/{address}', [AdminController::class, 'addresses_destroy'])->name('addresses.destroy');
 });
+
 
 //404
 //Route::fallback(function () {

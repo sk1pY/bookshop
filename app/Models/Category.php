@@ -15,3 +15,5 @@ class Category extends Model
         return $this->hasMany(Book::class);
     }
 }
+
+

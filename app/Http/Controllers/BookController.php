@@ -23,12 +23,14 @@ class BookController extends Controller
 {
     public function index(Request $request)
     {
+//        $user = Auth::user();
+//        $user-> assignRole('Admin');
+//        $user->givePermissionTo('superadmin');
         $bookmarkTaskUser = Bookmark::where('user_id', Auth::id())->pluck('book_id')->toArray();
 
 
-        return view('index', compact( 'bookmarkTaskUser'));
+        return view('index', compact('bookmarkTaskUser'));
     }
-
 
 
     public function book(Book $book)
@@ -38,31 +40,36 @@ class BookController extends Controller
         $book_id = OrderItem::whereIn('order_id', $orders)->pluck('book_id')->toArray();
 
 
-        in_array($book->id,$book_id) ? $bought= true : $bought = false;
+        in_array($book->id, $book_id) ? $bought = true : $bought = false;
 
         $commentaries = Commentary::where('book_id', $book->id)->orderBy('created_at', 'desc')->get();
 
         return view('book', compact('book', 'commentaries', 'bought'));
     }
 
-    public function category_bestsellers(){
+    public function category_bestsellers()
+    {
         $bookmarkTaskUser = Bookmark::where('user_id', Auth::id())->pluck('book_id')->toArray();
 
-        $books = \App\Models\Book::orderBy('numberOfPurchased','desc')->get();
-        return view('bestsellers',compact('books','bookmarkTaskUser'));
+        $books = \App\Models\Book::orderBy('numberOfPurchased', 'desc')->get();
+        return view('bestsellers', compact('books', 'bookmarkTaskUser'));
     }
-    public function category_newest(){
+
+    public function category_newest()
+    {
         $bookmarkTaskUser = Bookmark::where('user_id', Auth::id())->pluck('book_id')->toArray();
 
-        $books = \App\Models\Book::orderBy('created_at','asc')->get();
-        return view('newest',compact('books','bookmarkTaskUser'));
+        $books = \App\Models\Book::orderBy('created_at', 'asc')->get();
+        return view('newest', compact('books', 'bookmarkTaskUser'));
     }
- public function category_sale(){
+
+    public function category_sale()
+    {
         $bookmarkTaskUser = Bookmark::where('user_id', Auth::id())->pluck('book_id')->toArray();
 
-        $books = \App\Models\Book::where('discount','>',0)->get();
-       // dd($books);
-        return view('sale',compact('books','bookmarkTaskUser'));
+        $books = \App\Models\Book::where('discount', '>', 0)->get();
+        // dd($books);
+        return view('sale', compact('books', 'bookmarkTaskUser'));
     }
 
 }

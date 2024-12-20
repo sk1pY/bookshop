@@ -72,10 +72,10 @@
                 </div>
                 {{--FILTER--}}
                 {{--BOOKS--}}
-                <div class="row row-cols-1 row-cols-md-5 g-5">
+                <div class="row row-cols-1 row-cols-md-5 g-4">
                     @forelse($books as $book)
-                        <div class="col">
-                            <div class="card border-0 " style="height: 459px;width: 214px">
+                        <div class="col ">
+                            <div class="card border-0  h-auto" style="height: 459px;width: 214px">
                                 @auth
                                     {{-- BOOKMARK --}}
                                     <div style="cursor: pointer"
@@ -84,15 +84,15 @@
                                         <i class="fa-regular fa-heart bg-red-bookmark {{
                         in_array($book->id, $bookmarkTaskUser) ? 'fa-solid' : '' }}"></i>
                                     </div>
+                                    {{-- BOOKMARK --}}
                                 @endauth
-                                {{-- BOOKMARK --}}
                                 <a href="{{ route('books.book', ['book' => $book->id]) }}"
                                    style="text-decoration: none; color: inherit;">
                                     <div class="d-flex justify-content-center align-items-center image-container">
                                         <img src="{{ Storage::url('booksImages/' . $book->image) }}"
                                              alt="Responsive image" class="img-fluid" style="height: 170px">
                                     </div>
-                                    <div class="card-body pb-0 pt-0">
+                                    <div class="card-body pb-0 pt-0 ">
                                         <div class="d-flex mt-2">
                                             @if($book->discount > 0)
                                                 <div class="fw-bold text-danger"

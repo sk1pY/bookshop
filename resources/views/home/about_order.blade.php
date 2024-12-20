@@ -25,7 +25,7 @@
                 @if($order->status == "Получен")
                     <td>
 
-                        <form action="{{ route('books.book',['id' => $or->book->id])}}">
+                        <form action="{{ route('books.book',['book' => $or->book->id])}}">
                             <input class="btn btn-primary" type="submit" value="Оценить">
                         </form>
                     </td>

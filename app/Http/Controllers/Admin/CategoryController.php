@@ -35,7 +35,7 @@ class CategoryController extends Controller
             'category_name' => 'required|alpha|max:30'
         ]);
         Category::create(['name' => $validatedData['category_name']]);
-        return redirect()->route('admin.category.create')->with('successCategoryAdd', 'Категория добавлена');
+        return redirect()->route('admin.categories.index')->with('successCategoryAdd', 'Категория добавлена');
     }
 
     /**

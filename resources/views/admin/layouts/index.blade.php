@@ -54,7 +54,7 @@
                     </button>
                     <i class="bi bi-caret-down" width="16" height="16"></i>
                 </h2>
-                <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+                <div id="collapseOne" class="accordion-collapse collapse " data-bs-parent="#accordionExample">
                     <div class="accordion-body">
                         <li>
                             <a href="{{ route('admin.books.create') }}" class="nav-link text-white">
@@ -82,28 +82,52 @@
                 </div>
             </div>
 
+            <div class="accordion-item">
+                <h2 class="accordion-header nav-link text-white d-flex">
+                    <i class="bi bi-card-list me-2" width="16" height="16"></i>
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapseTwo" aria-expanded="true" aria-controls="collapseOne">
+                        Список
+                    </button>
+                    <i class="bi bi-caret-down" width="16" height="16"></i>
+                </h2>
+                <div id="collapseTwo" class="accordion-collapse collapse " data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        <li>
+                            <a href="{{route('admin.books.index')}}" class="nav-link text-white">
+                                Книги
+                            </a>
+
+                        </li>
+                    </div>
+                    <div class="accordion-body">
+                        <li>
+                            <a href="{{route('admin.authors.index')}}" class="nav-link text-white">
+                                Авторы
+                            </a>
+
+                        </li>
+                    </div>
+                    <div class="accordion-body">
+                        <li>
+                            <a href="{{route('admin.categories.index')}}" class="nav-link text-white">
+                                Категории
+                            </a>
+
+                        </li>
+                    </div>
+                </div>
+            </div>
+
             <li>
-                <a href="{{route('admin.books.index')}}" class="nav-link text-white">
-                    <i class="bi bi-book me-2" width="16" height="16"></i>
-                    Все книги
+                <a href="{{route('admin.permissions_roles.index')}}" class="nav-link text-white">
+                    <i class="bi  bi-clipboard2-check me-2" width="16" height="16"></i>
+                    Настройка ролей и разрешений
                 </a>
 
             </li>
 
 
-            <li>
-                <a href="{{route('admin.authors.index')}}" class="nav-link text-white">
-                    <i class="bi bi-person-gear me-2" width="16" height="16"></i>
-                    Все авторы
-                </a>
-            </li>
-
-            <li>
-                <a href="{{route('admin.categories.index')}}" class="nav-link text-white">
-                    <i class="bi bi-journal-check me-2" width="16" height="16"></i>
-                    Все категории
-                </a>
-            </li>
             <li>
                 <a href="{{route('admin.users.index')}}" class="nav-link text-white">
                     <i class="bi bi-people me-2" width="16" height="16"></i>
@@ -140,17 +164,23 @@
         <div class="dropdown">
             <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
                id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-                <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
-                <strong>mdo</strong>
+
+                <strong>{{Auth::user()->name}}</strong>
             </a>
             <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
-                <li><a class="dropdown-item" href="#">New project...</a></li>
-                <li><a class="dropdown-item" href="#">Settings</a></li>
-                <li><a class="dropdown-item" href="#">Profile</a></li>
+
+                <li><a class="dropdown-item" href="{{route('home.info.index')}}">Profile</a></li>
                 <li>
                     <hr class="dropdown-divider">
                 </li>
-                <li><a class="dropdown-item" href="#">Sign out</a></li>
+                <li>
+                    <form action="{{ route('logout') }}" method="post">
+                        @csrf
+                        <button type="submit" class="dropdown-item">Sign out</button>
+
+                    </form>
+                </li>
+
             </ul>
         </div>
     </div>

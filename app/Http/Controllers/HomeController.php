@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UpdateInfoRequest;
 use App\Models\Bookmark;
 use App\Models\Commentary;
 use App\Models\DeliveryAddress;
@@ -48,20 +49,13 @@ class HomeController extends Controller
         return view('home.info', compact('user', 'addresses'));
     }
 
-    public function infoUpdate(Request $request, $id)
+    public function infoUpdate(UpdateInfoRequest $request, $id)
     {
         //dd($request->all());
         $user = User::findOrFail($id);
-        $validatedData = $request->validate([
-            'name' => 'string|max:255|nullable',
-            'birthday' => 'date|nullable',
-            'gender' => 'string|max:255|nullable',
-            'phone' => 'string|nullable|max:15',
-            'address' => 'string|nullable|max:255',
-        ]);
-
-
-        foreach ($validatedData as $key => $value) {
+        $validated = $request->validated();
+        dd($validated);
+        foreach ($validated as $key => $value) {
             if ($value !== null && $value !== '' && $value !== $user->$key) {
                 $user->$key = $value;
             }

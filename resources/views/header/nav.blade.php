@@ -37,18 +37,26 @@
 
         <div class="collapse navbar-collapse" id="navbarNav">
             {{--            SEARCH--}}
-            <div class="d-flex justify-content-center align-items-center  search-container mx-4" style="width: 300px;">
-                <div class="input-group " style="  position: relative;">
-                    <input type="search" class="form-control rounded-pill" style="background-color: #f4f4f5"
-                           placeholder="Поиск книг" aria-label="Search"
+            <div class="d-flex justify-content-center align-items-center  search-container mx-4 " style="width: 500px;">
+                <div class="input-group " style=" position: relative; ">
+                    <span class="input-group-text border-0 rounded-left-5" id="basic-addon1"
+                          style="background-color: #f4f4f5">
+                        <i class="bi bi-search"></i>
+                    </span>
+
+                    <input type="search"
+                           class="form-control border-0 rounded-right-4"
+                           style=" background-color: #f4f4f5"
+                           placeholder="Поиск книг"
                            aria-describedby="search-addon" id="search" name="search">
                     <ul class="list-group search-result"
-                        style="position: absolute; top: 100%; left: 0; width: 100%; z-index: 1000; display: none;"></ul>
+                        style="position: absolute; top: 100%; left: 0; width: 100%; z-index: 1000; display: none;">
+
+                    </ul>
                 </div>
             </div>
             {{--          END  SEARCH--}}
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0 ">
-
                 @auth
                     <li class="nav-item">
                         <div class="dropdown mt-2">
@@ -91,19 +99,22 @@
                                     <a style="font-size: 0.8rem" class="dropdown-item p-0 ms-auto"
                                        href="{{ route('home.info.index') }}">Мой профиль</a>
                                 </li>
-                                <li class="d-flex align-items-center p-2 dropdownnav rounded-pill ">
-                                    <i class="bi bi-gear fs-3 d-flex  p-0 m-0 me-2"
-                                       style="font-size:1.4rem;width: 35px"></i>
-                                    <a style="font-size: 0.8rem" class="dropdown-item p-0 ms-auto "
-                                       href="{{ route('admin.index') }}">Админ панель</a>
-                                </li>
-
+                                @can('check_button_admin')
+                                    <li class="d-flex align-items-center p-2 dropdownnav rounded-pill ">
+                                        <i class="bi bi-gear fs-3 d-flex  p-0 m-0 me-2"
+                                           style="font-size:1.4rem;width: 35px"></i>
+                                        <a style="font-size: 0.8rem" class="dropdown-item p-0 ms-auto "
+                                           href="{{ route('admin.index') }}">Админ панель</a>
+                                    </li>
+                                @endcan
                                 <li class="d-flex align-items-center p-2 dropdownnav rounded-pill">
                                     <i class="bi bi-bag fs-3 d-flex  p-0 m-0 me-2"
                                        style="font-size:1.4rem;width: 35px"></i>
                                     <a style="font-size: 0.8rem;" class="dropdown-item p-0 ms-auto"
                                        href="{{ route('home.orders.index') }}">Мои заказы</a>
                                 </li>
+
+
                                 <li class="p-2 d-flex align-items-center dropdownnav rounded-pill">
                                     <i class="bi bi-bookmark fs-3 d-flex  p-0 m-0 me-2"
                                        style="font-size:1.4rem;width: 35px"></i>
@@ -151,10 +162,12 @@
                     <a class="nav-link d-flex flex-column align-items-center"
                        href="{{ route('basket.index') }}">
                         <i class="bi bi-cart fs-3 d-flex p-0 m-0">
-    <span class="badge rounded-circle text-bg-danger"
-          style="font-size: 0.8rem; width: 25px; height: 25px; display: flex; align-items: center; justify-content: center;">
+                            @auth
+                                <span class="badge rounded-circle text-bg-danger"
+                                      style="font-size: 0.8rem; width: 25px; height: 25px; display: flex; align-items: center; justify-content: center;">
         {{ $bookInBasket }}
     </span>
+                            @endauth
                         </i>
 
                         <span>Корзина</span>

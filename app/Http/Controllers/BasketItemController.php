@@ -271,6 +271,8 @@ class BasketItemController extends Controller
             }
 
 
+
+
         return redirect()->route('basket.index')->with('success', 'Заказ успешно оформлен');
     }
 }

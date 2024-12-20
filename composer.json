@@ -9,7 +9,8 @@
         "laravel/fortify": "^1.23",
         "laravel/framework": "^v11.19.0",
         "laravel/sanctum": "^4.0",
-        "laravel/tinker": "^2.9"
+        "laravel/tinker": "^2.9",
+        "spatie/laravel-permission": "*"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",

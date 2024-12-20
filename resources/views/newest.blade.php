@@ -53,7 +53,7 @@
                                         </span>
                         </div>
                         <div style="background-color: #daebe6; color: #10b37e" class="ms-2 px-1 border rounded-4  d-inline-block">
-                             Добавлена {{ date('m.d.y',strtotime($book->created_at))}}
+                             Добавлена {{ date('d.m.y',strtotime($book->created_at))}}
                         </div>
                     </a>
                     <div class="card-body ">

@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -24,6 +25,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton('basket', function () {
             return Auth::check() ? Basket::firstOrCreate(['user_id' => Auth::id()]) : null;
         });
+
     }
 
     /**
@@ -31,6 +33,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Gate::before(function ($user, $ability) {
+            return $user->hasRole('super-admin') ? true : null;
+        });
+
         Carbon::setLocale('ru');
         Route::pattern('id','[0-9]+');
         Route::pattern('','[0-9]+');

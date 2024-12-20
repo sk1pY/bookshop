@@ -62,7 +62,7 @@
                                 </form>
 
                             </div>
-                            Цена: {{ $book ->price * $book-> quantity  }}
+{{--                            Цена: {{ $book ->price * $book-> quantity  }}--}}
                         </td>
                         <td class="align-middle">
                             <form action="{{ route('basket.deleteAll', ['book'=>$book->id])}}" method="post"

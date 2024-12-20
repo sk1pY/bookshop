@@ -16,6 +16,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Spatie\Permission\Models\Role;
 
 class AdminController extends Controller
 {
@@ -25,12 +26,11 @@ class AdminController extends Controller
         return view('admin.layouts.index');
     }
 
-
-
     public function users()
     {
-        $users = User::get();
-        return view('admin.users', compact('users'));
+        $users = User::with('roles')->get();
+        $roles = Role::get();
+        return view('admin.users', compact('users','roles'));
     }
 
     public function discount()
@@ -128,6 +128,8 @@ class AdminController extends Controller
         return redirect()->route('admin.addresses.index');
 
     }
+
+
 
 
 
