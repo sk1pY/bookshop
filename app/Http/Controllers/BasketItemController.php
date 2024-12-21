@@ -73,8 +73,6 @@ class BasketItemController extends Controller
 
         return view('basket', compact('books', 'total_price', 'addresses'));
     }
-
-
     public function addToBasket(Request $request, $id)
     {
         $basket = app('basket');
@@ -160,7 +158,6 @@ class BasketItemController extends Controller
 
 
     }
-
     public function delete($id)
     {
         if (session()->has('books')) {
@@ -205,8 +202,7 @@ class BasketItemController extends Controller
 
         return redirect()->route('basket.index');
     }
-
-    public function delete_from_basket(Request $request, Book $book)
+    public function delete_all_books(Request $request, Book $book)
     {
         $basket = app('basket');
 
@@ -216,7 +212,6 @@ class BasketItemController extends Controller
         return redirect()->route('basket.index');
 
     }
-
     public function orderAdd(Request $request)
     {
 

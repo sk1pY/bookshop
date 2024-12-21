@@ -8,12 +8,12 @@
 
     <div class="row">
         <div class="col-5">
-            <form action="{{ route('admin.roles.store') }}" method="post">
+            <form action="{{ route('admin.roles.store') }}" method="post" class="d-flex align-items-center gap-2">
                 @csrf
                 <input type="text" placeholder="роль" name="role">
-                <input type="submit">
+                <input  class="btn btn-sm btn-primary" type="submit" value="Добавить">
             </form>
-            <h1>Roles</h1>
+            <h1>Роли</h1>
             <table class="table table-sm table-bordered table-striped">
                 <thead>
                 <tr>
@@ -32,7 +32,7 @@
                             <form action="{{ route('admin.roles.destroy',['role' => $role->id]) }}" method="post">
                                 @csrf
                                 @method('delete')
-                                <input type="submit" value="Удалить">
+                                <input class="btn btn-sm btn-danger" type="submit" value="Удалить">
                             </form>
                         </td>
                     </tr>
@@ -41,15 +41,15 @@
             </table>
         </div>
         <div class="col-5">
-            <form action="{{ route('admin.permissions.store') }}" method="post">
+            <form action="{{ route('admin.permissions.store') }}" method="post" class="d-flex align-items-center gap-2">
                 @csrf
-
-                <input type="text" placeholder="разрешение" name="permission">
-                <input type="submit">
+                <input class="form-control" type="text" placeholder="Разрешение" name="permission">
+                <input class="btn btn-sm btn-primary" type="submit" value="Добавить">
             </form>
 
 
-            <h1>Permissions</h1>
+
+            <h1>Разрешения</h1>
             <table class="table table-sm table-bordered table-striped">
                 <thead>
                 <tr>
@@ -69,7 +69,7 @@
                                   method="post">
                                 @csrf
                                 @method('delete')
-                                <input type="submit" value="Удалить">
+                                <input class="btn btn-sm btn-danger" type="submit" value="Удалить">
                             </form>
                         </td>
                     </tr>
@@ -114,7 +114,7 @@
                             </div>
 
                         @endforeach
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <button type="submit" class="btn btn-sm btn-primary">Принять</button>
 
                     </form>
                 </td>

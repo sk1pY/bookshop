@@ -12,7 +12,7 @@
 
     <h1>Скидки на книги</h1>
     <p>Выберите определенного автора или книгу, или введи скидку для всех книг/авторов</p>
-    <form action="{{ route('admin.discount.store') }}" method="post" id="discount">
+    <form action="{{ route('admin.discounts.store') }}" method="post" id="discount">
         @csrf
         <div class="mb-3">
             <label for="exampleInputEmail1" class="form-label">Скидка на книгу/книги %</label>
@@ -60,7 +60,7 @@
 
                 <td>{{$book -> discount.'%'}}</td>
                 <td>
-                    <form action="{{ route('admin.discount.destroy',['id'=>$book->id])}}" method="post">
+                    <form action="{{ route('admin.discounts.destroy',['discount'=>$book->id])}}" method="post">
                         @csrf
                         @method('delete')
                         <input class="btn btn-danger" type="submit" value="Удалить">
@@ -71,7 +71,7 @@
         </tbody>
     </table>
     @if(count($booksWithDiscount) > 0)
-        <form action="{{ route('admin.discount.destroyAll')}}" method="post">
+        <form action="{{ route('admin.discounts.destroyAll')}}" method="post">
             @csrf
             @method('delete')
             <input class="btn btn-danger" type="submit" value="Удалить все скидки">

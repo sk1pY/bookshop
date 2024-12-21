@@ -135,7 +135,7 @@
                 </a>
             </li>
             <li>
-                <a href="{{route('admin.discount.index')}}" class="nav-link text-white">
+                <a href="{{route('admin.discounts.index')}}" class="nav-link text-white">
                     <i class="bi bi-percent me-2" width="16" height="16"></i>
                     Настройка скидок
                 </a>

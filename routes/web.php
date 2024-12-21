@@ -1,24 +1,24 @@
 <?php
 
+use App\Http\Controllers\Admin\AddressesController;
+use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\AuthorController as AdminAuthController;
 use App\Http\Controllers\Admin\BookController as AdminBookController;
 use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
+use App\Http\Controllers\Admin\DiscountController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
-use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthorController;
 use App\Http\Controllers\BasketItemController;
 use App\Http\Controllers\BookController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CommentaryController;
 use App\Http\Controllers\Home\BookmarkController as HomeBookmarkController;
-use App\Http\Controllers\HomeController;
+use App\Http\Controllers\Home\HomeController;
+use App\Http\Controllers\RolesPermissions\PermissionController;
+use App\Http\Controllers\RolesPermissions\RoleController;
+use App\Http\Controllers\RolesPermissions\RolePermissionController;
 use App\Http\Controllers\SearchController;
-use App\Models\Bookmark;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-
-use App\Http\Controllers\PermissionController;
-use App\Http\Controllers\RoleController;
-use App\Http\Controllers\RolePermissionController;
 
 //SEARCH
 Route::get('/search', [SearchController::class, 'search'])->name('live.search');
@@ -33,9 +33,9 @@ Route::get('/book/{book}', [BookController::class, 'book'])->name('books.book');
 
 //------------------------------------------------КАТЕГОРИИ------------------------------------------------
 Route::get('/category/{category}', [\App\Http\Controllers\UserCategoryController::class, 'categoryBooks'])->name('categories.public.show');
-Route::get('/bestsellers', [BookController::class, 'category_bestsellers'])->name('bestsellers');
-Route::get('/newest', [BookController::class, 'category_newest'])->name('newest');
-Route::get('/sale', [BookController::class, 'category_sale'])->name('sale');
+Route::get('/bestsellers', [CategoryController::class, 'category_bestsellers'])->name('bestsellers');
+Route::get('/newest', [CategoryController::class, 'category_newest'])->name('newest');
+Route::get('/sale', [CategoryController::class, 'category_sale'])->name('sale');
 
 //------------------------------------------------КОРЗИНА------------------------------------------------
 Route::prefix('basket')->group(function () {
@@ -43,7 +43,7 @@ Route::prefix('basket')->group(function () {
     Route::post('/add-to-order', [BasketItemController::class, 'orderAdd'])->name('basket.order');
     Route::post('/add-to-basket/{id}', [BasketItemController::class, 'addToBasket'])->name('basket.add');
     Route::delete('/delete/{id}', [BasketItemController::class, 'delete'])->name('basket.delete');
-    Route::delete('/delete_all_book/{book}', [BasketItemController::class, 'delete_from_basket'])->name('basket.deleteAll');
+    Route::delete('/delete_all_book/{book}', [BasketItemController::class, 'delete_all_books'])->name('basket.deleteAll');
 });
 
 
@@ -54,8 +54,8 @@ Route::name('home.')->prefix('home')->group(function () {
     Route::post('/bookmarks', [HomeBookmarkController::class, 'store'])->name('bookmarks.store');
     Route::post('/bookmarks', [HomeBookmarkController::class, 'store'])->name('bookmarks.store');
     Route::delete('/bookmarks/{bookmark}', [HomeBookmarkController::class, 'destroy'])->name('bookmarks.destroy');
-    Route::get('/orders', [HomeController::class, 'orders'])->name('orders.index');
-    Route::get('/orders/{order}', [HomeController::class, 'about_orders'])->name('orders.show');
+    Route::get('/orders', [\App\Http\Controllers\Home\OrderController::class, 'orders'])->name('orders.index');
+    Route::get('/orders/{order}', [\App\Http\Controllers\Home\OrderController::class, 'about_orders'])->name('orders.show');
     Route::delete('/orders/{order}', [\App\Http\Controllers\Home\OrderController::class, 'cancel_order'])->name('orders.destroy');
     Route::get('/info', [HomeController::class, 'info'])->name('info.index');
     Route::patch('/info/{id}', [HomeController::class, 'infoUpdate'])->name('info.update');
@@ -87,7 +87,7 @@ Route::name('admin.')->prefix('admin')->middleware(['role:admin'])->group(functi
     //Categories
     Route::resource('categories', AdminCategoryController::class);
     //Users
-    Route::get('/users', [AdminController::class, 'users'])->name('users.index');
+    Route::resource('users', \App\Http\Controllers\Admin\UserController::class);
     //Orders
     Route::get('/orders', [AdminOrderController::class, 'orders'])->name('orders.index');
     Route::get('/orders/history', [AdminOrderController::class, 'orderHistory'])->name('orders.history');
@@ -96,16 +96,13 @@ Route::name('admin.')->prefix('admin')->middleware(['role:admin'])->group(functi
     //Authors
     Route::resource('authors', AdminAuthController::class);
     //Discount
-    Route::get('/discount', [AdminController::class, 'discount'])->name('discount.index');
-    Route::post('/discount', [AdminController::class, 'discountAdd'])->name('discount.store');
-    Route::delete('/discount', [AdminController::class, 'discountDeleteAll'])->name('discount.destroyAll');
-    Route::delete('/discount/{id}', [AdminController::class, 'discountDelete'])->name('discount.destroy');
+    Route::resource('discounts', DiscountController::class)->except('show', 'edit', 'update');
+    Route::delete('/discounts', [DiscountController::class, 'discountDeleteAll'])->name('discounts.destroyAll');
     //Interface
     Route::get('/interface', [\App\Http\Controllers\Admin\InterfaceController::class, 'index'])->name('interface.index');
-    Route::get('/addresses', [AdminController::class, 'addresses'])->name('addresses.index');
-    Route::post('/addresses', [AdminController::class, 'addresses_store'])->name('addresses.store');
-    Route::patch('/addresses/{address}', [AdminController::class, 'addresses_update'])->name('addresses.update');
-    Route::delete('/addresses/{address}', [AdminController::class, 'addresses_destroy'])->name('addresses.destroy');
+    //ADRESSES
+    Route::resource('addresses', AddressesController::class)->except('show', 'edit', 'create');
+
 });
 
 

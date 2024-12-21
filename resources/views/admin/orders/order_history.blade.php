@@ -19,7 +19,7 @@
                     {{ $order->updated_at->format('F j, Y, g:i a') }}
                 </td>
                 <td>
-                    <a href="{{ route('admin.orders.show',['id'=>$order->id]) }}" class="btn btn-secondary">Подробнее</a>
+                    <a href="{{ route('admin.orders.show',['id'=>$order->id]) }}" class="btn btn-sm btn-secondary">Подробнее</a>
                 </td>
 
 
