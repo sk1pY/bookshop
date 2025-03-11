@@ -11,7 +11,7 @@
             <form action="{{ route('admin.roles.store') }}" method="post" class="d-flex align-items-center gap-2">
                 @csrf
                 <input type="text" placeholder="роль" name="role">
-                <input  class="btn btn-sm btn-primary" type="submit" value="Добавить">
+                <input class="btn btn-sm btn-primary" type="submit" value="Добавить">
             </form>
             <h1>Роли</h1>
             <table class="table table-sm table-bordered table-striped">
@@ -23,7 +23,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                @forelse($roles as $role)
+                @foreach($roles as $role)
                     <tr>
                         <th scope="row">{{$role -> id}}</th>
                         <td>
@@ -36,7 +36,7 @@
                             </form>
                         </td>
                     </tr>
-                    @endforeach
+                @endforeach
                 </tbody>
             </table>
         </div>
@@ -46,7 +46,6 @@
                 <input class="form-control" type="text" placeholder="Разрешение" name="permission">
                 <input class="btn btn-sm btn-primary" type="submit" value="Добавить">
             </form>
-
 
 
             <h1>Разрешения</h1>
@@ -59,7 +58,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                @forelse($permissions as $permission)
+                @foreach($permissions as $permission)
                     <tr>
                         <th scope="row">{{$permission -> id}}</th>
                         <td>
@@ -73,7 +72,7 @@
                             </form>
                         </td>
                     </tr>
-                    @endforeach
+                @endforeach
 
                 </tbody>
             </table>
@@ -89,7 +88,7 @@
         </tr>
         </thead>
         <tbody>
-        @forelse($rolesWithPermissions as $role)
+        @foreach($rolesWithPermissions as $role)
             <tr>
                 <td>
                     {{$role->name}}
@@ -104,7 +103,6 @@
 
                             <div class="form-check form-check-inline">
                                 <input id="permission_{{ $permission->id }}" class="form-check-input" type="checkbox"
-
                                        name="permissions[]"
                                        value="{{ $permission->id }}"
                                        @if($role->permissions->contains($permission)) checked @endif
@@ -120,11 +118,8 @@
                 </td>
 
             </tr>
-
             @endforeach
-
         </tbody>
-
     </table>
 
 @endsection

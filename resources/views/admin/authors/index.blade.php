@@ -1,25 +1,28 @@
 @extends('admin.layouts.index')
 @section('content')
-<table class="table table-sm table-bordered table-striped">
+    <table class="table table-sm table-bordered table-striped m-0">
     <thead>
     <tr>
-        <th scope="col" class="col-1">#</th>
-        <th scope="col" class="col-7">Автор</th>
-        <th scope="col" class="col-1">Удалить</th>
+        <th scope="col" class="text-center">#</th>
+        <th scope="col" class="text-center">Автор</th>
+        <th scope="col" class="text-center">#</th>
     </tr>
     </thead>
     <tbody>
     @foreach( $authors as $author )
         <tr>
-            <th scope="row">{{$author -> id}}</th>
-            <td>
-                <a class="text-decoration-none text-dark" href="{{ route('author.index',['id'=>$author->id]) }}">{{$author -> surname.' '.$author -> name}}</td></a>
-            <td>
-                <form action="{{ route('admin.authors.destroy',['author'=>$author->id])}}" method="post"
+            <td class="text-center p-0">{{$author->id}}</td>
+            <td class="p-0 ps-2">
+                <a class="text-decoration-none text-dark small" href="{{ route('authors.index',$author->id) }}">{{$author -> surname.' '.$author -> name}}
+
+                </a>
+            </td>
+            <td class="text-center p-0">
+                <form action="{{ route('admin.authors.destroy',$author->id)}}" method="post"
                       id>
                     @csrf
                     @method('delete')
-                    <button class="btn btn-sm fs-3">
+                    <button class="btn btn-sm fs-5 p-0">
                         <i type="submit" class="bi bi-x"></i>
                     </button>
                 </form>

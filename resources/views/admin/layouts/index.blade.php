@@ -27,7 +27,7 @@
 <body>
 
 <div class="row">
-    <div class="col-2 d-flex flex-column flex-shrink-0 p-3 bg-dark" style=" height: 100vh;">
+        <div class="col-2 d-flex flex-column flex-shrink-0 p-3 bg-dark">
         <a href="/" class="d-flex align-items-center mb-3 text-white text-decoration-none">
             <svg class="bi me-2" width="40" height="32">
 
@@ -40,51 +40,43 @@
         <ul class="according nav nav-pills flex-column mb-auto ">
             <li>
                 <a href="{{route('admin.orders.index')}}" class="nav-link text-white">
-                    <i class="bi bi-bag me-2" width="16" height="16"></i>
+                    <i class="bi bi-bag me-2"></i>
                     Активные заказы
                 </a>
 
             </li>
             <div class="accordion-item">
                 <h2 class="accordion-header nav-link text-white d-flex">
-                    <i class="bi bi-plus-circle-dotted me-2" width="16" height="16"></i>
+                    <i class="bi bi-plus-circle-dotted me-2" ></i>
                     <button class="accordion-button" type="button" data-bs-toggle="collapse"
                             data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                         Добавить
                     </button>
-                    <i class="bi bi-caret-down" width="16" height="16"></i>
+                    <i class="bi bi-caret-down"></i>
                 </h2>
                 <div id="collapseOne" class="accordion-collapse collapse " data-bs-parent="#accordionExample">
                     <div class="accordion-body">
-                        <li>
                             <a href="{{ route('admin.books.create') }}" class="nav-link text-white">
                                 Книга
                             </a>
-
-                        </li>
                     </div>
                     <div class="accordion-body">
-                        <li>
                             <a href="{{ route('admin.authors.create') }}" class="nav-link text-white">
                                 Автор
                             </a>
-
-                        </li>
                     </div>
                     <div class="accordion-body">
-                        <li>
                             <a href="{{ route('admin.categories.create') }}" class="nav-link text-white">
                                 Категорию
                             </a>
 
-                        </li>
                     </div>
                 </div>
             </div>
 
             <div class="accordion-item">
                 <h2 class="accordion-header nav-link text-white d-flex">
-                    <i class="bi bi-card-list me-2" width="16" height="16"></i>
+                    <i class="bi bi-card-list me-2" ></i>
                     <button class="accordion-button" type="button" data-bs-toggle="collapse"
                             data-bs-target="#collapseTwo" aria-expanded="true" aria-controls="collapseOne">
                         Список

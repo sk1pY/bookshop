@@ -15,10 +15,9 @@ class AuthorController extends Controller
      */
     public function index()
     {
-        $authors = Author::all();
-        $books = Book::orderBy('created_at', 'desc')->paginate(8);
+        $authors = Author::orderBy('id','asc')->select('name','id')->get();
 
-        return view('admin.authors.index', compact('books', 'authors'));
+        return view('admin.authors.index', compact( 'authors'));
     }
 
     /**
@@ -43,11 +42,7 @@ class AuthorController extends Controller
             'surname.required' => 'напишите фамилию автора',
             '*.alpha' => 'только буквы'
         ]);
-        Author:: create([
-            'name' => $validated['name'],
-            'surname' => $validated['surname'],
-        ]);
-
+        Author:: create($validated);
         return redirect()->route('admin.authors.index');
     }
 
@@ -78,9 +73,9 @@ class AuthorController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Author $author)
     {
-        Author::destroy($id);
+        $author->delete();
         return redirect()->route('admin.authors.index');
     }
 }

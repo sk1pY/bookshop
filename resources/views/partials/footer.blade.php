@@ -5,22 +5,20 @@
         </div>
         <div>
             <a href="" class="me-4 text-reset">
-                <i class="fab fa-facebook-f"></i>
+                <i class="bi bi-facebook"></i>            </a>
+            <a href="" class="me-4 text-reset">
+                <i class="bi bi-twitter"></i>            </a>
+            <a href="" class="me-4 text-reset">
+                <i class="bi bi-google"></i>
+                </a>
+            <a href="" class="me-4 text-reset">
+                <i class="bi bi-instagram"></i>
             </a>
             <a href="" class="me-4 text-reset">
-                <i class="fab fa-twitter"></i>
+                <i class="bi bi-linkedin"></i>
             </a>
             <a href="" class="me-4 text-reset">
-                <i class="fab fa-google"></i>
-            </a>
-            <a href="" class="me-4 text-reset">
-                <i class="fab fa-instagram"></i>
-            </a>
-            <a href="" class="me-4 text-reset">
-                <i class="fab fa-linkedin"></i>
-            </a>
-            <a href="" class="me-4 text-reset">
-                <i class="fab fa-github"></i>
+                <i class="bi bi-github"></i>
             </a>
         </div>
     </section>
@@ -74,13 +72,13 @@
                 <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
                     <!-- Links -->
                     <h6 class="text-uppercase fw-bold mb-4">Контакты</h6>
-                    <p><i class="fas fa-home me-3"></i> Минск,  220000, BY</p>
+                    <p><i class="bi bi-house me-3"></i> Минск,  220000, BY</p>
                     <p>
-                        <i class="fas fa-envelope me-3"></i>
+                        <i class="bi bi-envelope me-3"></i>
                         test@example.com
                     </p>
-                    <p><i class="fas fa-phone me-3"></i> + 375 33 1234567</p>
-                    <p><i class="fas fa-print me-3"></i> + 375 29 1234567</p>
+                    <p><i class="bi bi-telephone me-3"></i> + 375 33 1234567</p>
+                    <p><i class="bi bi-printer me-3"></i> + 375 29 1234567</p>
                 </div>
 
             </div>

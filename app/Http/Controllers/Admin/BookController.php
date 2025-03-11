@@ -15,10 +15,11 @@ class BookController extends Controller
      */
     public function index()
     {
-        $authors = Author::all();
-        $books = Book::orderBy('created_at', 'desc')->paginate(8);
+//        $authors = Author::all();
+//        $books = Book::orderBy('created_at', 'desc')->paginate(8);
+     $books = Book::with('authors')->orderBy('created_at', 'desc')->paginate(8);
 
-        return view('admin.books.index', compact('books', 'authors'));
+        return view('admin.books.index', compact('books'));
     }
 
     /**

@@ -22,18 +22,24 @@ class BookFactory extends Factory
      */
     public function definition(): array
     {
-        $imageFiles = Storage::files('public/booksImages');
-        $randomImage = $imageFiles[array_rand($imageFiles)];
+        $sourcePath = database_path('seeders/booksImages');
+        $destinationPath = storage_path('app/public/booksImages');
 
-        $fileName = basename($randomImage);
+        if (!File::exists($destinationPath)) {
+            File::makeDirectory($destinationPath, 0755, true);
+        }
+        $files = File::files($sourcePath);
+        foreach ($files as $file) {
+            $destination = $destinationPath . '/' . basename($file);
+            File::copy($file->getPathname(), $destination);
+        }
 
 
         return [
             'title' => fake()->sentence(1),
             'description' => fake()->text(1000),
             'price' => fake()->randomFloat(2, 5, 100),
-            'image' => $fileName,
-
+            'image' => $files ? $files[array_rand($files)]->getFilename() : null,
             'author_id' => Author::inRandomOrder()->first()->id,
             'category_id' => Category::inRandomOrder()->first()->id
         ];

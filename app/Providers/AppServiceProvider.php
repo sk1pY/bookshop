@@ -95,14 +95,13 @@ class AppServiceProvider extends ServiceProvider
 
         View::composer('*', function ($view) {
             if (Auth::guard()->check()) {
-
-                $countOrdersforUser = Order::where('user_id', Auth::user()->id)->whereIn('status', ['Готов к выдаче'])->count();
+                $countOrdersforUser = Auth::user()->orders()->where('status', 'Готов к выдаче')->count();
                 $view->with('countOrdersforUser', $countOrdersforUser);
             }
         });
-        View::composer('header.nav', function ($view) {
+        View::composer('partials.nav', function ($view) {
             if (Auth::guard()->check()) {
-                $notifOrders = Order::where(['status' => 'Готов к выдаче', 'user_id' => Auth::user()->id])->pluck('id')->toArray();
+                $notifOrders = Auth::user()->orders()->where('status','Готов к выдаче')->pluck('id')->all();
 
                 $view->with('notifOrders', $notifOrders);
             }

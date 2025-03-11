@@ -24,7 +24,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/search', [SearchController::class, 'search'])->name('live.search');
 
 //Автор
-Route::get('/author/{id}', [AuthorController::class, 'index'])->name('author.index');
+Route::get('/authors/{author}', [AuthorController::class, 'index'])->name('authors.index');
 
 //КНИГИ
 Route::get('/', [BookController::class, 'index'])->name('books.index');
@@ -52,7 +52,6 @@ Route::name('home.')->prefix('home')->group(function () {
     Route::get('/', [HomeController::class, 'index'])->name('index');
     Route::get('/bookmarks', [HomeBookmarkController::class, 'index'])->name('bookmarks.index');
     Route::post('/bookmarks', [HomeBookmarkController::class, 'store'])->name('bookmarks.store');
-    Route::post('/bookmarks', [HomeBookmarkController::class, 'store'])->name('bookmarks.store');
     Route::delete('/bookmarks/{bookmark}', [HomeBookmarkController::class, 'destroy'])->name('bookmarks.destroy');
     Route::get('/orders', [\App\Http\Controllers\Home\OrderController::class, 'orders'])->name('orders.index');
     Route::get('/orders/{order}', [\App\Http\Controllers\Home\OrderController::class, 'about_orders'])->name('orders.show');
@@ -67,7 +66,7 @@ Route::post('/book/{id}/comment', [CommentaryController::class, 'commentAdd'])->
 Route::delete('/book/comment/{id}', [CommentaryController::class, 'commentDelete'])->name('comment.destroy');
 
 //------------------------------------------------ADMIN-PANEL--------------------------------------------//
-Route::name('admin.')->prefix('admin')->middleware(['role:admin'])->group(function () {
+Route::name('admin.')->prefix('admin')->group(function () {
     Route::get('/', [AdminController::class, 'index'])->name('index');
     //Roles and Permission
     Route::get('/permissions_roles', [RolePermissionController::class, 'index'])->name('permissions_roles.index');
