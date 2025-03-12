@@ -158,7 +158,7 @@ class BasketItemController extends Controller
 
 
     }
-    public function delete($id)
+    public function delete(Book $book)
     {
         if (session()->has('books')) {
 

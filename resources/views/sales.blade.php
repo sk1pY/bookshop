@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('content')
-    <h1>Новинки</h1>
+    <h1>Книги на акции</h1>
     {{--FILTER--}}
     <div class="my-4">
         <form  id="filterForm" method="get">
@@ -22,7 +22,5 @@
     {{--BOOKS--}}
     @include('partials.book_card')
     {{--BOOKS--}}
-    <div class="mt-4">
-        {{ $books->links('pagination::bootstrap-5') }}
-    </div>
+
 @endsection('content')

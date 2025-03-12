@@ -100,17 +100,14 @@
                         @method('PUT')
                         <input type="text" hidden value="{{$role->id}}" name="role">
                         @foreach($permissions as $permission)
-
                             <div class="form-check form-check-inline">
                                 <input id="permission_{{ $permission->id }}" class="form-check-input" type="checkbox"
                                        name="permissions[]"
+                                       data-url="{{route('admin.permissions_roles.update',['role'=>$role->id])}}"
                                        value="{{ $permission->id }}"
-                                       @if($role->permissions->contains($permission)) checked @endif
-
-                                >
+                                       @if($role->permissions->contains($permission)) checked @endif>
                                 <label class="form-check-label" for="inlineCheckbox1">{{$permission->name}}</label>
                             </div>
-
                         @endforeach
                         <button type="submit" class="btn btn-sm btn-primary">Принять</button>
 

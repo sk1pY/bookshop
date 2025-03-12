@@ -25,7 +25,7 @@
                         {{ $order->created_at->format('F j, Y, g:i a') }}
                 </td>
             <td>
-                <a href ="{{ route('admin.orders.show',['id'=>$order->id]) }}" class="btn btn-secondary">Подробнее</a>
+                <a href ="{{ route('admin.orders.show',$order) }}" class="btn btn-secondary">Подробнее</a>
             </td>
                 <td>
                     <form action="{{ route('admin.orders.status.update', ['id' => $order->id]) }}"

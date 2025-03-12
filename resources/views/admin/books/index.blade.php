@@ -25,7 +25,7 @@
                 <td>
                     <img alt="logo" src="{{ Storage::url('booksImages/' . $book->image) }}" style="width: 30px;">
                     <a class="text-decoration-none text-black "
-                       href="{{ route('books.book',['book' => $book ->id] )}}">{{$book -> title}}</a>
+                       href="{{ route('books.book', $book  )}}">{{$book -> title}}</a>
                 </td>
                 <td class=" text-center ">
                     {{$book->price}} р.
@@ -41,7 +41,7 @@
                             data-bs-target="#update.{{$book->id}}">
                         <i class="bi bi-pencil-square"></i>
                     </button>
-                    <form action="{{ route('admin.books.destroy', $book->id)}}" method="post"
+                    <form action="{{ route('admin.books.destroy', $book)}}" method="post"
                           id>
                         @csrf
                         @method('delete')
@@ -62,7 +62,7 @@
                                     aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <form action="{{ route('admin.books.update',['book'=>$book->id])}}"
+                            <form action="{{ route('admin.books.update',$book)}}"
                                   method="post">
                                 @csrf
                                 @method('put')
@@ -73,7 +73,7 @@
                                 <input id="price" class="form-control" name="price" value="{{$book->price}}">
                                 <label for="author" class="form-label">author</label>
                                 <select class="form-control" name="author_id">
-                                    <option value="" {{ !$book->author? 'selected' : '' }}>Без автора</option>
+                                    <option value="" {{ !$book->author->name? 'selected' : '' }}>Без автора</option>
                                     @foreach($authors as $author)
                                         <option
                                             value="{{$author->id}}"

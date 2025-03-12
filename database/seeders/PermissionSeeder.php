@@ -21,12 +21,12 @@ class PermissionSeeder extends Seeder
         Permission::create(['name' => 'bookmark_books']);
 
         $userRole = Role::where(['name' => 'user'])->first();
-        $userRole->givePermissionTo('create_posts');
+//        $userRole->givePermissionTo('create_posts');
 
         $adminRole = Role::where(['name' => 'admin'])->first();
         $adminRole->givePermissionTo(Permission::all());
 
         $guestRole = Role::where(['name' => 'guest'])->first();
-        $guestRole->givePermissionTo('view_content','update_posts');
+//        $guestRole->givePermissionTo('view_content','update_posts');
     }
 }

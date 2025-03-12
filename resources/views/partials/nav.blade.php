@@ -70,60 +70,53 @@
                     </li>
                     {{--                        DROPDOWN MENU--}}
 
-                    <li class="nav-item ">
+                    <li class="nav-item">
                         <div class="dropdown-center">
-                            <button class="nav-link d-flex flex-column align-items-center" type="button"
-                                    data-bs-toggle="dropdown"
-                                    aria-expanded="false">
-                                <i class="bi bi-person fs-5 d-flex  p-0 m-0"></i>
-                                <span>{{Auth::user()?Auth::user()->name:'guest'}}</span>
-
-                            </button>
-                            <ul class="dropdown-menu  p-2 w-auto">
-
-                                <li class="d-flex align-items-center p-2 dropdownnav rounded-pill ">
-                                    <i class="bi bi-person fs-3 d-flex  p-0 m-0 me-2"></i>
+                            <div class="nav-link d-flex flex-column align-items-center dropdown-toggle">
+                                <i class="bi bi-person fs-5 d-flex p-0 m-0"></i>
+                                <span>{{ Auth::user() ? Auth::user()->name : 'guest' }}</span>
+                            </div>
+                            <ul class="dropdown-menu p-2 w-auto">
+                                <li class="d-flex align-items-center p-2 dropdownnav rounded-pill">
+                                    <i class="bi bi-person fs-3 d-flex p-0 m-0 me-2"></i>
                                     <a style="font-size: 0.8rem" class="dropdown-item p-0 ms-auto"
                                        href="{{ route('home.info.index') }}">Мой профиль</a>
                                 </li>
-                                <li class="d-flex align-items-center p-2 dropdownnav rounded-pill ">
-                                    <i class="bi bi-gear fs-3 d-flex  p-0 m-0 me-2"
+                                <li class="d-flex align-items-center p-2 dropdownnav rounded-pill">
+                                    <i class="bi bi-gear fs-3 d-flex p-0 m-0 me-2"
                                        style="font-size:1.4rem;width: 35px"></i>
-                                    <a style="font-size: 0.8rem" class="dropdown-item p-0 ms-auto "
+                                    <a style="font-size: 0.8rem" class="dropdown-item p-0 ms-auto"
                                        href="{{ route('admin.index') }}">Админ панель</a>
                                 </li>
                                 <li class="d-flex align-items-center p-2 dropdownnav rounded-pill">
-                                    <i class="bi bi-bag fs-3 d-flex  p-0 m-0 me-2"
+                                    <i class="bi bi-bag fs-3 d-flex p-0 m-0 me-2"
                                        style="font-size:1.4rem;width: 35px"></i>
                                     <a style="font-size: 0.8rem;" class="dropdown-item p-0 ms-auto"
                                        href="{{ route('home.orders.index') }}">Мои заказы</a>
                                 </li>
-
-
                                 <li class="p-2 d-flex align-items-center dropdownnav rounded-pill">
-                                    <i class="bi bi-bookmark fs-3 d-flex  p-0 m-0 me-2"
+                                    <i class="bi bi-bookmark fs-3 d-flex p-0 m-0 me-2"
                                        style="font-size:1.4rem;width: 35px"></i>
                                     <a style="font-size: 0.8rem" class="dropdown-item p-0 ms-auto"
-                                       href="{{ route('home.bookmarks.index') }}">Избранные
-                                        товары</a>
+                                       href="{{ route('home.bookmarks.index') }}">Избранные товары</a>
                                 </li>
-                                <li class="p-2 d-flex align-items-center  dropdownnav rounded-pill">
-                                    <i class="bi bi-chat fs-3 d-flex  p-0 m-0 me-2"
+                                <li class="p-2 d-flex align-items-center dropdownnav rounded-pill">
+                                    <i class="bi bi-chat fs-3 d-flex p-0 m-0 me-2"
                                        style="font-size:1.4rem;width: 35px"></i>
                                     <a style="font-size: 0.8rem" class="dropdown-item p-0 ms-auto"
                                        href="{{ route('home.commentaries.index') }}">Мои отзывы</a>
                                 </li>
                                 <li class="p-2 d-flex align-items-center dropdownnav rounded-pill">
-                                    <i class="bi bi-box-arrow-left fs-3 d-flex  p-0 m-0 me-2"
+                                    <i class="bi bi-box-arrow-left fs-3 d-flex p-0 m-0 me-2"
                                        style="font-size:1.4rem;width: 35px"></i>
                                     <button style="font-size: 0.8rem" class="dropdown-item p-0 ms-auto"
                                             onclick="document.getElementById('logout-form').submit();">Выйти
                                     </button>
                                 </li>
                             </ul>
-
                         </div>
                     </li>
+
                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                         @csrf
                     </form>

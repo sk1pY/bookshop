@@ -11,7 +11,7 @@
             @foreach( $commentaries as $commentary )
                 <tr>
                     <td style="width: 170px">
-                        <a href="{{route('books.book',['id'=>$commentary -> book -> id])}}">{{$commentary -> book -> title}}</a>
+                        <a href="{{route('books.book',$commentary -> book -> id)}}">{{$commentary -> book -> title}}</a>
                     </td>
                     <td style="width: 200px">
                         @php

@@ -38,7 +38,7 @@
                                 <img style="width: 80px" src="{{ Storage::url('booksImages/' .$book->image) }}"
                                      alt="">
                                 <div class="ms-3">
-                                    <a href="{{route('books.book',['book'=> $book->id])}}">
+                                    <a href="{{route('books.book',$book)}}">
                                         {{ $book->title }}
                                     </a>
                                 </div>

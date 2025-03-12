@@ -26,18 +26,17 @@ class OrderController extends Controller
         return view('home.orders', compact('orders'));
     }
 
-    public function about_orders($id)
+    public function about_orders(Order $order)
     {
-        $order = Order::find($id);
-        $orderItems = OrderItem::where('order_id', $id)->get();
+        $orderItems =  $order->order_items()->get();
+
         return view('home.about_order', compact('order','orderItems'));
     }
 
     public function cancel_order(Order $order){
 
-        $booksBoughtUpdate = OrderItem::where(['order_id' => $order->id])->get();
+        $booksBoughtUpdate = $order->order_items()->get();
 
-        //ПРОХОДИТ ПО КНИГАМ КОТОРЫЕ БЫЛИ ОТМЕНЕНЫ И ПРИБАВЛЯЕМ К СТОКУ
         $booksBoughtUpdate->each(function ($item) {
             Book::where(['id' => $item->book_id])
                 ->increment('stock', $item->quantity);

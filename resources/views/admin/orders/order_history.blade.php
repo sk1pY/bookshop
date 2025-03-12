@@ -1,4 +1,4 @@
-@extends('admin.layouts.index')
+w@extends('admin.layouts.index')
 @section('content')
 
     <table class="table table-sm table-bordered table-striped">

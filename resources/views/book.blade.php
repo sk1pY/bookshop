@@ -14,7 +14,7 @@
 
             <h1> {{ $book -> title }}</h1>
             @if($book->author_id)
-                <a href="{{route('author.index',['id' => $book->author->id])}}">
+                <a href="{{route('authors.index', $book->author )}}">
                     <h5> {{ $book -> author -> name .' '. $book -> author -> surname  }}</h5></a>
                 <p>
                     @endif
@@ -27,27 +27,23 @@
                     @endphp
 
                     @for ($i = 0; $i < $fullStars; $i++)
-                        <i class="fas fa-star text-warning"></i>
+                        <i class="bi bi-star-fill text-warning"></i>
                     @endfor
 
                     @if($halfStars)
-                        <i class="fas fa-star-half-alt text-warning"></i>
+                        <i class="bi bi-star-half text-warning"></i>
                     @endif
 
                     @for( $i = 5 - $fullStars - ($halfStars?1:0); $i >  0; $i-- )
 
-                        <i class="fa-regular fa-star text-warning"></i>
+                        <i class="bi bi-star text-warning"></i>
                     @endfor
 
-                    {{ $book -> avgRating }}
+                    <span> {{ $book -> avgRating }}</span>
                 </p>
                 <div class="d-flex align-items-center">
                     <h2 class="fw-bold mb-0">{{ $book->price }}р.</h2>
-
                 </div>
-
-
-
                 @auth()
                     <form action="{{ route('basket.add', $book->id) }}" method="post">
                         @csrf
@@ -83,13 +79,14 @@
                                 <option value="3">⭐⭐⭐</option>
                                 <option value="2">⭐⭐</option>
                                 <option value="1">⭐</option>
+
                             </select>
                         </form>
 
                         @else
                             <h5 class="mt-5">Вы не приобрели данный товар для его оценки</h5>
                         @endif
-{{--                    COMMENTARIES--}}
+                        {{--                    COMMENTARIES--}}
                         @forelse($commentaries as $commentary)
                             <div class="w-100 py-4">
                                 <div class="d-flex justify-content-center row  ">
@@ -102,8 +99,9 @@
                                                     <span class="text fs-5">
                                                         {{$commentary->user->name}}
                                                     </span>
-                                                        <span style="margin-left:12px;font-size: 0.9rem;">{{ $commentary->created_at->diffforhumans()}}</span>
-                                                    <span style="margin-left:12px;font-size: 0.9rem;">{{ $commentary->rating}}⭐</span>
+                                                    <span
+                                                        style="margin-left:12px;font-size: 0.9rem;">{{ $commentary->created_at->diffforhumans()}}</span>
+                                                    <span style="margin-left:12px;font-size: 0.9rem;">{{ $commentary->rating}}<i class="bi bi-star-fill text-warning"></i></span>
 
                                                 </div>
 

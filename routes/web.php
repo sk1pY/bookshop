@@ -13,11 +13,13 @@ use App\Http\Controllers\BookController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CommentaryController;
 use App\Http\Controllers\Home\BookmarkController as HomeBookmarkController;
+use App\Http\Controllers\Home\OrderController as HomeOrderController;
 use App\Http\Controllers\Home\HomeController;
 use App\Http\Controllers\RolesPermissions\PermissionController;
 use App\Http\Controllers\RolesPermissions\RoleController;
 use App\Http\Controllers\RolesPermissions\RolePermissionController;
 use App\Http\Controllers\SearchController;
+use App\Http\Controllers\UserCategoryController;
 use Illuminate\Support\Facades\Route;
 
 //SEARCH
@@ -32,10 +34,10 @@ Route::get('/book/{book}', [BookController::class, 'book'])->name('books.book');
 
 
 //------------------------------------------------КАТЕГОРИИ------------------------------------------------
-Route::get('/category/{category}', [\App\Http\Controllers\UserCategoryController::class, 'categoryBooks'])->name('categories.public.show');
-Route::get('/bestsellers', [CategoryController::class, 'category_bestsellers'])->name('bestsellers');
-Route::get('/newest', [CategoryController::class, 'category_newest'])->name('newest');
-Route::get('/sale', [CategoryController::class, 'category_sale'])->name('sale');
+Route::get('/category/{category}', [UserCategoryController::class, 'categoryBooks'])->name('categories.public.show');
+Route::get('/bestsellers', [CategoryController::class, 'categories_top'])->defaults('type','bestsellers')->name('bestsellers');
+Route::get('/newest', [CategoryController::class, 'categories_top'])->defaults('type','newest')->name('newest');
+Route::get('/sale', [CategoryController::class, 'categories_top'])->defaults('type','sales')->name('sale');
 
 //------------------------------------------------КОРЗИНА------------------------------------------------
 Route::prefix('basket')->group(function () {
@@ -53,11 +55,11 @@ Route::name('home.')->prefix('home')->group(function () {
     Route::get('/bookmarks', [HomeBookmarkController::class, 'index'])->name('bookmarks.index');
     Route::post('/bookmarks', [HomeBookmarkController::class, 'store'])->name('bookmarks.store');
     Route::delete('/bookmarks/{bookmark}', [HomeBookmarkController::class, 'destroy'])->name('bookmarks.destroy');
-    Route::get('/orders', [\App\Http\Controllers\Home\OrderController::class, 'orders'])->name('orders.index');
-    Route::get('/orders/{order}', [\App\Http\Controllers\Home\OrderController::class, 'about_orders'])->name('orders.show');
-    Route::delete('/orders/{order}', [\App\Http\Controllers\Home\OrderController::class, 'cancel_order'])->name('orders.destroy');
+    Route::get('/orders', [HomeOrderController::class, 'orders'])->name('orders.index');
+    Route::get('/orders/{order}', [HomeOrderController::class, 'about_orders'])->name('orders.show');
+    Route::delete('/orders/{order}', [HomeOrderController::class, 'cancel_order'])->name('orders.destroy');
     Route::get('/info', [HomeController::class, 'info'])->name('info.index');
-    Route::patch('/info/{id}', [HomeController::class, 'infoUpdate'])->name('info.update');
+    Route::patch('/info/{user}', [HomeController::class, 'infoUpdate'])->name('info.update');
     Route::get('/commentaries', [CommentaryController::class, 'commentaries'])->name('commentaries.index');
 });
 
@@ -91,7 +93,7 @@ Route::name('admin.')->prefix('admin')->group(function () {
     Route::get('/orders', [AdminOrderController::class, 'orders'])->name('orders.index');
     Route::get('/orders/history', [AdminOrderController::class, 'orderHistory'])->name('orders.history');
     Route::patch('/orders/{id}/status', [AdminOrderController::class, 'addStatusOrder'])->name('orders.status.update');
-    Route::get('/orders/{id}', [AdminOrderController::class, 'aboutOrderAdmin'])->name('orders.show');
+    Route::get('/orders/{order}', [AdminOrderController::class, 'aboutOrderAdmin'])->name('orders.show');
     //Authors
     Route::resource('authors', AdminAuthController::class);
     //Discount

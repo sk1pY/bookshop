@@ -46,16 +46,16 @@ class OrderController extends Controller
                     ->increment('stock', $item->quantity);
             });
         }
-
         return redirect()->route('admin.orders.index')->with('successStatusUpdate', 'Статус заказа обновлен');
 
     }
-    public function aboutOrderAdmin($id)
+    public function aboutOrderAdmin(Order $order)
     {
+        $order_items = $order->order_items()->get();
+        $order_items->each(function($q){
+         $q->sum_res = $q->quantity*$q->book->price;
+        });
 
-        $order_items = OrderItem::where('order_id', $id)->get();
-        $order = Order::where('id', $id)->first();
-        $user = $order->user;
-        return view('admin.orders.show', compact('order_items','order','user'));
+        return view('admin.orders.show', compact('order_items','order'));
     }
 }

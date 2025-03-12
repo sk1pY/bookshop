@@ -73,8 +73,6 @@ class AppServiceProvider extends ServiceProvider
         View::composer(['newest','sale','index','bestsellers'], function ($view,) {
             $request = app(Request::class);
             $query = Book::withCount(['commentaries']);
-
-
             if ($request->filled('filter')) {
                 switch ($request->input('filter')) {
                     case 'cheap':
@@ -86,9 +84,8 @@ class AppServiceProvider extends ServiceProvider
                     case 'rating':
                         $query->orderBy('avgRating', 'desc');
                 }
-
+                $books = $query->paginate(10);
             }
-
             $books = $query->paginate(10);
             $view->with('books', $books);
         });

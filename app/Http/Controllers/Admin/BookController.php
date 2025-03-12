@@ -15,11 +15,10 @@ class BookController extends Controller
      */
     public function index()
     {
-//        $authors = Author::all();
-//        $books = Book::orderBy('created_at', 'desc')->paginate(8);
-     $books = Book::with('authors')->orderBy('created_at', 'desc')->paginate(8);
+        $books = Book::with('author')->orderBy('created_at', 'desc')->paginate(8);
+        $authors = Author::all();
 
-        return view('admin.books.index', compact('books'));
+        return view('admin.books.index', compact('books','authors'));
     }
 
     /**
@@ -56,7 +55,7 @@ class BookController extends Controller
         $authorId = Author::where('surname', $request->input('author'))->first()?->id;
         $categoryId = Category::where('name', $request->input('category'))->first()?->id;
 
-        Book::create(array_merge($validatedData,[
+        Book::create(array_merge($validatedData, [
             'author_id' => $authorId,
             'category_id' => $categoryId,
             'image' => $fileName
@@ -86,7 +85,7 @@ class BookController extends Controller
      */
     public function update(Request $request, Book $book)
     {
-      //  $book = Book::find($id);
+        //  $book = Book::find($id);
         $validatedData = $request->validate([
             'title' => 'required|string|max:255',
             'price' => 'numeric|required|min:0',
@@ -95,11 +94,11 @@ class BookController extends Controller
 
         ]);
 
-        $result =   $book->update([
+        $result = $book->update([
             'title' => $validatedData['title'],
             'price' => $validatedData['price'],
             'stock' => $validatedData['stock'],
-         //   'image' => $validatedData['image'],
+            //   'image' => $validatedData['image'],
             'author_id' => $request->input('author_id'),
         ]);
 
@@ -110,9 +109,9 @@ class BookController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Book $book)
     {
-        Book:: destroy($id);
+        $book->delete();
         return redirect()->route('admin.books.index');
     }
 }

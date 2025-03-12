@@ -6,6 +6,7 @@
         <tr>
             <th scope="col">Книга</th>
             <th scope="col">Сумма</th>
+            <th scope="col">Кол-во</th>
             <th scope="col">Адрес самовывоза</th>
             @if($order->status == "Получен")
                 <th scope="col">Оценить товар</th>
@@ -21,6 +22,7 @@
 
                 <a href="{{route('books.book',['book'=> $or->book->id])}}">{{ $or->book -> title }}</a></td>
                 <td>{{ $or -> book -> price }}</td>
+                <td>{{ $or->quantity }}</td>
                 <td>{{ $or -> order-> address }}</td>
                 @if($order->status == "Получен")
                     <td>

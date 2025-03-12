@@ -17,7 +17,7 @@
                 <div class="d-flex align-items-center">
                     <p class=" fs-5  text mb-0">{{ $user->name  }}</p>
                     <i data-bs-target="#exampleModal" type="button" data-bs-toggle="modal"
-                       class="fa-solid fa-pencil ms-3    ms-auto"></i>
+                       class="bi bi-pencil-square ms-3    ms-auto"></i>
                 </div>
 
 
@@ -31,7 +31,7 @@
                                         aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
-                                <form action="{{ route('home.info.update', ['id' => $user->id]) }}" method="post">
+                                <form action="{{ route('home.info.update',$user) }}" method="post">
                                     @csrf
                                     @method('PATCH')
 

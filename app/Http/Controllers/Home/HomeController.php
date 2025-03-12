@@ -25,11 +25,9 @@ class HomeController extends Controller
         return view('home.info', compact('user', 'addresses'));
     }
 
-    public function infoUpdate(UpdateInfoRequest $request, $id)
+    public function infoUpdate(UpdateInfoRequest $request, User $user)
     {
-        $user = User::findOrFail($id);
         $validated = $request->validated();
-
 
         foreach ($validated as $key => $value) {
             if ($value !== null && $value !== '' && $value !== $user->$key) {

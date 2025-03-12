@@ -38,7 +38,7 @@
                     <div class="card-body ">
                         <div style="font-size: 0.8rem">
                             @if($book->author_id)
-                                <a href="{{ route('author.index', ['id' => $book->author->id]) }}">
+                                <a href="{{ route('authors.index',  $book->author->id) }}">
                                     {{ $book->author->surname . ' ' . $book->author->name }}</a>
                             @else
                                 <div>без автора</div>

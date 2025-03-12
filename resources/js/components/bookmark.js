@@ -1,34 +1,28 @@
-    $(document).ready(function () {
-
-    $('.bookmark-button').on('click', function () {
-        let taskId = $(this).data('bookmark-id');
-        let bookmarkButton = $(this).find('.bookmark_button');
-        let url = this.dataset.url;
-
-        $.ajax({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            url: url ,
-            method: 'POST',
-            data: {
-                bookmark_id: taskId
-            },
-            success: function (response) {
-                if (response.success) {
-                    if (response.bookmark) {
-                        bookmarkButton.addClass('bi-heart-fill', 'text-danger');
-                        bookmarkButton.removeClass('bi-heart');
+document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll('.bookmark-button').forEach(function (button) {
+        button.addEventListener('click', function () {
+            let bookmarkId = this.dataset.bookmarkId;
+            let bookmarkButton = this.querySelector('.bookmark_button');
+            let url = this.dataset.url;
+            axios.post(url, {bookmark_id: bookmarkId})
+                .then(response => {
+                    if (response.data.success) {
+                        if (response.data.bookmark) {
+                            bookmarkButton.classList.add('bi-heart-fill', 'text-danger');
+                            bookmarkButton.classList.remove('bi-heart');
+                        } else {
+                            bookmarkButton.classList.add('bi-heart');
+                            bookmarkButton.classList.remove('bi-heart-fill', 'text-danger');
+                        }
                     } else {
-                        bookmarkButton.addClass('bi-heart');
-                        bookmarkButton.removeClass('bi-heart-fill', 'text-danger');
+                        document.getElementById('message').textContent = response.data.message;
+                        document.getElementById('message').style.color = 'red';
                     }
-                } else {
-                    $('#message').text(response.message).css('color', 'red');
-                }
-            },
-
+                })
+                .catch(error => console.error('Ошибка:', error));
         });
-    })
+    });
 });
+
+
 
