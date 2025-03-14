@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
@@ -11,6 +13,8 @@
             crossorigin="anonymous"></script>
 
     <title>Admin</title>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+
     <style>
 
         .row {
@@ -112,7 +116,7 @@
             </div>
 
             <li>
-                <a href="{{route('admin.permissions_roles.index')}}" class="nav-link text-white">
+                <a href="{{route('admin.roles.permissions.index')}}" class="nav-link text-white">
                     <i class="bi  bi-clipboard2-check me-2" width="16" height="16"></i>
                     Настройка ролей и разрешений
                 </a>
@@ -156,8 +160,9 @@
         <div class="dropdown">
             <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
                id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-
+                @auth()
                 <strong>{{Auth::user()->name}}</strong>
+                @endauth
             </a>
             <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
 

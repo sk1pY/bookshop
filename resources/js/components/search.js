@@ -1,25 +1,32 @@
-$(document).ready(function () {
-    $('#search').on('keyup', function () {
-        var value = $(this).val();
-        $.ajax({
-            type: 'get',
-            url: '/search',
-            data: {'search': value},
-            success: function (data) {
-                $('.search-result').html(data).show();
-            }
-        });
-    });
-    $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
-    });
-    $(document).click(function (event) {
-        let target = $(event.target);
-        if (!target.closest('#search').length && !target.closest('.search-result').length) {
-            $('.search-result').hide();
-        }
-    });
+document.addEventListener('DOMContentLoaded', function () {
+    const searchInput = document.getElementById('search');
+    const searchResult = document.querySelector('.search-result');
 
+    if (searchInput) {
+        searchInput.addEventListener('keyup', function () {
+            const value = this.value;
+
+            if (value.trim() === '') {
+                searchResult.style.display = 'none';
+                return;
+            }
+
+            axios.get('/search', { params: { search: value } })
+                .then(response => {
+                    searchResult.innerHTML = response.data;
+                    searchResult.style.display = 'block';
+                })
+                .catch(error => {
+                    console.error('Ошибка при поиске:', error);
+                });
+        });
+    }
+
+    document.addEventListener('click', function (event) {
+        const target = event.target;
+
+        if (!searchInput.contains(target) && !searchResult.contains(target)) {
+            searchResult.style.display = 'none';
+        }
+    });
 });

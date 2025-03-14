@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\RolesPermissions;
+namespace App\Http\Controllers\Admin\RolesPermissions;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -18,7 +18,7 @@ class RoleController extends Controller
          return redirect()->route('admin.permissions_roles.index');
     }
 
-    public function destroy(Request $request, Role $role){
+    public function destroy(Role $role){
 
         $role -> delete();
 

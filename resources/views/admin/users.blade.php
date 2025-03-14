@@ -12,14 +12,13 @@
         </thead>
         <tbody>
         @foreach( $users as $user )
+
             <tr>
                 <th scope="row">{{$user -> id}}</th>
                 <td>{{$user -> name}}</td>
                 <td>
-                    <form action="{{ route('admin.role_for_user.update',['user'=>$user->id] ) }}" method="post" class="d-flex align-items-center gap-2">
-                        @csrf
-                        @method('PUT')
-                        <select name="role" class="form-select form-select-sm">
+                        <select name="role" class="role-update form-select form-select-sm"
+                                data-url="{{route('admin.roles.users.update', $user->id)}}">
                             @foreach($roles as $role)
                                 <option value="{{ $role->name }}"
                                     {{ $user->roles->contains('name', $role->name) ? 'selected' : '' }}>
@@ -27,8 +26,6 @@
                                 </option>
                             @endforeach
                         </select>
-                        <button class="btn btn-secondary btn-sm" type="submit">ok</button>
-                    </form>
                 </td>
 
                 <td>

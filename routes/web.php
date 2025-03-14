@@ -7,17 +7,17 @@ use App\Http\Controllers\Admin\BookController as AdminBookController;
 use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Admin\DiscountController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
+use App\Http\Controllers\Admin\RolesPermissions\PermissionController;
+use App\Http\Controllers\Admin\RolesPermissions\RoleController;
+use App\Http\Controllers\Admin\RolesPermissions\RolePermissionController;
 use App\Http\Controllers\AuthorController;
 use App\Http\Controllers\BasketItemController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CommentaryController;
 use App\Http\Controllers\Home\BookmarkController as HomeBookmarkController;
-use App\Http\Controllers\Home\OrderController as HomeOrderController;
 use App\Http\Controllers\Home\HomeController;
-use App\Http\Controllers\RolesPermissions\PermissionController;
-use App\Http\Controllers\RolesPermissions\RoleController;
-use App\Http\Controllers\RolesPermissions\RolePermissionController;
+use App\Http\Controllers\Home\OrderController as HomeOrderController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\UserCategoryController;
 use Illuminate\Support\Facades\Route;
@@ -71,18 +71,16 @@ Route::delete('/book/comment/{id}', [CommentaryController::class, 'commentDelete
 Route::name('admin.')->prefix('admin')->group(function () {
     Route::get('/', [AdminController::class, 'index'])->name('index');
     //Roles and Permission
-    Route::get('/permissions_roles', [RolePermissionController::class, 'index'])->name('permissions_roles.index');
-    Route::put('/permissions_roles/{role}', [RolePermissionController::class, 'update'])->name('permissions_roles.update');
-    Route::put('/role_for_user/{user}', [RolePermissionController::class, 'role_for_user'])->name('role_for_user.update');
-    //
+    Route::get('/roles-permission', [RolePermissionController::class, 'index'])->name('roles.permissions.index');
+
+    Route::put('/role/{role}/permissions', [RolePermissionController::class, 'updatePermissionsForRole'])->name('roles.permissions.update');
+    Route::put('/role/user/{user}', [RolePermissionController::class, 'updateRoleForUser'])->name('roles.users.update');
+    //Permission
     Route::post('/permissions', [PermissionController::class, 'store'])->name('permissions.store');
     Route::delete('/permissions/{permission}', [PermissionController::class, 'destroy'])->name('permissions.destroy');
     //ROLES
     Route::post('/roles', [RoleController::class, 'store'])->name('roles.store');
     Route::delete('/roles/{role}', [RoleController::class, 'destroy'])->name('roles.destroy');
-    //PERMISSION
-    Route::post('/permissions', [PermissionController::class, 'store'])->name('permissions.store');
-    Route::delete('/permissions/{permission}', [PermissionController::class, 'destroy'])->name('permissions.destroy');
     //Books
     Route::resource('books', AdminBookController::class)->except('show', 'edit');
     //Categories

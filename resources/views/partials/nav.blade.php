@@ -32,11 +32,11 @@
                         <i class="bi bi-search"></i>
                     </span>
 
-                    <input type="search"
+                    <input id="search"
                            class="form-control border-0 rounded-right-4"
                            style=" background-color: #f4f4f5"
                            placeholder="Поиск книг"
-                           aria-describedby="search-addon" id="search" name="search">
+                           aria-describedby="search-addon"  name="search">
                     <ul class="list-group search-result"
                         style="position: absolute; top: 100%; left: 0; width: 100%; z-index: 1000; display: none;">
 

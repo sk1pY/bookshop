@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\RolesPermissions;
+namespace App\Http\Controllers\Admin\RolesPermissions;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -8,8 +8,6 @@ use Spatie\Permission\Models\Permission;
 
 class PermissionController extends Controller
 {
-
-
     public function store(Request $request){
         Permission::create([
             'name' => $request['permission'],
@@ -18,7 +16,7 @@ class PermissionController extends Controller
         return redirect()->route('admin.permissions_roles.index');
     }
 
-    public function destroy(Request $request, Permission $permission){
+    public function destroy( Permission $permission){
 
         $permission -> delete();
 
