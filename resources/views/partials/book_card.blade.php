@@ -63,9 +63,10 @@
                             </form>
                         </div>
                     @else
-                        <div class="d-flex justify-content-center align-items-center">
-                            <span>нет в наличии</span>
-                        </div>
+                        <button
+                            class="w-auto rounded-pill btn d-flex justify-content-center align-items-center ">
+                            нет в наличии
+                        </button>
                     @endif
                 </div>
             </div>

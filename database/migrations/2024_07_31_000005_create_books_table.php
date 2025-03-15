@@ -21,7 +21,7 @@ return new class extends Migration
             $table->foreignId('author_id')->nullable()->constrained('authors')->cascadeOnDelete();
             $table->foreignId('category_id')->nullable()->constrained('categories')->cascadeOnDelete();
             $table->integer('numberOfPurchased')->default(0);
-            $table->unsignedInteger('stock')->default(3);
+            $table->unsignedInteger('stock')->default(0);
             $table->integer('discount')->default(0);
             $table->decimal('avgRating',4,2)->default(0);
             $table->timestamps();

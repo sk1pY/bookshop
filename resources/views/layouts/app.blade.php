@@ -17,11 +17,8 @@
         font-family: 'Inter', sans-serif;
         font-weight: 400;
         font-size: 14px;
-        width: 100%;
         margin: 0;
         padding: 0;
-        overflow-x: hidden;
-
     }
     a {
         color: black;
@@ -34,22 +31,17 @@
     .dropdown-menu {
         display: none;
     }
-    body {
-        max-width: 1200px;
-        margin: 0 auto;
-    }
 
-    html {
-        margin: 0;
-        padding: 0;
-    }
+
 
 
 </style>
-<body class="container">
+<body >
 <header class="sticky-top">
     @include('partials.nav')
 </header>
+<div class="container">
+
 
 <main>
     @yield('content')
@@ -58,5 +50,6 @@
 <footer class="">
     @include('partials.footer')
 </footer>
+</div>
 </body>
 </html>

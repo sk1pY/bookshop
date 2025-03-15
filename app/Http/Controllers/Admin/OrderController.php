@@ -31,18 +31,18 @@ class OrderController extends Controller
         if ($orderStatus->status == 'Получен') {
             $booksBoughtUpdate = OrderItem::where(['order_id' => $id])->get();
 
-            //ПРОХОДИТ ПО КНИГАМ КОТОРЫЕ БЫЛИ КУПЛЕНЫ И ПРИБАВЛЯЕМ КОЛ-ВО ПРОДАНЫХ
             $booksBoughtUpdate->each(function ($item) {
-                $book = Book::where(['id' => $item->book_id])
+                 Book::where(['id' => $item->book_id])
                     ->increment('numberOfPurchased', $item->quantity);
+
             });
+
         }
         if ($orderStatus->status == 'Отмена заказа') {
             $booksBoughtUpdate = OrderItem::where(['order_id' => $id])->get();
 
-            //ПРОХОДИТ ПО КНИГАМ КОТОРЫЕ БЫЛИ ОТМЕНЕНЫ И ПРИБАВЛЯЕМ К СТОКУ
             $booksBoughtUpdate->each(function ($item) {
-                $book = Book::where(['id' => $item->book_id])
+                Book::where(['id' => $item->book_id])
                     ->increment('stock', $item->quantity);
             });
         }

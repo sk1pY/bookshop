@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Address;
 use App\Models\DeliveryAddress;
 use Illuminate\Http\Request;
 
@@ -13,7 +14,7 @@ class AddressesController extends Controller
      */
     public function index()
     {
-        $addresses = DeliveryAddress::all();
+        $addresses = Address::get();
         return view('admin.addresses',compact('addresses'));
     }
 
@@ -30,8 +31,8 @@ class AddressesController extends Controller
      */
     public function store(Request $request)
     {
-        DeliveryAddress::create([
-            'address' => $request->input('address'),
+        Address::create([
+            'name' => $request->input('address'),
         ]);
 
         return redirect()->route('admin.addresses.index');
@@ -56,21 +57,32 @@ class AddressesController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request,DeliveryAddress $address)
+    public function update(Request $request)
     {
-        $address->update([
-            'address' => $request->input('address'),
-        ]);
 
-        return redirect()->route('admin.addresses.index');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(DeliveryAddress $address)
+    public function destroy(Address $address)
     {
         $address->delete();
+
+        return redirect()->route('admin.addresses.index');
+    }
+
+    public function addressesDeleted()
+    {
+        $addresses = Address::onlyTrashed()->get();
+
+            return view('admin.addresses_deleted',compact('addresses'));
+    }
+    public function addressesRestore($addressId)
+    {
+        $address = Address::withTrashed()->findOrFail($addressId);
+
+        $address->restore();
 
         return redirect()->route('admin.addresses.index');
     }

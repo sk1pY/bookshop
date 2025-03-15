@@ -45,12 +45,12 @@ Route::prefix('basket')->group(function () {
     Route::post('/add-to-order', [BasketItemController::class, 'orderAdd'])->name('basket.order');
     Route::post('/add-to-basket/{id}', [BasketItemController::class, 'addToBasket'])->name('basket.add');
     Route::delete('/delete/{id}', [BasketItemController::class, 'delete'])->name('basket.delete');
-    Route::delete('/delete_all_book/{book}', [BasketItemController::class, 'delete_all_books'])->name('basket.deleteAll');
+    Route::delete('/delete-all-book/{book}', [BasketItemController::class, 'delete_all_books'])->name('basket.deleteAll');
 });
 
 
 //------------------------------------------------HOME PROFILE------------------------------------------------
-Route::name('home.')->prefix('home')->group(function () {
+Route::name('home.')->prefix('home') ->middleware('role:user|admin')->group(function () {
     Route::get('/', [HomeController::class, 'index'])->name('index');
     Route::get('/bookmarks', [HomeBookmarkController::class, 'index'])->name('bookmarks.index');
     Route::post('/bookmarks', [HomeBookmarkController::class, 'store'])->name('bookmarks.store');
@@ -64,11 +64,11 @@ Route::name('home.')->prefix('home')->group(function () {
 });
 
 //------------------------------------------------Commentaries------------------------------------------------
-Route::post('/book/{id}/comment', [CommentaryController::class, 'commentAdd'])->name('comment.store');
+Route::post('/book/{book}/comment', [CommentaryController::class, 'commentAdd'])->name('comment.store');
 Route::delete('/book/comment/{id}', [CommentaryController::class, 'commentDelete'])->name('comment.destroy');
 
 //------------------------------------------------ADMIN-PANEL--------------------------------------------//
-Route::name('admin.')->prefix('admin')->group(function () {
+Route::name('admin.')->prefix('admin')->middleware('role:admin')->group(function () {
     Route::get('/', [AdminController::class, 'index'])->name('index');
     //Roles and Permission
     Route::get('/roles-permission', [RolePermissionController::class, 'index'])->name('roles.permissions.index');
@@ -89,7 +89,7 @@ Route::name('admin.')->prefix('admin')->group(function () {
     Route::resource('users', \App\Http\Controllers\Admin\UserController::class);
     //Orders
     Route::get('/orders', [AdminOrderController::class, 'orders'])->name('orders.index');
-    Route::get('/orders/history', [AdminOrderController::class, 'orderHistory'])->name('orders.history');
+    Route::get('/orders-history', [AdminOrderController::class, 'orderHistory'])->name('orders.history');
     Route::patch('/orders/{id}/status', [AdminOrderController::class, 'addStatusOrder'])->name('orders.status.update');
     Route::get('/orders/{order}', [AdminOrderController::class, 'aboutOrderAdmin'])->name('orders.show');
     //Authors
@@ -101,7 +101,8 @@ Route::name('admin.')->prefix('admin')->group(function () {
     Route::get('/interface', [\App\Http\Controllers\Admin\InterfaceController::class, 'index'])->name('interface.index');
     //ADRESSES
     Route::resource('addresses', AddressesController::class)->except('show', 'edit', 'create');
-
+    Route::get('/addresses-deleted',[AddressesController::class,'addressesDeleted'])->name('addresses.deleted');
+    Route::get('/addresses-deleted/{addressId}/restore',[AddressesController::class,'addressesRestore'])->name('addresses.restore');
 });
 
 

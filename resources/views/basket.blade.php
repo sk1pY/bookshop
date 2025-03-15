@@ -113,7 +113,7 @@
                         <label for="address">Самовывоз</label>
                         <select name="address" class="form-select mb-3">
                             @foreach($addresses as $address)
-                                <option value="{{$address->address}}">{{$address->address}}</option>
+                                <option value="{{$address->id}}">{{$address->name}}</option>
 
                             @endforeach
                         </select>

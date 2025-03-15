@@ -40,6 +40,7 @@ class BookFactory extends Factory
             'description' => fake()->text(1000),
             'price' => fake()->randomFloat(2, 5, 100),
             'image' => $files ? $files[array_rand($files)]->getFilename() : null,
+            'stock' => 10,
             'author_id' => Author::inRandomOrder()->first()->id,
             'category_id' => Category::inRandomOrder()->first()->id
         ];

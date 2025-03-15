@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Book;
 use App\Models\Commentary;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -15,19 +16,19 @@ class CommentaryController extends Controller
         $commentaries = Commentary::where('user_id', Auth::id())->get();
         return view('home.commentaries', compact('commentaries'));
     }
-    public function commentAdd(Request $request, $id)
+    public function commentAdd(Request $request, Book $book)
     {
-        $comment = Commentary::create(['text' => request('text'), 'book_id' => $id, 'rating' => request('rating'),'user_id'=>Auth::id()]);
+        $validate = $request->validate([
+            'text'  => 'required|string|max:1000',
+            'rating' => 'required|between:1,5'
+        ]);
+         Commentary::create(array_merge($validate,['book_id'=>$book->id,'user_id'=>Auth::id() ]));
 
+      $avgRating =  $book->commentaries()->avg('rating');
+       $book->avgRating = $avgRating;
+       $book-> save();
 
-        $avgRating = Commentary::with('book')->avg('rating');
-        $roundAvgRating = round($avgRating, 2);
-
-        $bookObj = $comment->book;
-        $bookObj->avgRating = $roundAvgRating;
-        $bookObj->save();
-
-        return redirect()->route('books.book',$id);
+        return redirect()->route('books.book',$book);
     }
     public function commentDelete($id)
     {

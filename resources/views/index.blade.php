@@ -18,9 +18,9 @@
     </div>
 
     <div class="row">
-        <div class="col">
+        <div class="col ">
             {{--слайдшоу--}}
-            <div id="demo" class="carousel slide" data-bs-ride="carousel">
+            <div id="demo" class="carousel slide " data-bs-ride="carousel">
                 <div class="carousel-indicators">
                     <button type="button" data-bs-target="#demo" data-bs-slide-to="0" class="active"></button>
                     <button type="button" data-bs-target="#demo" data-bs-slide-to="1"></button>
@@ -31,21 +31,21 @@
                         <a href="#" class=" ">
                             <img
                                 src="{{ asset('imageSlide/1.jpg')}}"
-                                alt="#" class="d-block" style="width:100%; height:340px">
+                                alt="#" class="d-block" >
                         </a>
                     </div>
                     <div class="carousel-item ">
                         <a href="#">
                             <img
                                 src="{{ asset('imageSlide/2.jpg') }}"
-                                alt="Chicago" class="d-block" style="width:100%; height:340px">
+                                alt="Chicago" class="d-block" >
                         </a>
                     </div>
                     <div class="carousel-item">
                         <a href="#">
                             <img
                                 src="{{ asset('imageSlide/3.jpg') }}"
-                                alt="New York" class="d-block" style="width:100%; height:340px">
+                                alt="New York" class="d-block" >
                         </a>
                     </div>
                 </div>

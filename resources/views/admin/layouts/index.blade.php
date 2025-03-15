@@ -49,6 +49,12 @@
                 </a>
 
             </li>
+            <li>
+                <a href="{{route('admin.orders.history')}}" class="nav-link text-white">
+                    <i class="bi bi-hourglass me-2" width="16" height="16"></i>
+                    История заказов
+                </a>
+            </li>
             <div class="accordion-item">
                 <h2 class="accordion-header nav-link text-white d-flex">
                     <i class="bi bi-plus-circle-dotted me-2" ></i>
@@ -136,12 +142,7 @@
                     Настройка скидок
                 </a>
             </li>
-            <li>
-                <a href="{{route('admin.orders.history')}}" class="nav-link text-white">
-                    <i class="bi bi-hourglass me-2" width="16" height="16"></i>
-                    История заказов
-                </a>
-            </li>
+
             <li>
                 <a href="{{route('admin.addresses.index')}}" class="nav-link text-white">
                     <i class="bi bi-building me-2" width="16" height="16"></i>

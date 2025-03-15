@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Order extends Model
 {
     use HasFactory;
-    protected $fillable = ['status','user_id','basket_id','price','address'];
+    protected $fillable = ['status','user_id','basket_id','price','address_id'];
     public function basket()
     {
         return $this->BelongsTo(Basket::class);
@@ -25,4 +25,8 @@ class Order extends Model
 
     public function books(){
         return $this->belongsTo(Book::class);    }
+
+    public function address(){
+        return $this->belongsTo(Address::class);
+    }
 }

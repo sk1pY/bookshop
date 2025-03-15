@@ -18,33 +18,28 @@
                     <h5> {{ $book -> author -> name .' '. $book -> author -> surname  }}</h5></a>
                 <p>
                     @endif
-
                     @php
                         $fullStars = floor($book->avgRating);
 
                         $halfStars = ($book->avgRating - $fullStars) > 0;
-
                     @endphp
-
                     @for ($i = 0; $i < $fullStars; $i++)
                         <i class="bi bi-star-fill text-warning"></i>
                     @endfor
-
                     @if($halfStars)
                         <i class="bi bi-star-half text-warning"></i>
                     @endif
-
                     @for( $i = 5 - $fullStars - ($halfStars?1:0); $i >  0; $i-- )
 
                         <i class="bi bi-star text-warning"></i>
                     @endfor
-
                     <span> {{ $book -> avgRating }}</span>
                 </p>
                 <div class="d-flex align-items-center">
                     <h2 class="fw-bold mb-0">{{ $book->price }}р.</h2>
                 </div>
                 @auth()
+                    @if($book->stock > 0)
                     <form action="{{ route('basket.add', $book->id) }}" method="post">
                         @csrf
                         <input type="text" hidden name="book_id" value="{{ $book->id }}">
@@ -53,6 +48,13 @@
                             В корзину
                         </button>
                     </form>
+                    @else
+                        <button style="width: 160px; height: 30px;"
+                                class="btn btn-outline-danger d-flex justify-content-center align-items-center disabled ">
+                            Нет в наличии
+                        </button>
+                    @endif
+
                 @endauth
                 <p class="text-start mt-3">{{ $book -> description }}</p>
         </div>
@@ -64,7 +66,7 @@
                 {{--            БЛОК НАПИСАНИЕ КОМЕНТА--}}
                 <div class="panel">
                     <div class="panel-body">
-                        <form action="{{ route('comment.store',['id'=>$book->id])  }}" id="commentaryForm"
+                        <form action="{{ route('comment.store',$book)  }}" id="commentaryForm"
                               method="post" class="d-flex gap-3">
                             @csrf
                             <textarea name="text" class="form-control" rows="2"

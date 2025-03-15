@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Address;
 use App\Models\Basket;
 use App\Models\BasketItem;
 use App\Models\Book;
@@ -69,7 +70,7 @@ class BasketItemController extends Controller
             session()->forget('books');
         }
 
-        $addresses = DeliveryAddress::all();
+        $addresses = Address::all();
 
         return view('basket', compact('books', 'total_price', 'addresses'));
     }
@@ -214,15 +215,12 @@ class BasketItemController extends Controller
     }
     public function orderAdd(Request $request)
     {
-
-       //   dd($request->input('basket'));
         $validated = $request->validate([
             'name' => 'required|alpha|string',
-            'surname' => 'required|alpha|string',
-            'address' => 'required|string',
+            'surname' => 'alpha|string|nullable',
             'phone' => ['required', 'regex:/^\+375(25|29|33|44|17)\d{7}$/'],
         ], [
-            'phone.regex' => 'Номер телефона должен начинаться с +375 и содержать 7 цифр после кода оператора.'
+            'phone.regex' => 'Номер телефона должен начинаться с +375 и содержать 7 цифр после кода оператора. 25|29|33|44'
         ]);
 
         $books = json_decode($request->input('basket'));
@@ -237,8 +235,8 @@ class BasketItemController extends Controller
             Auth::user()->update($validated);
             $order_user = Order::create([
                 'user_id' => Auth::id(),
-                'price' => $request->input('total_price'),
-                'address' => $request->input('address'),
+                'price' => $request['total_price'],
+                'address_id' => $request['address'],
                 'status' => 'Новый заказ'
             ]);
 
@@ -264,9 +262,6 @@ class BasketItemController extends Controller
                 $request->session()->forget('books');
 
             }
-
-
-
 
         return redirect()->route('basket.index')->with('success', 'Заказ успешно оформлен');
     }

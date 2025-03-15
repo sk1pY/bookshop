@@ -34,7 +34,7 @@ class RolePermissionController extends Controller
     public function updateRoleForUser(Request $request, User $user)
     {
         $role = $request['role'];
-        $user->syncRoles($role);
+        $user->syncRoles([$role]);
         return response()->json(['success' => 'User role updated successfully.','role' => $role]);
 
 

@@ -7,6 +7,7 @@ use App\Models\Book;
 use App\Models\Order;
 use App\Models\OrderItem;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 
 class OrderController extends Controller
@@ -14,13 +15,12 @@ class OrderController extends Controller
     public function orders(Request $request)
     {
         $status = $request->query('status','all');
-
+        $user = Auth::user();
         if($status == 'all'){
-            $orders = Order::orderBy('created_at','desc')->get();
+            $orders = $user->orders()->orderBy('created_at','desc')->get();
 
         }elseif($status == 'delivered'){
-            $orders = Order::where('status', 'Получен')->get();
-
+            $orders = $user->orders()->where('status', 'Получен')->get();
         }
 
         return view('home.orders', compact('orders'));

@@ -23,7 +23,7 @@
                 <a href="{{route('books.book',['book'=> $or->book->id])}}">{{ $or->book -> title }}</a></td>
                 <td>{{ $or -> book -> price }}</td>
                 <td>{{ $or->quantity }}</td>
-                <td>{{ $or -> order-> address }}</td>
+                <td>{{ $or->order->address->name }}</td>
                 @if($order->status == "Получен")
                     <td>
 
