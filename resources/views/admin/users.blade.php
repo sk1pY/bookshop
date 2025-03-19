@@ -1,7 +1,7 @@
 @extends('admin.layouts.index')
 @section('content')
 
-        <table class="table table-sm table-bordered table-striped ">
+        <table id="table" class="table table-sm table-bordered table-striped ">
         <thead>
         <tr>
             <th scope="col">#</th>
@@ -43,5 +43,7 @@
         @endforeach
 
     </table>
-
+        <div class="mt-4">
+            {{ $users->links('pagination::bootstrap-5') }}
+        </div>
 @endsection

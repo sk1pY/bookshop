@@ -19,4 +19,6 @@ class Commentary extends Model
 
         return $this->belongsTo(User::class);
     }
+
+
 }

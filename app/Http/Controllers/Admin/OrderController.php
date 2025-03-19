@@ -19,7 +19,7 @@ class OrderController extends Controller
 
     public function orderHistory()
     {
-        $orders = Order::whereIn('status', ['Отменен', 'Получен'])->get();
+        $orders = Order::whereIn('status', ['Отменен', 'Получен'])->paginate(10);
         return view('admin.orders.order_history', compact('orders'));
     }
 

@@ -10,11 +10,10 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthorController extends Controller
 {
-    public function index($id)
+    public function index(Author $author)
     {
         $bookmarkTaskUser = Bookmark::where('user_id', Auth::id())->pluck('book_id')->toArray();
-        $books = Book::where('author_id', $id)->get();
-        $author = Author::find($id);
+        $books =  $author->books()->get();
         return view('author', compact('books', 'bookmarkTaskUser', 'author'));
     }
 }

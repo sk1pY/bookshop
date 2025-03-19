@@ -1,6 +1,6 @@
 @extends('admin.layouts.index')
 @section('content')
-    <table class="table table-sm table-bordered table-striped m-0">
+    <table id="table" class="table table-sm table-bordered table-striped m-0">
     <thead>
     <tr>
         <th scope="col" class="text-center">#</th>
@@ -18,7 +18,7 @@
                 </a>
             </td>
             <td class="text-center p-0">
-                <form action="{{ route('admin.authors.destroy',$author->id)}}" method="post"
+                <form action="{{ route('admin.authors.destroy',$author)}}" method="post"
                       id>
                     @csrf
                     @method('delete')
@@ -31,4 +31,7 @@
     @endforeach
     </tbody>
 </table>
+    <div class="mt-4">
+        {{ $authors->links('pagination::bootstrap-5') }}
+    </div>
 @endsection

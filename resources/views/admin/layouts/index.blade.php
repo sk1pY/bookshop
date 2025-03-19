@@ -3,14 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-            crossorigin="anonymous"></script>
 
     <title>Admin</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -29,9 +21,8 @@
     </style>
 </head>
 <body>
-
 <div class="row">
-        <div class="col-2 d-flex flex-column flex-shrink-0 p-3 bg-dark">
+    <div class="col-2 d-flex flex-column flex-shrink-0 p-3 bg-dark w-auto h-auto">
         <a href="/" class="d-flex align-items-center mb-3 text-white text-decoration-none">
             <svg class="bi me-2" width="40" height="32">
 
@@ -43,11 +34,13 @@
 
         <ul class="according nav nav-pills flex-column mb-auto ">
             <li>
-                <a href="{{route('admin.orders.index')}}" class="nav-link text-white">
-                    <i class="bi bi-bag me-2"></i>
-                    Активные заказы
-                </a>
+                <div class="alert alert-danger" role="alert">
+                    <a href="{{route('admin.orders.index')}}" class="nav-link text-dark">
+                            <i class="bi bi-bag me-2 text-dark"></i> Активные заказы
 
+                            {{$countOrders ?? 0}}
+                    </a>
+                </div>
             </li>
             <li>
                 <a href="{{route('admin.orders.history')}}" class="nav-link text-white">
@@ -55,71 +48,63 @@
                     История заказов
                 </a>
             </li>
+
             <div class="accordion-item">
                 <h2 class="accordion-header nav-link text-white d-flex">
-                    <i class="bi bi-plus-circle-dotted me-2" ></i>
+                    <i class="bi bi-plus-circle-dotted me-2"></i>
                     <button class="accordion-button" type="button" data-bs-toggle="collapse"
                             data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                         Добавить
                     </button>
-                    <i class="bi bi-caret-down"></i>
+                    <i class="bi bi-caret-down ms-auto"></i>
                 </h2>
-                <div id="collapseOne" class="accordion-collapse collapse " data-bs-parent="#accordionExample">
+                <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
                     <div class="accordion-body">
-                            <a href="{{ route('admin.books.create') }}" class="nav-link text-white">
-                                Книга
-                            </a>
+                        <a href="{{ route('admin.books.create') }}" class="nav-link text-white">
+                            Книга
+                        </a>
                     </div>
                     <div class="accordion-body">
-                            <a href="{{ route('admin.authors.create') }}" class="nav-link text-white">
-                                Автор
-                            </a>
+                        <a href="{{ route('admin.authors.create') }}" class="nav-link text-white">
+                            Автор
+                        </a>
                     </div>
                     <div class="accordion-body">
-                            <a href="{{ route('admin.categories.create') }}" class="nav-link text-white">
-                                Категорию
-                            </a>
-
+                        <a href="{{ route('admin.categories.create') }}" class="nav-link text-white">
+                            Категория
+                        </a>
                     </div>
                 </div>
             </div>
 
             <div class="accordion-item">
                 <h2 class="accordion-header nav-link text-white d-flex">
-                    <i class="bi bi-card-list me-2" ></i>
+                    <i class="bi bi-card-list me-2"></i>
                     <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#collapseTwo" aria-expanded="true" aria-controls="collapseOne">
+                            data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
                         Список
                     </button>
-                    <i class="bi bi-caret-down" width="16" height="16"></i>
+                    <i class="bi bi-caret-down ms-auto"></i>
                 </h2>
-                <div id="collapseTwo" class="accordion-collapse collapse " data-bs-parent="#accordionExample">
+                <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
                     <div class="accordion-body">
-                        <li>
-                            <a href="{{route('admin.books.index')}}" class="nav-link text-white">
-                                Книги
-                            </a>
-
-                        </li>
+                        <a href="{{ route('admin.books.index') }}" class="nav-link text-white">
+                            Книги
+                        </a>
                     </div>
                     <div class="accordion-body">
-                        <li>
-                            <a href="{{route('admin.authors.index')}}" class="nav-link text-white">
-                                Авторы
-                            </a>
-
-                        </li>
+                        <a href="{{ route('admin.authors.index') }}" class="nav-link text-white">
+                            Авторы
+                        </a>
                     </div>
                     <div class="accordion-body">
-                        <li>
-                            <a href="{{route('admin.categories.index')}}" class="nav-link text-white">
-                                Категории
-                            </a>
-
-                        </li>
+                        <a href="{{ route('admin.categories.index') }}" class="nav-link text-white">
+                            Категории
+                        </a>
                     </div>
                 </div>
             </div>
+
 
             <li>
                 <a href="{{route('admin.roles.permissions.index')}}" class="nav-link text-white">
@@ -162,7 +147,7 @@
             <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
                id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
                 @auth()
-                <strong>{{Auth::user()->name}}</strong>
+                    <strong>{{Auth::user()->name}}</strong>
                 @endauth
             </a>
             <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">

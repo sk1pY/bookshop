@@ -7,6 +7,8 @@ use App\Models\BasketItem;
 use App\Models\Book;
 use App\Models\Category;
 use App\Models\Order;
+use App\Models\OrderItem;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -33,6 +35,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+
+        Gate::define('check-bought-book', function (User $user, Book $book) {
+            return $user->orders()->whereHas('order_items', function ($query) use ($book) {
+                $query->where('book_id', $book->id);
+            })->exists();
+        });
         Gate::before(function ($user, $ability) {
             return $user->hasRole('super-admin') ? true : null;
         });

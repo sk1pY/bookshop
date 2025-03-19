@@ -60,7 +60,7 @@
 
                 <td>{{$book -> discount.'%'}}</td>
                 <td>
-                    <form action="{{ route('admin.discounts.destroy',['discount'=>$book->id])}}" method="post">
+                    <form action="{{ route('admin.discounts.destroy',$book)}}" method="post">
                         @csrf
                         @method('delete')
                         <input class="btn btn-danger" type="submit" value="Удалить">

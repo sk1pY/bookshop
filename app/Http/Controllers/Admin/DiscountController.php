@@ -15,8 +15,9 @@ class DiscountController extends Controller
     public function index()
     {
         $booksWithDiscount = Book::where('discount', '>', 0)->get();
-        $booksWithoutDiscount = Book::all();
-        $authors = Author::all();
+        $booksWithoutDiscount = Book::get();
+        $authors = Author::get();
+
         return view('admin.discount', compact('authors', 'booksWithDiscount', 'booksWithoutDiscount'));
     }
 
@@ -90,7 +91,7 @@ class DiscountController extends Controller
      */
     public function destroy($id)
     {
-        $item = Book::findorfail($id);
+        $item = Book::find($id);
         $item->price = $item->priceBeforeDiscount;
         $item->discount = 0;
         $item->save();

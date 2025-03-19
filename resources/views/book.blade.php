@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
     <div class="row mt-5">
-        <div class="col-4">
+        <div class="col-4 p-0">
             <img
                 style="width: 350px;height: 500px"
                 src="{{Storage::url('booksImages/'.$book->image)}}"
@@ -40,14 +40,14 @@
                 </div>
                 @auth()
                     @if($book->stock > 0)
-                    <form action="{{ route('basket.add', $book->id) }}" method="post">
-                        @csrf
-                        <input type="text" hidden name="book_id" value="{{ $book->id }}">
-                        <button style="width: 160px; height: 30px;"
-                                class="btn btn-outline-success d-flex justify-content-center align-items-center">
-                            В корзину
-                        </button>
-                    </form>
+                        <form action="{{ route('basket.add', $book->id) }}" method="post">
+                            @csrf
+                            <input type="text" hidden name="book_id" value="{{ $book->id }}">
+                            <button style="width: 160px; height: 30px;"
+                                    class="btn btn-outline-success d-flex justify-content-center align-items-center">
+                                В корзину
+                            </button>
+                        </form>
                     @else
                         <button style="width: 160px; height: 30px;"
                                 class="btn btn-outline-danger d-flex justify-content-center align-items-center disabled ">
@@ -60,7 +60,7 @@
         </div>
     </div>
 
-    @if($bought)
+    @can('check-bought-book',$book)
         <div class="container mt-5">
             <div class="col-md-12 bootstrap snippets">
                 {{--            БЛОК НАПИСАНИЕ КОМЕНТА--}}
@@ -84,34 +84,32 @@
 
                             </select>
                         </form>
+                        @endcan
 
-                        @else
-                            <h5 class="mt-5">Вы не приобрели данный товар для его оценки</h5>
-                        @endif
                         {{--                    COMMENTARIES--}}
                         @forelse($commentaries as $commentary)
-                            <div class="w-100 py-4">
-                                <div class="d-flex justify-content-center row  ">
+                            <div class="row py-2">
+                                <div class="d-flex justify-content-center">
                                     <div class="d-flex flex-column col-md-8">
-
-                                        <div class="coment-bottom bg-white p-2 px-4 border rounded-4">
-                                            <div
-                                                class="commented-section mt-2">
+                                        <div class="bg-white p-3 px-4 border rounded-4">
+                                            <div class="commented-section mt-2">
                                                 <div class="d-flex flex-row align-items-center commented-user">
-                                                    <span class="text fs-5">
-                                                        {{$commentary->user->name}}
-                                                    </span>
-                                                    <span
-                                                        style="margin-left:12px;font-size: 0.9rem;">{{ $commentary->created_at->diffforhumans()}}</span>
-                                                    <span style="margin-left:12px;font-size: 0.9rem;">{{ $commentary->rating}}<i class="bi bi-star-fill text-warning"></i></span>
-
+                                                    <span class="text fs-5">{{ $commentary->user->name }}</span>
+                                                    <span class="ms-3 text-muted" style="font-size: 0.9rem;">
+                                {{ $commentary->created_at->diffForHumans() }}
+                            </span>
+                                                      <span class="ms-3" style="font-size: 0.9rem;">
+                                    {{ $commentary->rating }}
+                                    <i class="bi bi-star-fill text-warning"></i>
+                                </span>
                                                 </div>
 
-                                                <div class="comment-text-sm"><span>{{$commentary->text}}</span>
+                                                <div class="comment-text-sm mt-2">
+                                                    <span>{{ $commentary->text }}</span>
                                                 </div>
-                                                <div
-                                                    class="reply-section">
-                                                    <div class="my-3 d-flex flex-row align-items-center voting-icons">
+
+                                                <div class="reply-section mt-3">
+                                                    <div class="d-flex flex-row align-items-center voting-icons">
                                                         <i class="fa-regular fa-heart"></i>
                                                     </div>
                                                 </div>
@@ -120,9 +118,10 @@
                                     </div>
                                 </div>
                             </div>
-                    </div>
-                </div>
-                @empty
-                    <p>Комментарии отсутствуют</p>
-        @endforelse
+                        @empty
+                            <div class="text-center py-4">
+                                <p class="text-muted fs-5">Пока комментариев нет</p>
+                            </div>
+                        @endforelse
+
         @endsection

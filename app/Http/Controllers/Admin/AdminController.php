@@ -12,7 +12,7 @@ class AdminController extends Controller
     public function index()
     {
         $countOrders = Order::whereIn('status', ['Новый заказ', 'Готов к выдаче'])->count();
-        return view('admin.layouts.index');
+        return view('admin.layouts.index',compact('countOrders'));
     }
 
 }

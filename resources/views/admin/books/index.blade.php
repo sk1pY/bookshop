@@ -9,7 +9,7 @@
             </ul>
         </div>
     @endif
-    <table class="table table-sm table-bordered table-striped">
+    <table id="table" class="table table-sm table-bordered table-striped">
         <thead>
         <tr class="text-center align-middle">
             <th scope="col" class="col-5">Книга</th>
@@ -19,7 +19,7 @@
             <th scope="col" class="col-1">Удалить/изменить</th>
         </tr>
         </thead>
-        <tbody>
+        <tbody id="tablecontents">
         @foreach( $books as $book )
             <tr class="align-middle">
                 <td>

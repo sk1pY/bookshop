@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\Admin\AddressesController;
 use App\Http\Controllers\Admin\AdminController;
-use App\Http\Controllers\Admin\AuthorController as AdminAuthController;
+use App\Http\Controllers\Admin\AuthorController as AdminAuthorController;
 use App\Http\Controllers\Admin\BookController as AdminBookController;
 use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Admin\DiscountController;
@@ -93,7 +93,7 @@ Route::name('admin.')->prefix('admin')->middleware('role:admin')->group(function
     Route::patch('/orders/{id}/status', [AdminOrderController::class, 'addStatusOrder'])->name('orders.status.update');
     Route::get('/orders/{order}', [AdminOrderController::class, 'aboutOrderAdmin'])->name('orders.show');
     //Authors
-    Route::resource('authors', AdminAuthController::class);
+    Route::resource('authors', AdminAuthorController::class);
     //Discount
     Route::resource('discounts', DiscountController::class)->except('show', 'edit', 'update');
     Route::delete('/discounts', [DiscountController::class, 'discountDeleteAll'])->name('discounts.destroyAll');

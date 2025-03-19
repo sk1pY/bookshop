@@ -31,9 +31,11 @@ class AddressesController extends Controller
      */
     public function store(Request $request)
     {
-        Address::create([
-            'name' => $request->input('address'),
+        $validate = $request->validate([
+            'address' => 'required|string|max:255'
         ]);
+
+        Address::create($validate);
 
         return redirect()->route('admin.addresses.index');
     }
