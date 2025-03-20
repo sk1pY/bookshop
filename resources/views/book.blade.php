@@ -120,7 +120,7 @@
                             </div>
                         @empty
                             <div class="text-center py-4">
-                                <p class="text-muted fs-5">Пока комментариев нет</p>
+                                <p class="text-muted fs-5">Пока комментариев нет.</p>
                             </div>
                         @endforelse
 
