@@ -14,6 +14,7 @@ class AuthorController extends Controller
     {
         $bookmarkTaskUser = Bookmark::where('user_id', Auth::id())->pluck('book_id')->toArray();
         $books =  $author->books()->get();
+
         return view('author', compact('books', 'bookmarkTaskUser', 'author'));
     }
 }

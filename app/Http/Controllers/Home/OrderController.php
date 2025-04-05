@@ -26,14 +26,14 @@ class OrderController extends Controller
         return view('home.orders', compact('orders'));
     }
 
-    public function about_orders(Order $order)
+    public function aboutOrders(Order $order)
     {
         $orderItems =  $order->order_items()->get();
 
         return view('home.about_order', compact('order','orderItems'));
     }
 
-    public function cancel_order(Order $order){
+    public function cancelOrder(Order $order){
 
         $booksBoughtUpdate = $order->order_items()->get();
 

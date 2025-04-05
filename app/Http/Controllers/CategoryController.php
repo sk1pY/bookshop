@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Auth;
 class CategoryController extends Controller
 {
 
-    public function categories_top(Request $request,$type)
+    public function categoriesTop(Request $request,$type)
     {
         $query = Book::query();
         $bookmarkTaskUser = Bookmark::where('user_id', Auth::id())->pluck('book_id')->toArray();

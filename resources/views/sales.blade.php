@@ -20,7 +20,7 @@
     </div>
     {{--FILTER--}}
     {{--BOOKS--}}
-    @include('partials.book_card')
+    @include('partials.book-card')
     {{--BOOKS--}}
 
 @endsection('content')

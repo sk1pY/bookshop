@@ -4,6 +4,7 @@
     <thead>
     <tr>
         <th scope="col" class="text-center">#</th>
+        <th scope="col" class="text-center">Количество книг</th>
         <th scope="col" class="text-center">Автор</th>
         <th scope="col" class="text-center">#</th>
     </tr>
@@ -12,8 +13,9 @@
     @foreach( $authors as $author )
         <tr>
             <td class="text-center p-0">{{$author->id}}</td>
+            <td class="text-center p-0">{{$author->books_count}}</td>
             <td class="p-0 ps-2">
-                <a class="text-decoration-none text-dark small" href="{{ route('authors.index',$author->id) }}">{{$author -> surname.' '.$author -> name}}
+                <a class="text-decoration-none text-dark small" href="{{ route('authors.index',$author->id) }}">{{$author->surname.' '.$author->name}}
 
                 </a>
             </td>

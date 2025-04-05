@@ -46,8 +46,7 @@
                         </td>
                         <td class="align-middle">
                             <div class="d-flex align-items-center">
-
-                                <form action="{{ route('basket.delete',['id'=> $book->id]) }}" method="post"
+                                <form action="{{ route('basket-item.decrease',$book) }}" method="post"
                                       style="margin-right: 10px;">
                                     @csrf
                                     @method('delete')
@@ -55,7 +54,7 @@
                                 </form>
 
                                 <div class="  d-flex text-center ">{{ $book->quantity }}</div>
-                                <form action="{{ route('basket.add',['id'=> $book->id]) }}" method="post"
+                                <form action="{{ route('basket-item.increase', $book) }}" method="post"
                                       style="margin-left: 10px;">
                                     @csrf
                                     <button class="btn btn-light">+</button>
@@ -65,7 +64,7 @@
 {{--                            Цена: {{ $book ->price * $book-> quantity  }}--}}
                         </td>
                         <td class="align-middle">
-                            <form action="{{ route('basket.deleteAll', ['book'=>$book->id])}}" method="post"
+                            <form action="{{ route('basket-item.deleteAll', $book)}}" method="post"
                                   id>
                                 @csrf
                                 @method('delete')

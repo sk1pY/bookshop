@@ -1,5 +1,5 @@
 @extends('home.index')
-@section('сontentAdditional')
+@section('content-home')
     <h1>Избранное</h1>
     <div class="row g-4 mt-3">
         @forelse($bookmarks as $bookmark)
@@ -25,7 +25,7 @@
                         @auth
                             @if($bookmark->book->stock > 0)
                                 <div class="d-flex justify-content-center align-items-center">
-                                    <form action="{{ route('basket.add', ['id' => $bookmark->book->id]) }}" method="post">
+                                    <form action="{{ route('basket-item.increase', $bookmark->book) }}" method="post">
                                         @csrf
                                         <button style="width: 200px; background-color: red; color: white"
                                                 class="rounded-pill btn d-flex justify-content-center align-items-center">

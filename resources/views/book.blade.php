@@ -11,7 +11,6 @@
             <div style="background-color: #daebe6; color: #10b37e" class="px-1 border rounded-4  d-inline-block">
                 Купили {{ $book->numberOfPurchased }} раз
             </div>
-
             <h1> {{ $book -> title }}</h1>
             @if($book->author_id)
                 <a href="{{route('authors.index', $book->author )}}">
@@ -40,7 +39,7 @@
                 </div>
                 @auth()
                     @if($book->stock > 0)
-                        <form action="{{ route('basket.add', $book->id) }}" method="post">
+                        <form action="{{ route('basket-item.increase', $book) }}" method="post">
                             @csrf
                             <input type="text" hidden name="book_id" value="{{ $book->id }}">
                             <button style="width: 160px; height: 30px;"
@@ -66,7 +65,7 @@
                 {{--            БЛОК НАПИСАНИЕ КОМЕНТА--}}
                 <div class="panel">
                     <div class="panel-body">
-                        <form action="{{ route('comment.store',$book)  }}" id="commentaryForm"
+                        <form action="{{ route('comments.store',$book)  }}" id="commentaryForm"
                               method="post" class="d-flex gap-3">
                             @csrf
                             <textarea name="text" class="form-control" rows="2"
@@ -98,7 +97,7 @@
                                                     <span class="ms-3 text-muted" style="font-size: 0.9rem;">
                                 {{ $commentary->created_at->diffForHumans() }}
                             </span>
-                                                      <span class="ms-3" style="font-size: 0.9rem;">
+                                                    <span class="ms-3" style="font-size: 0.9rem;">
                                     {{ $commentary->rating }}
                                     <i class="bi bi-star-fill text-warning"></i>
                                 </span>
@@ -122,6 +121,6 @@
                             <div class="text-center py-4">
                                 <p class="text-muted fs-5">Пока комментариев нет.</p>
                             </div>
-                        @endforelse
+        @endforelse
 
         @endsection

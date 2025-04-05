@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\RolesPermissions\PermissionController;
 use App\Http\Controllers\Admin\RolesPermissions\RoleController;
 use App\Http\Controllers\Admin\RolesPermissions\RolePermissionController;
 use App\Http\Controllers\AuthorController;
+use App\Http\Controllers\BasketController;
 use App\Http\Controllers\BasketItemController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\CategoryController;
@@ -33,39 +34,42 @@ Route::get('/', [BookController::class, 'index'])->name('books.index');
 Route::get('/book/{book}', [BookController::class, 'book'])->name('books.book');
 
 
-//------------------------------------------------КАТЕГОРИИ------------------------------------------------
+//------------------------------------------------CATEGORIES------------------------------------------------
 Route::get('/category/{category}', [UserCategoryController::class, 'categoryBooks'])->name('categories.public.show');
-Route::get('/bestsellers', [CategoryController::class, 'categories_top'])->defaults('type','bestsellers')->name('bestsellers');
-Route::get('/newest', [CategoryController::class, 'categories_top'])->defaults('type','newest')->name('newest');
-Route::get('/sale', [CategoryController::class, 'categories_top'])->defaults('type','sales')->name('sale');
+Route::get('/bestsellers', [CategoryController::class, 'categoriesTop'])->defaults('type', 'bestsellers')->name('bestsellers');
+Route::get('/newest', [CategoryController::class, 'categoriesTop'])->defaults('type', 'newest')->name('newest');
+Route::get('/sale', [CategoryController::class, 'categoriesTop'])->defaults('type', 'sales')->name('sale');
 
-//------------------------------------------------КОРЗИНА------------------------------------------------
+//------------------------------------------------BASKET------------------------------------------------
 Route::prefix('basket')->group(function () {
-    Route::get('/', [BasketItemController::class, 'index'])->name('basket.index');
-    Route::post('/add-to-order', [BasketItemController::class, 'orderAdd'])->name('basket.order');
-    Route::post('/add-to-basket/{id}', [BasketItemController::class, 'addToBasket'])->name('basket.add');
-    Route::delete('/delete/{id}', [BasketItemController::class, 'delete'])->name('basket.delete');
-    Route::delete('/delete-all-book/{book}', [BasketItemController::class, 'delete_all_books'])->name('basket.deleteAll');
+    Route::get('/', [BasketController::class, 'index'])->name('basket.index');
+    Route::post('/make-order', [BasketController::class, 'makeOrder'])->name('basket.order');
+    Route::post('/basket-items/book/{book}/increase', [BasketItemController::class, 'increase'])->name('basket-item.increase');
+    Route::delete('/basket-items/book/{book}/decrease', [BasketItemController::class, 'decrease'])->name('basket-item.decrease');
+    Route::delete('/basket-items/book/{book}', [BasketItemController::class, 'deleteAllByBook'])->name('basket-item.deleteAll');
 });
 
 
 //------------------------------------------------HOME PROFILE------------------------------------------------
-Route::name('home.')->prefix('home') ->middleware('role:user|admin')->group(function () {
+Route::name('home.')->prefix('home')->middleware('role:user|admin')->group(function () {
     Route::get('/', [HomeController::class, 'index'])->name('index');
     Route::get('/bookmarks', [HomeBookmarkController::class, 'index'])->name('bookmarks.index');
     Route::post('/bookmarks', [HomeBookmarkController::class, 'store'])->name('bookmarks.store');
     Route::delete('/bookmarks/{bookmark}', [HomeBookmarkController::class, 'destroy'])->name('bookmarks.destroy');
     Route::get('/orders', [HomeOrderController::class, 'orders'])->name('orders.index');
-    Route::get('/orders/{order}', [HomeOrderController::class, 'about_orders'])->name('orders.show');
-    Route::delete('/orders/{order}', [HomeOrderController::class, 'cancel_order'])->name('orders.destroy');
+    Route::get('/orders/{order}', [HomeOrderController::class, 'aboutOrders'])->name('orders.show');
+    Route::delete('/orders/{order}', [HomeOrderController::class, 'cancelOrder'])->name('orders.destroy');
     Route::get('/info', [HomeController::class, 'info'])->name('info.index');
     Route::patch('/info/{user}', [HomeController::class, 'infoUpdate'])->name('info.update');
-    Route::get('/commentaries', [CommentaryController::class, 'commentaries'])->name('commentaries.index');
 });
 
 //------------------------------------------------Commentaries------------------------------------------------
-Route::post('/book/{book}/comment', [CommentaryController::class, 'commentAdd'])->name('comment.store');
-Route::delete('/book/comment/{id}', [CommentaryController::class, 'commentDelete'])->name('comment.destroy');
+Route::name('comments.')->group(function () {
+    Route::get('/comments', [CommentaryController::class, 'index'])->name('index');
+    Route::post('/books/{book}/comments', [CommentaryController::class, 'store'])->name('store');
+    Route::delete('/books/comments/{comment}', [CommentaryController::class, 'destroy'])->name('destroy');
+});
+
 
 //------------------------------------------------ADMIN-PANEL--------------------------------------------//
 Route::name('admin.')->prefix('admin')->middleware('role:admin')->group(function () {
@@ -101,8 +105,8 @@ Route::name('admin.')->prefix('admin')->middleware('role:admin')->group(function
     Route::get('/interface', [\App\Http\Controllers\Admin\InterfaceController::class, 'index'])->name('interface.index');
     //ADRESSES
     Route::resource('addresses', AddressesController::class)->except('show', 'edit', 'create');
-    Route::get('/addresses-deleted',[AddressesController::class,'addressesDeleted'])->name('addresses.deleted');
-    Route::get('/addresses-deleted/{addressId}/restore',[AddressesController::class,'addressesRestore'])->name('addresses.restore');
+    Route::get('/addresses-deleted', [AddressesController::class, 'addressesDeleted'])->name('addresses.deleted');
+    Route::get('/addresses-deleted/{addressId}/restore', [AddressesController::class, 'addressesRestore'])->name('addresses.restore');
 });
 
 

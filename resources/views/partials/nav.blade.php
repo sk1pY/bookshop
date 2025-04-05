@@ -90,7 +90,7 @@
                                 <i class="bi bi-chat fs-3 d-flex p-0 m-0 me-2"
                                    style="font-size:1.4rem;width: 35px"></i>
                                 <a style="font-size: 0.8rem" class="dropdown-item p-0 ms-auto"
-                                   href="{{ route('home.commentaries.index') }}">Мои отзывы</a>
+                                   href="{{ route('comments.index') }}">Мои отзывы</a>
                             </li>
                             <li class="p-2 d-flex align-items-center dropdownnav rounded-pill">
                                 <i class="bi bi-box-arrow-left fs-3 d-flex p-0 m-0 me-2"

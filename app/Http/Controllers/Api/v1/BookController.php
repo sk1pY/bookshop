@@ -29,11 +29,6 @@ class BookController extends Controller
             'stock' => 'numeric|required|min:0',
         ]);
 
-        if ($validated->fails()) {
-            $errors = $validated->errors();
-            return response()->json(['errors' => $errors->all()], 422);
-
-        }
         Book::create($validated);
 
         return response()->json('Book added successfully');

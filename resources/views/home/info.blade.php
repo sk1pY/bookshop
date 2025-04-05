@@ -1,5 +1,5 @@
 @extends('home.index')
-@section('сontentAdditional')
+@section('content-home')
 
     <div class="col ms-4 mb-4 ">
         @if ($errors->any())
@@ -43,8 +43,7 @@
 
                                     <select name="address" class="form-select mb-3">
                                         @foreach($addresses as $address)
-                                            <option value="{{$address->address}}">{{$address->address}}</option>
-
+                                            <option value="{{$address->name}}">{{$address->name}}</option>
                                         @endforeach
                                     </select>
 
@@ -109,9 +108,15 @@
             <div class="d-flex align-items-center   rounded-pill p-2">
                 <a style="font-size: 1rem" href="">Сменить пароль</a>
             </div>
-            <div class="d-flex align-items-center   rounded-pill p-2">
-                <a style="font-size: 1rem" href="">Выйти из аккаунта</a>
+            <div class="d-flex align-items-center rounded-pill p-2">
+                <form id="logout-form" >
+                    @csrf
+                    <button type="submit" class="btn  p-0" style="font-size: 1rem; text-decoration: none;">
+                        Выйти из аккаунта
+                    </button>
+                </form>
             </div>
+
             <div class="d-flex align-items-center   rounded-pill p-2">
 
                 <a style="font-size: 1rem" href="">Удалить аккаунт</a>

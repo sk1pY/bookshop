@@ -1,5 +1,5 @@
 @extends('home.index')
-@section('сontentAdditional')
+@section('content-home')
         <h1>Мои отзывы</h1>
 
 
@@ -8,15 +8,15 @@
 
             </thead>
             <tbody>
-            @foreach( $commentaries as $commentary )
+            @foreach( $comments as $comment )
                 <tr>
                     <td style="width: 170px">
-                        <a href="{{route('books.book',$commentary -> book -> id)}}">{{$commentary -> book -> title}}</a>
+                        <a href="{{route('books.book',$comment->book)}}">{{$comment->book->title}}</a>
                     </td>
                     <td style="width: 200px">
                         @php
-                            $fullStars = floor($commentary->rating);
-                            $halfStars = ($commentary->rating - $fullStars) > 0;
+                            $fullStars = floor($comment->rating);
+                            $halfStars = ($comment->rating - $fullStars) > 0;
                         @endphp
 
 
@@ -36,9 +36,9 @@
                         @endfor
                     </td>
 
-                    <td>{{$commentary -> text}}</td>
+                    <td>{{$comment -> text}}</td>
                     <td>
-                        <form action="{{ route('comment.destroy',['id'=>$commentary->id])}}" method="post"
+                        <form action="{{ route('comments.destroy',$comment)}}" method="post"
                               id>
                             @csrf
                             @method('delete')

@@ -54,7 +54,7 @@
 
                     @if($book->stock > 0)
                         <div class="d-flex justify-content-center align-items-center">
-                            <form action="{{ route('basket.add', ['id' => $book->id]) }}" method="post">
+                            <form action="{{ route('basket-item.increase', $book) }}" method="post">
                                 @csrf
                                 <button style="width: 200px; color: white"
                                         class="bg-danger  rounded-pill btn d-flex justify-content-center align-items-center">

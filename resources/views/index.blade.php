@@ -70,7 +70,7 @@
             </div>
             {{--FILTER--}}
             {{--BOOKS--}}
-            @include('partials.book_card')
+            @include('partials.book-card')
             {{--BOOKS--}}
             <div class="mt-4">
                 {{ $books->links('pagination::bootstrap-5') }}

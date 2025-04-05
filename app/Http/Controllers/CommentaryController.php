@@ -10,13 +10,13 @@ use Illuminate\Support\Facades\Auth;
 class CommentaryController extends Controller
 {
 
-    public function commentaries()
+    public function index()
     {
         $user = Auth::user();
-        $commentaries = Commentary::where('user_id', Auth::id())->get();
-        return view('home.commentaries', compact('commentaries'));
+        $comments = Commentary::where('user_id', Auth::id())->get();
+        return view('home.comments', compact('comments'));
     }
-    public function commentAdd(Request $request, Book $book)
+    public function store(Request $request, Book $book)
     {
         $validate = $request->validate([
             'text'  => 'required|string|max:1000',
@@ -30,10 +30,10 @@ class CommentaryController extends Controller
 
         return redirect()->route('books.book',$book);
     }
-    public function commentDelete($id)
+    public function destroy(Commentary $comment)
     {
-        Commentary::destroy($id);
-        return redirect()->route('home.commentaries.index');
+        $comment->delete();
+        return redirect()->route('comments.index');
 
     }
 }

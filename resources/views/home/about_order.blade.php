@@ -1,5 +1,5 @@
 @extends('home.index')
-@section('сontentAdditional')
+@section('content-home')
     <h4>Заказ №{{ $order->id }}</h4>
     <table class="table table-bordered">
         <thead>

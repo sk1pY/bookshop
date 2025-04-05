@@ -21,6 +21,8 @@ class OrderFactory extends Factory
      */
     public function definition(): array
     {
+
+
         return [
             'user_id'=> User::inRandomOrder()->first()->id,
             'address_id' => Address::inRandomOrder()->first()->id,
@@ -36,7 +38,7 @@ class OrderFactory extends Factory
             foreach ($books as $book) {
                 $quantity = rand(1, 3);
 
-              $order_item =   OrderItem::create([
+               OrderItem::create([
                     'order_id' => $order->id,
                     'book_id' => $book->id,
                     'quantity' => $quantity,

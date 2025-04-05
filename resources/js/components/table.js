@@ -1,5 +1,5 @@
 import $ from "jquery";
-import DataTable from "datatables.net";
+import DataTable from 'datatables.net-dt';
 import language from "datatables.net-plugins/i18n/ru.mjs";
 
 $(document).ready(function() {
@@ -8,7 +8,6 @@ $(document).ready(function() {
         searching: true,
         ordering: true,
         info:false,
-
         language
     });
 });

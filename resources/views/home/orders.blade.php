@@ -1,5 +1,5 @@
 @extends('home.index')
-@section('сontentAdditional')
+@section('content-home')
     @if (session('success'))
         <div class="alert alert-success d-flex px-4">
             <div>{{ session('success') }}</div>

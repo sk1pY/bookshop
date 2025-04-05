@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Home;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateInfoRequest;
+use App\Models\Address;
 use App\Models\DeliveryAddress;
 use App\Models\Order;
 use App\Models\OrderItem;
@@ -21,7 +22,8 @@ class HomeController extends Controller
     public function info()
     {
         $user = Auth::user();
-        $addresses = DeliveryAddress::all();
+        $addresses = Address::get();
+
         return view('home.info', compact('user', 'addresses'));
     }
 
