@@ -64,20 +64,6 @@ class AppServiceProvider extends ServiceProvider
             }
         });
 
-
-//        View::composer('*', function ($view) {
-//            if (Auth::guard()->check()) {
-//                //create basket after auth uuser
-//                $basket = Basket::firstOrCreate(['user_id' => Auth::id()])->first();
-//
-//                $countOrders = Order::whereIn('status', ['Новый заказ', 'Готов к выдаче'])->count();
-//                $view->with([
-//                    'countOrders' => $countOrders,
-//                    'basket' => $basket
-//                ]);
-//            }
-//        });
-
         View::composer(['newest','sale','index','bestsellers'], function ($view,) {
             $request = app(Request::class);
             $query = Book::withCount(['commentaries']);

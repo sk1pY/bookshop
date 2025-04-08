@@ -66,6 +66,6 @@ class UserController extends Controller
     {
         $user->delete();
 
-        return redirect()->route('admin.users.index');
+        return to_route('admin.users.index');
     }
 }

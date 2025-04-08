@@ -1,7 +1,6 @@
 @extends('admin.layouts.index')
 @section('content')
-
-    <table id="table" class="table table-sm table-bordered table-striped ">
+       <table id="table" class="table table-sm table-bordered table-striped ">
         <thead>
         <tr class=>
             <th scope="col" >#</th>

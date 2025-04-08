@@ -41,7 +41,7 @@ class BasketItemController extends Controller
                         $basket_item_book->increment('quantity');
                         $basket->price += $basket_item_book->book->price;
                         $basket->save();
-                        return redirect()->route('basket.index');
+                        return to_route('basket.index');
 
                     }
                 });
@@ -58,16 +58,16 @@ class BasketItemController extends Controller
                 );
                 $basket->price += $basket_item_book->book->price;
                 $basket->save();
-                return redirect()->route('basket.index')->with('success', 'Успешно добавлена в корзину');
+                return to_route('basket.index')->with('success', 'Успешно добавлена в корзину');
             } elseif ($basket_item_book->quantity < $stock) {
 
                 $basket_item_book->increment('quantity');
                 $basket->price += $basket_item_book->book->price;
                 $basket->save();
-                return redirect()->route('basket.index');
+                return to_route('basket.index');
 
             } elseif ($basket_item_book->quantity == $stock) {
-                return redirect()->route('basket.index')->with('error', 'Выбрано максимальное количество книг');
+                return to_route('basket.index')->with('error', 'Выбрано максимальное количество книг');
             }
         } else {
             $books = collect(session()->get('books', []));
@@ -86,7 +86,7 @@ class BasketItemController extends Controller
                 return $item;
             });
             if ($stock) {
-                return redirect()->route('basket.index')->with('error', 'Выбрано максимальное количество книг');
+                return to_route('basket.index')->with('error', 'Выбрано максимальное количество книг');
             }
             if (!$book_exist) {
                 $book->quantity = 1;
@@ -95,7 +95,7 @@ class BasketItemController extends Controller
             session(['books' => $books]);
 
         }
-        return redirect()->route('basket.index');
+        return to_route('basket.index');
 
 
     }
@@ -121,7 +121,7 @@ class BasketItemController extends Controller
             })->filter();
             session(['books' => $books]);
             if ($update) {
-                return redirect()->route('basket.index');
+                return to_route('basket.index');
             }
         }
 
@@ -137,14 +137,14 @@ class BasketItemController extends Controller
                     $basket->price -= $bookInBasket->book->price;
                     $basket->delete();
                 }
-                return redirect()->route('basket.index');
+                return to_route('basket.index');
             }
             $bookInBasket->decrement('quantity');
             $basket->price -= $bookInBasket->book->price;
             $basket->save();
         }
 
-        return redirect()->route('basket.index');
+        return to_route('basket.index');
     }
 
     public function deleteAllByBook(Request $request, Book $book)
@@ -154,7 +154,7 @@ class BasketItemController extends Controller
         BasketItem::where(['book_id' => $book->id, 'basket_id' => $basket->id])->delete();
         $request->session()->forget('books');
 
-        return redirect()->route('basket.index');
+        return to_route('basket.index');
 
     }
 }

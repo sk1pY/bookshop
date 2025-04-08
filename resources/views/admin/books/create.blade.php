@@ -17,25 +17,25 @@
         @endif
         <div class="row  ">
             <div class="col-4">
-                <select class="form-select" name="category" form="addBookForm">
+                <select class="form-select" name="category_id" form="addBookForm">
                     @if(count($categories)  > 0)
                         <option value="">Категория не выбрана</option>
                         @foreach($categories as $category)
-                            <option value="{{$category-> name }}">{{$category-> name}}</option>
+                            <option value="{{$category-> id }}">{{$category-> name}}</option>
                         @endforeach
                     @else
-                        <option>Без категории</option>
+                        <option value="">Без категории</option>
                     @endif
                 </select>
-                <select class="form-select" name="author" form="addBookForm">
+                <select class="form-select" name="author_id" form="addBookForm">
                     @if(count($authors) > 0)
                         <option value="">Автор не выбран</option>
 
                         @foreach($authors as $author)
-                            <option value="{{$author->surname}}">{{$author->surname.' '.$author-> name}}</option>
+                            <option value="{{$author->id}}">{{$author->surname.' '.$author-> name}}</option>
                         @endforeach
                     @else
-                        <option>Без Автора</option>
+                        <option value="">Без Автора</option>
                     @endif
                 </select>
 
@@ -43,7 +43,6 @@
             <div class="col">
                 <form action="{{ route('admin.books.store') }}" method="post" id="addBookForm" enctype="multipart/form-data">
                     @csrf
-
                     <label for="title" class=" form-label">Название книги</label>
                     <input class="form-control" id="title" type="text" name="title" value="{{old('title')}}">
                     <label for="description" class="form-label">Описание</label>

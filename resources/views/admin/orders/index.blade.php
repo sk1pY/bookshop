@@ -28,7 +28,7 @@
                 <a href ="{{ route('admin.orders.show',$order) }}" class="btn btn-secondary">Подробнее</a>
             </td>
                 <td>
-                    <form action="{{ route('admin.orders.status.update', ['id' => $order->id]) }}"
+                    <form action="{{ route('admin.orders.status.update',  $order) }}"
                           id="statusForm{{ $order -> id }}" method="POST">
                         @csrf
                         @method('PATCH')

@@ -26,7 +26,7 @@
                                      style="font-size: 1.5rem">{{$book->price}} р.
                                 </div>
                                 <div class="ms-2 fw-bold text-secondary">
-                                    <del>{{$book->priceBeforeDiscount}} р.</del>
+                                    <del>{{round($book->price / ((100 - $book->discount) * 0.01), 2)}} р.</del>
                                 </div>
                             @else
                                 <div class="fw-bold" style="font-size: 1.5rem">{{$book->price}} р.</div>

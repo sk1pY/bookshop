@@ -13,7 +13,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories =   Category::paginate(10);
+        $categories =   Category::orderBy('created_at','desc')->paginate(10);
         return view('admin.categories.index',compact('categories'));
     }
 
@@ -31,11 +31,11 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
-            'category_name' => 'required|alpha|max:30'
+        $validated = $request->validate([
+            'name' => 'required|alpha|max:30'
         ]);
-        Category::create(['name' => $validatedData['category_name']]);
-        return redirect()->route('admin.categories.index')->with('successCategoryAdd', 'Категория добавлена');
+        Category::create($validated);
+        return to_route('admin.categories.index')->with('successCategoryAdd', 'Категория добавлена');
     }
 
     /**

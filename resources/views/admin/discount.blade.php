@@ -9,32 +9,41 @@
             </ul>
         </div>
     @endif
+    <div class="row">
+        <div class="col">
+            <form action="{{ route('admin.discounts.book') }}" method="post" >
+                @csrf
+                <div class="mb-3">
+                    <input type="text" name="discount" class="form-control" id="exampleInputEmail1"
+                           placeholder="введите % скидки">
+                </div>
+                <select class="form-select" name="book_id" >
+                    <option value="" selected>Выбрать книгу/Все книги</option>
+                    @foreach($books as $book)
+                        <option value="{{$book->id}}">{{$book->title}}</option>
+                    @endforeach
+                </select>
+                <button type="submit" class="btn btn-primary my-3">Принять</button>
 
-    <h1>Скидки на книги</h1>
-    <p>Выберите определенного автора или книгу, или введи скидку для всех книг/авторов</p>
-    <form action="{{ route('admin.discounts.store') }}" method="post" id="discount">
-        @csrf
-        <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label">Скидка на книгу/книги %</label>
-            <input type="text" name="discount" class="form-control" id="exampleInputEmail1"
-                   placeholder="введите % скидки">
+            </form>
         </div>
-        {{--    SKIDKA NA KNIGY VIBRAT--}}
-        <select class="form-select" name="bookName" form="discount">
-            <option value="" selected>Выбрать книгу/Все книги</option>
-            @foreach($booksWithoutDiscount as $book)
-                <option value="{{$book->title}}">{{$book->title}}</option>
-            @endforeach
-        </select>
-        {{--    SKIDKA NA KNIGI AUTHORS VIBRAT--}}
-        <select class="form-select mt-3" name="authorPersonalDiscount" form="discount" id="authorPersonalDiscount">
-            <option value="" selected>Выберите автора/Все авторы</option>
-            @foreach($authors as $author)
-                <option value="{{$author->surname}}">{{$author->surname. ' ' .$author->name }}</option>
-            @endforeach
-        </select>
-        <button type="submit" class="btn btn-primary my-3">Принять</button>
-    </form>
+        <div class="col">
+            <form  action="{{ route('admin.discounts.author') }}" method="post">
+                @csrf
+                <div class="mb-3">
+                    <input type="text" name="discount" class="form-control" id="exampleInputEmail1"
+                           placeholder="введите % скидки">
+                </div>
+                <select class="form-select mt-3" name="author_id" >
+                    <option value="" selected>Выберите автора/Все авторы</option>
+                    @foreach($authors as $author)
+                        <option value="{{$author->id}}">{{$author->surname. ' ' .$author->name }}</option>
+                    @endforeach
+                </select>
+                <button type="submit" class="btn btn-primary my-3">Принять</button>
+            </form>
+        </div>
+    </div>
 
     <table class="table">
         <thead>
@@ -77,4 +86,5 @@
             <input class="btn btn-danger" type="submit" value="Удалить все скидки">
         </form>
     @endif
+    {{$booksWithDiscount->links('pagination::bootstrap-5')}}
 @endsection

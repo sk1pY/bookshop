@@ -16,7 +16,7 @@ class BookController extends Controller
     public function index()
     {
         $books = Book::with('author')->orderBy('created_at', 'desc')->paginate(10);
-        $authors = Author::all();
+        $authors = Author::get();
 
         return view('admin.books.index', compact('books','authors'));
     }
@@ -26,8 +26,8 @@ class BookController extends Controller
      */
     public function create()
     {
-        $authors = Author::all();
-        $categories = Category::all();
+        $authors = Author::get();
+        $categories = Category::get();
 
         return view('admin.books.create', compact('authors', 'categories'));
     }
@@ -37,31 +37,25 @@ class BookController extends Controller
      */
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
-            'title' => 'string|required',
-            'description' => 'string|required',
-            'price' => 'numeric|required|min:0',
-            'stock' => 'numeric|required|min:0',
-            'file' => 'required|image|mimes:jpeg,png,jpg,gif,svg',
 
+        $validated = $request->validate([
+            'title' => 'required|string|max:100',
+            'description' => 'required|string',
+            'price' => 'required|numeric|min:0',
+            'stock' => 'required|numeric|min:0',
+            'file' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'author_id' => 'nullable|numeric',
+            'category_id' => 'nullable|numeric'
         ]);
 
-        $fileName = null;
         if ($request->hasFile('file')) {
-            $path = $request->file('file')->store('booksImages', 'public');
-            $fileName = basename($path);
+            $validated['image'] = basename($request->file('file')->store('booksImages', 'public'));
         }
+        if( Book::create($validated)){
+            return redirect()->route('admin.books.index')->with('success', 'book added success');
 
-        $authorId = Author::where('surname', $request->input('author'))->first()?->id;
-        $categoryId = Category::where('name', $request->input('category'))->first()?->id;
-
-        Book::create(array_merge($validatedData, [
-            'author_id' => $authorId,
-            'category_id' => $categoryId,
-            'image' => $fileName
-        ]));
-
-        return redirect()->route('admin.books.index')->with('successBookAdd', 'Книга добавлена');
+        }
+        return to_route('admin.books.index')->with('info','book added error');
     }
 
     /**
@@ -85,25 +79,23 @@ class BookController extends Controller
      */
     public function update(Request $request, Book $book)
     {
-        //  $book = Book::find($id);
-        $validatedData = $request->validate([
-            'title' => 'required|string|max:255',
-            'price' => 'numeric|required|min:0',
-            'stock' => 'numeric|required|min:0',
-            //'image' => 'image|mimes:jpeg,png,jpg,gif,svg',
+        $validated = $request->validate([
+            'title' => 'sometimes|string|max:255',
+            'price' => 'sometimes|numeric|min:0',
+            'stock' => 'sometimes|numeric|min:0',
+            'image' => 'sometimes|image|mimes:jpeg,png,jpg|max:2048',
+            'author_id' => 'sometimes|nullable|numeric|exists:authors,id'
 
         ]);
+        if ($request->hasFile('image')) {
+            $validated['image'] = basename($request->file('image')->store('booksImages', 'public'));
+        }
 
-        $result = $book->update([
-            'title' => $validatedData['title'],
-            'price' => $validatedData['price'],
-            'stock' => $validatedData['stock'],
-            //   'image' => $validatedData['image'],
-            'author_id' => $request->input('author_id'),
-        ]);
+        if ($book->update($validated)) {
+            return to_route('admin.books.index')->with('success', 'book update success');
+        }
+        return to_route('admin.books.index')->with('info','book update error');
 
-
-        return redirect()->route('admin.books.index');
     }
 
     /**
@@ -112,6 +104,6 @@ class BookController extends Controller
     public function destroy(Book $book)
     {
         $book->delete();
-        return redirect()->route('admin.books.index');
+        return to_route('admin.books.index');
     }
 }

@@ -9,6 +9,16 @@
             </ul>
         </div>
     @endif
+    @if (session('info'))
+        <div class="alert alert-success">
+            {{ session('info') }}
+        </div>
+    @endif
+    @if (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
     <table id="table" class="table table-sm table-bordered table-striped">
         <thead>
         <tr class="text-center align-middle">
@@ -63,21 +73,22 @@
                         </div>
                         <div class="modal-body">
                             <form action="{{ route('admin.books.update',$book)}}"
-                                  method="post">
+                                  method="post" enctype="multipart/form-data"
+                            >
                                 @csrf
                                 @method('put')
                                 <label for="title" class="form-label">Title</label>
                                 <input id="title" class="form-control" name="title"
-                                       value="{{ old('title',$book->title) }}">
+                                       value="{{ old('title', $book->title ) }}">
                                 <label for="price" class="form-label">Price</label>
                                 <input id="price" class="form-control" name="price" value="{{$book->price}}">
                                 <label for="author" class="form-label">author</label>
                                 <select class="form-control" name="author_id">
-                                    <option value="" {{ !$book->author->name? 'selected' : '' }}>Без автора</option>
+                                    <option value="" {{ !$book->author_id? 'selected' : '' }}>Без автора</option>
                                     @foreach($authors as $author)
                                         <option
                                             value="{{$author->id}}"
-                                            {{$book->author && $book->author->id == $author->id? 'selected':''}}>
+                                            {{$book->author && $book->author_id == $author->id? 'selected':''}}>
                                             {{$author->surname.' '.$author->name}}
                                         </option>
                                     @endforeach
@@ -86,7 +97,7 @@
                                 <label for="stock" class="form-label">stock</label>
 
                                 <input id="stock" class="form-control" name="stock" value="{{$book->stock}}">
-                                <input type="file" name="image">
+                                <input class="my-3 form-control" type="file" name="image" value="{{$book->image}}">
                                 <img src="{{ Storage::url('booksImages/'.$book->image) }}" alt="123"
                                      style="width: 40px;height: 40px;">
                                 <div class="modal-footer">

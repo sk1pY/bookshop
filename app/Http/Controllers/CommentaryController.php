@@ -28,12 +28,12 @@ class CommentaryController extends Controller
        $book->avgRating = $avgRating;
        $book-> save();
 
-        return redirect()->route('books.book',$book);
+        return to_route('books.book',$book);
     }
     public function destroy(Commentary $comment)
     {
         $comment->delete();
-        return redirect()->route('comments.index');
+        return to_route('comments.index');
 
     }
 }

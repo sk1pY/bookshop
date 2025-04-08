@@ -9,105 +9,77 @@ use Illuminate\Http\Request;
 
 class DiscountController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+
     public function index()
     {
-        $booksWithDiscount = Book::where('discount', '>', 0)->get();
-        $booksWithoutDiscount = Book::get();
+        $booksWithDiscount = Book::where('discount', '>', 0)->paginate(10);
+        $books = Book::get();
         $authors = Author::get();
 
-        return view('admin.discount', compact('authors', 'booksWithDiscount', 'booksWithoutDiscount'));
+        return view('admin.discount', compact('authors', 'booksWithDiscount', 'books'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function discountForAuthor(Request $request)
     {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        $validatedData = $request->validate([
+        $validated = $request->validate([
             'discount' => 'required|numeric|min:0|max:100',
-        ], [
-            'discount.required' => 'Введите процент скидки',
-            'discount.numeric' => 'Введите число',
-            'discount.min' => 'больше 0',
-            'discount.max' => 'меньше 100'
+        ]);
+        $authorBooks = Book::get();
+        if (request('author_id')) {
+            $author = Author::find(request('author_id'));
+            $authorBooks = $author->books()->get();
+        }
+
+        $discount = $validated['discount'];
+        $authorBooks->each(function ($book) use ($discount) {
+            $book->price = $book->price - round($book->price * $discount * 0.01, 2);
+            $book->discount = $discount;
+            $book->save();
+        });
+        return to_route('admin.discounts.index');
+    }
+
+    public function discountForBook(Request $request)
+    {
+        $validate = $request->validate([
+            'discount' => 'required|numeric|min:0|max:100',
         ]);
 
-        if ($request->input('authorPersonalDiscount') !== null) {
-            $authorId = Author:: where('surname', $request->input('authorPersonalDiscount'))->first()->id;
-            $authorPersonalDiscountBooks = Book:: where('author_id', $authorId)->get();
-        } elseif ($request->input('bookName') !== null) {
-            $authorPersonalDiscountBooks = Book::where('title', $request->input('bookName'))->get();
+        $books = Book::get();
+        $discount = $validate['discount'];
 
+        if (request('book_id')) {
+            $book = Book::find(request('book_id'));
+            $book->price = $book->price - round($book->price * $discount * 0.01, 2);
+            $book->discount = $discount;
+            $book->save();
         } else {
-            $authorPersonalDiscountBooks = Book::get();
+            $books->each(function ($book) use ($discount) {
+                $book->price = $book->price - round($book->price * $discount * 0.01, 2);
+                $book->discount = $discount;
+                $book->save();
+            });
         }
-        $discount = $validatedData['discount'];
-        $authorPersonalDiscountBooks->each(function ($item) use ($discount) {
-            $item->priceBeforeDiscount = $item->price;
-            $item->price = $item->price - round($item->price * $discount * 0.01, 2);
-            $item->discount = $discount;
-            $item->save();
-        });
-        return redirect()->route('admin.discounts.index');
+        return to_route('admin.discounts.index');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+
+    public function destroy(Book $book)
     {
-        //
+        $book->price = round($book->price / ((100 - $book->discount) * 0.01), 2);
+        $book->discount = 0;
+        $book->save();
+        return to_route('admin.discounts.index');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy($id)
-    {
-        $item = Book::find($id);
-        $item->price = $item->priceBeforeDiscount;
-        $item->discount = 0;
-        $item->save();
-        return redirect()->route('admin.discounts.index');
-    }
     public function discountDeleteAll()
     {
-        $booksWithDiscount = Book::where('discount', '>', 0)->get();
-
-
-        $booksWithDiscount->each(function ($item) {
-            $item->price = $item->priceBeforeDiscount;
-            $item->discount = 0;
-            $item->save();
+        $books = Book::where('discount', '>', 0)->get();
+        $books->each(function ($book) {
+            $book->price = round($book->price / ((100 - $book->discount) * 0.01), 2);
+            $book->discount = 0;
+            $book->save();
         });
-        return redirect()->route('admin.discounts.destroyAll');
-
+        return to_route('admin.discounts.index');
     }
 }

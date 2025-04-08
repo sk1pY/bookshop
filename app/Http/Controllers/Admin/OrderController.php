@@ -10,43 +10,42 @@ use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
+    public const NEW = 'Новый заказ';
+    public const READY = 'Готов к выдаче';
+    public const CANCEL = 'Отменен';
+    public const RECEIVED = 'Получен';
     public function orders()
     {
-        $orders = Order::whereIn('status', ['Новый заказ', 'Готов к выдаче'])->get();
+        $orders = Order::whereIn('status', [OrderController::NEW,OrderController::READY])->get();
 
         return view('admin.orders.index', compact('orders'));
     }
 
     public function orderHistory()
     {
-        $orders = Order::whereIn('status', ['Отменен', 'Получен'])->paginate(10);
+        $orders = Order::whereIn('status', [OrderController::CANCEL, OrderController::RECEIVED])->paginate(10);
         return view('admin.orders.order_history', compact('orders'));
     }
 
-    public function addStatusOrder(Request $request, $id)
+    public function addStatusOrder(Order $order)
     {
-        $orderStatus = Order::findOrFail($id);
-        $orderStatus->update(['status' => $request->input('status')]);
+        $order->update(['status' => request('status')]);
+        $booksBoughtUpdate =  $order->order_items()->get();
 
-        if ($orderStatus->status == 'Получен') {
-            $booksBoughtUpdate = OrderItem::where(['order_id' => $id])->get();
-
+        if ($order->status == OrderController::RECEIVED) {
             $booksBoughtUpdate->each(function ($item) {
                  Book::where(['id' => $item->book_id])
                     ->increment('numberOfPurchased', $item->quantity);
-
             });
 
         }
-        if ($orderStatus->status == 'Отмена заказа') {
-            $booksBoughtUpdate = OrderItem::where(['order_id' => $id])->get();
-
+        if ($order->status == OrderController::CANCEL) {
             $booksBoughtUpdate->each(function ($item) {
                 Book::where(['id' => $item->book_id])
                     ->increment('stock', $item->quantity);
             });
         }
-        return redirect()->route('admin.orders.index')->with('successStatusUpdate', 'Статус заказа обновлен');
+        return to_route('admin.orders.index')->with('successStatusUpdate', 'Статус заказа обновлен');
 
     }
     public function aboutOrderAdmin(Order $order)

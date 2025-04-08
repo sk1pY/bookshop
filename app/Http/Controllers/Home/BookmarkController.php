@@ -38,6 +38,6 @@ class BookmarkController extends Controller
 
     public function destroy(Bookmark $bookmark){
         $bookmark->delete();
-        return redirect()->route('home.bookmarks.index');
+        return to_route('home.bookmarks.index');
     }
 }

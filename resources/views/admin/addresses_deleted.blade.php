@@ -16,7 +16,9 @@
                     {{$address->name}}
                 </td>
                 <td class="d-flex p-1 justify-content-center">
-                    <form action="{{route('admin.addresses.restore',$address)}}">
+                    <form action="{{route('admin.addresses.restore',$address)}}" method="post">
+                        @csrf
+                        @method('put')
                         <button type="submit" class="btn btn-success">Восстановить</button>
                     </form>
                 </td>

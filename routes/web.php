@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\Admin\AddressesController;
+use App\Http\Controllers\Admin\AddressController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\AuthorController as AdminAuthorController;
 use App\Http\Controllers\Admin\BookController as AdminBookController;
@@ -94,19 +94,22 @@ Route::name('admin.')->prefix('admin')->middleware('role:admin')->group(function
     //Orders
     Route::get('/orders', [AdminOrderController::class, 'orders'])->name('orders.index');
     Route::get('/orders-history', [AdminOrderController::class, 'orderHistory'])->name('orders.history');
-    Route::patch('/orders/{id}/status', [AdminOrderController::class, 'addStatusOrder'])->name('orders.status.update');
+    Route::patch('/orders/{order}/status', [AdminOrderController::class, 'addStatusOrder'])->name('orders.status.update');
     Route::get('/orders/{order}', [AdminOrderController::class, 'aboutOrderAdmin'])->name('orders.show');
-    //Authors
+    //AUTHORS
     Route::resource('authors', AdminAuthorController::class);
-    //Discount
-    Route::resource('discounts', DiscountController::class)->except('show', 'edit', 'update');
+    //DISCOUNT
+    Route::get('/discounts', [DiscountController::class, 'index'])->name('discounts.index');
+    Route::post('/discounts/book', [DiscountController::class, 'discountForBook'])->name('discounts.book');
+    Route::post('/discounts/author', [DiscountController::class, 'discountForAuthor'])->name('discounts.author');
+    Route::delete('/discounts/{book}', [DiscountController::class, 'destroy'])->name('discounts.destroy');
     Route::delete('/discounts', [DiscountController::class, 'discountDeleteAll'])->name('discounts.destroyAll');
     //Interface
     Route::get('/interface', [\App\Http\Controllers\Admin\InterfaceController::class, 'index'])->name('interface.index');
     //ADRESSES
-    Route::resource('addresses', AddressesController::class)->except('show', 'edit', 'create');
-    Route::get('/addresses-deleted', [AddressesController::class, 'addressesDeleted'])->name('addresses.deleted');
-    Route::get('/addresses-deleted/{addressId}/restore', [AddressesController::class, 'addressesRestore'])->name('addresses.restore');
+    Route::resource('addresses', AddressController::class)->except('show', 'edit', 'create');
+    Route::get('/addresses-deleted', [AddressController::class, 'addressesDeleted'])->name('addresses.deleted');
+    Route::put('/addresses-deleted/{address}/restore', [AddressController::class, 'addressesRestore'])->name('addresses.restore')->withTrashed();;
 });
 
 

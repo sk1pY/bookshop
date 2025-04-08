@@ -44,7 +44,7 @@ class OrderController extends Controller
 
         $order->delete();
 
-        return redirect() -> route('home.orders.index')->with('success','Заказ успешно отменен');
+        return to_route('home.orders.index')->with('success','Заказ успешно отменен');
     }
 
 

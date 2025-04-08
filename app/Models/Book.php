@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Model;
 class Book extends Model
 {
     use HasFactory;
+
+    public mixed $priceBeforeDiscount;
     protected $fillable = ['title','description','price','author_id','category_id','avgRating','image','stock'];
 
 

@@ -39,7 +39,7 @@ class HomeController extends Controller
 
         $user->save();
 
-        return redirect()->route('home.info.index');
+        return to_route('home.info.index');
 
     }
 

@@ -4,10 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Address;
-use App\Models\DeliveryAddress;
 use Illuminate\Http\Request;
 
-class AddressesController extends Controller
+class AddressController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,7 +14,7 @@ class AddressesController extends Controller
     public function index()
     {
         $addresses = Address::get();
-        return view('admin.addresses',compact('addresses'));
+        return view('admin.addresses', compact('addresses'));
     }
 
     /**
@@ -37,7 +36,7 @@ class AddressesController extends Controller
 
         Address::create($validate);
 
-        return redirect()->route('admin.addresses.index');
+        return to_route('admin.addresses.index');
     }
 
     /**
@@ -70,22 +69,18 @@ class AddressesController extends Controller
     public function destroy(Address $address)
     {
         $address->delete();
-
-        return redirect()->route('admin.addresses.index');
+        return to_route('admin.addresses.index');
     }
 
     public function addressesDeleted()
     {
         $addresses = Address::onlyTrashed()->get();
-
-            return view('admin.addresses_deleted',compact('addresses'));
+        return view('admin.addresses_deleted', compact('addresses'));
     }
-    public function addressesRestore($addressId)
+
+    public function addressesRestore(Address $address)
     {
-        $address = Address::withTrashed()->findOrFail($addressId);
-
         $address->restore();
-
-        return redirect()->route('admin.addresses.index');
+        return to_route('admin.addresses.index');
     }
 }
