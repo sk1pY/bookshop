@@ -105,7 +105,9 @@ Route::name('admin.')->prefix('admin')->middleware('role:admin')->group(function
     Route::delete('/discounts/{book}', [DiscountController::class, 'destroy'])->name('discounts.destroy');
     Route::delete('/discounts', [DiscountController::class, 'discountDeleteAll'])->name('discounts.destroyAll');
     //Interface
-    Route::get('/interface', [\App\Http\Controllers\Admin\InterfaceController::class, 'index'])->name('interface.index');
+    Route::get('/interfaces', [\App\Http\Controllers\Admin\InterfaceController::class, 'index'])->name('interfaces.index');
+    Route::post('/interfaces/slides', [\App\Http\Controllers\Admin\InterfaceController::class, 'store'])->name('interfaces.slides.store');
+    Route::delete('/interfaces/slides/{slide}', [\App\Http\Controllers\Admin\InterfaceController::class, 'destroy'])->name('interfaces.slides.destroy');
     //ADRESSES
     Route::resource('addresses', AddressController::class)->except('show', 'edit', 'create');
     Route::get('/addresses-deleted', [AddressController::class, 'addressesDeleted'])->name('addresses.deleted');

@@ -48,7 +48,11 @@ class AppServiceProvider extends ServiceProvider
         Carbon::setLocale('ru');
         Route::pattern('id','[0-9]+');
         Route::pattern('','[0-9]+');
+        View::composer('admin.layouts.index', function ($view) {
+            $countOrders = Order::whereIn('status', ['Новый заказ', 'Готов к выдаче'])->count();
 
+            $view->with('countOrders', $countOrders);
+        });
 
         View::composer('*', function ($view) {
             if (Auth::guard()->check()) {

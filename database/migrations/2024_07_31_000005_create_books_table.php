@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('title',50);
             $table->string('description',1000);
             $table->float('price');
+            $table->float('original_price')->nullable();
 //            $table->float('priceBeforeDiscount')->nullable();
             $table->string('image')->nullable();
             $table->foreignId('author_id')->nullable()->constrained('authors')->cascadeOnDelete();

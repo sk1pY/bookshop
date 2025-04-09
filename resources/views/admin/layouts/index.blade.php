@@ -37,7 +37,6 @@
                 <div class="alert alert-danger" role="alert">
                     <a href="{{route('admin.orders.index')}}" class="nav-link text-dark">
                             <i class="bi bi-bag me-2 text-dark"></i> Активные заказы
-
                             {{$countOrders ?? 0}}
                     </a>
                 </div>
@@ -135,7 +134,7 @@
                 </a>
             </li>
             <li>
-                <a href="{{route('admin.interface.index')}}" class="nav-link text-white">
+                <a href="{{route('admin.interfaces.index')}}" class="nav-link text-white">
                     <i class="bi bi-palette me-2" width="16" height="16"></i>
                     Настройка интерфейса
                 </a>

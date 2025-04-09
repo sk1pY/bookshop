@@ -9,6 +9,7 @@ use App\Models\Book;
 use App\Models\Bookmark;
 use App\Models\Category;
 use App\Models\Commentary;
+use App\Models\InterfaceSite;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\User;
@@ -24,7 +25,8 @@ class BookController extends Controller
     public function index(Request $request)
     {
         $bookmarkTaskUser = Bookmark::where('user_id', Auth::id())->pluck('book_id')->toArray();
-        return view('index', compact('bookmarkTaskUser'));
+        $slides = InterfaceSite::where('type','slide')->get();
+        return view('index', compact('bookmarkTaskUser','slides'));
     }
 
 

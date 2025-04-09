@@ -33,7 +33,7 @@
                         @csrf
                         @method('PATCH')
                         <select name="status" id="status" form="statusForm{{ $order->id }}">
-                            <option value="новый заказ" {{ $order->status == 'новый заказ'? 'selected' :''}}>Не готов</option>
+                            <option value="новый заказ" {{ $order->status == 'Новый заказ'? 'selected' :''}}>Новый заказ</option>
                             <option value="Готов к выдаче" {{ $order->status == 'Готов к выдаче'? 'selected' :''}}>Готов к выдаче</option>
                             <option value="Получен" {{ $order->status == 'Получен'? 'selected' :''}}>Получен</option>
                             <option value="Отмена заказа" {{ $order->status == 'Отмена заказа'? 'selected' :''}}>Отмена Заказа</option>

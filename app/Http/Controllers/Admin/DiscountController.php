@@ -32,6 +32,7 @@ class DiscountController extends Controller
 
         $discount = $validated['discount'];
         $authorBooks->each(function ($book) use ($discount) {
+            $book->original_price = $book->price;
             $book->price = $book->price - round($book->price * $discount * 0.01, 2);
             $book->discount = $discount;
             $book->save();
@@ -50,11 +51,13 @@ class DiscountController extends Controller
 
         if (request('book_id')) {
             $book = Book::find(request('book_id'));
+            $book->original_price = $book->price;
             $book->price = $book->price - round($book->price * $discount * 0.01, 2);
             $book->discount = $discount;
             $book->save();
         } else {
             $books->each(function ($book) use ($discount) {
+                $book->original_price = $book->price;
                 $book->price = $book->price - round($book->price * $discount * 0.01, 2);
                 $book->discount = $discount;
                 $book->save();
@@ -67,6 +70,7 @@ class DiscountController extends Controller
     public function destroy(Book $book)
     {
         $book->price = round($book->price / ((100 - $book->discount) * 0.01), 2);
+        $book->original_price = 0;
         $book->discount = 0;
         $book->save();
         return to_route('admin.discounts.index');
@@ -77,6 +81,7 @@ class DiscountController extends Controller
         $books = Book::where('discount', '>', 0)->get();
         $books->each(function ($book) {
             $book->price = round($book->price / ((100 - $book->discount) * 0.01), 2);
+            $book->original_price = 0;
             $book->discount = 0;
             $book->save();
         });

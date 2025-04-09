@@ -22,32 +22,24 @@
             {{--слайдшоу--}}
             <div id="demo" class="carousel slide " data-bs-ride="carousel">
                 <div class="carousel-indicators">
-                    <button type="button" data-bs-target="#demo" data-bs-slide-to="0" class="active"></button>
-                    <button type="button" data-bs-target="#demo" data-bs-slide-to="1"></button>
-                    <button type="button" data-bs-target="#demo" data-bs-slide-to="2"></button>
+
+                    @foreach($slides as $key => $slide)
+                        <button type="button" data-bs-target="#demo" data-bs-slide-to="{{$key}}"
+                                class="active"></button>
+                    @endforeach
                 </div>
+
                 <div class="carousel-inner rounded-5">
-                    <div class="carousel-item active">
-                        <a href="#" class=" ">
-                            <img
-                                src="{{ asset('imageSlide/1.jpg')}}"
-                                alt="#" class="d-block" >
-                        </a>
+                    @foreach($slides as $key =>$slide)
+                    <div class="carousel-item  {{$key == 0? 'active':''}}">
+                            <a href="#" class="">
+                                <img src="{{ Storage::url('imageSlide/' . $slide->image) }}"
+                                     alt="#" class="d-block w-100 " style="height: 400px;">
+                            </a>
+
                     </div>
-                    <div class="carousel-item ">
-                        <a href="#">
-                            <img
-                                src="{{ asset('imageSlide/2.jpg') }}"
-                                alt="Chicago" class="d-block" >
-                        </a>
-                    </div>
-                    <div class="carousel-item">
-                        <a href="#">
-                            <img
-                                src="{{ asset('imageSlide/3.jpg') }}"
-                                alt="New York" class="d-block" >
-                        </a>
-                    </div>
+                    @endforeach
+
                 </div>
                 <button class="carousel-control-prev" type="button" data-bs-target="#demo" data-bs-slide="prev">
                     <span class="carousel-control-prev-icon"></span>
