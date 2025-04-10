@@ -3,13 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Address;
-use App\Models\Basket;
 use App\Models\BasketItem;
 use App\Models\Book;
 use App\Models\Order;
 use App\Models\OrderItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+
 class BasketController extends Controller
 {
     public function index(request $request)
@@ -69,6 +69,7 @@ class BasketController extends Controller
 
         return view('basket', compact('books', 'total_price', 'addresses'));
     }
+
     public function makeOrder(Request $request)
     {
         $validated = $request->validate([
@@ -82,9 +83,9 @@ class BasketController extends Controller
         $books = json_decode($request->input('basket'));
         $basket = app('basket');
 
-        if($basket->price == 0 ) {
+        if ($basket->price == 0) {
             return redirect()->route('basket.index')->with('error', 'Корзина пуста');
-        }elseif(empty($books)){
+        } elseif (empty($books)) {
             return redirect()->route('basket.index')->with('error', 'Выберите книги для покупки');
         }
 
@@ -103,22 +104,15 @@ class BasketController extends Controller
                 'order_id' => $order_user->id,
             ]);
         }
-
-        $booksStockUpdate = OrderItem::where(['order_id' => $order_user->id])->get();
-
+        $booksStockUpdate = $order_user->order_items()->get();
         $booksStockUpdate->each(function ($item) {
             $book = Book::where(['id' => $item->book_id])->first();
             $book->stock -= $item->quantity;
             $book->save();
         });
 
-        if ($basket = Auth::user()->basket) {
-            BasketItem::where('basket_id', $basket->id)->delete();
-            $basket->delete();
-            $request->session()->forget('books');
-
-        }
-
+        $basket->delete();
+        $request->session()->forget('books');
         return to_route('basket.index')->with('success', 'Заказ успешно оформлен');
     }
 

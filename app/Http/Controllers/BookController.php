@@ -25,14 +25,16 @@ class BookController extends Controller
     public function index(Request $request)
     {
         $bookmarkTaskUser = Bookmark::where('user_id', Auth::id())->pluck('book_id')->toArray();
-        $slides = InterfaceSite::where('type','slide')->get();
-        return view('index', compact('bookmarkTaskUser','slides'));
+        $slides = InterfaceSite::where('type', 'slide')->get();
+
+        $books = Book::filters($request)->paginate(10);
+
+        return view('index', compact('books', 'bookmarkTaskUser', 'slides'));
     }
 
 
-    public function book(Book $book)
+    public function books(Book $book)
     {
-        //id books которые юзер купил
         $orders = Order::where('user_id', Auth::id())->where('status', 'Получен')->pluck('id');
         $book_id = OrderItem::whereIn('order_id', $orders)->pluck('book_id')->toArray();
 

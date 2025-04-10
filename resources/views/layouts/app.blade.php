@@ -27,19 +27,16 @@
     .dropdown-center:hover .dropdown-menu {
         display: block;
         margin-top: 0;
+
     }
-    .dropdown-menu {
-        display: none;
-    }
+
 
 
 
 
 </style>
 <body >
-<header class="sticky-top">
     @include('partials.nav')
-</header>
 <div class="container">
 <main>
     @yield('content')

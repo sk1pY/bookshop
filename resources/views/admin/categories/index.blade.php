@@ -12,7 +12,7 @@
         @foreach( $categories as $category )
             <tr >
                 <th class="text-center p-0">{{$category -> id}}</th>
-                <td class="text-center p-0"><a href="{{ route('categories.public.show',['category' => $category->id]) }}"
+                <td class="text-center p-0"><a href="{{ route('categories.show',$category->slug) }}"
                                 class="text-decoration-none text-dark ">{{$category -> name}}</a>
                 </td>
                 <td class="d-flex text-center p-0">

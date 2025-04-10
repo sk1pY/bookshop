@@ -27,8 +27,8 @@
                                 <div class="d-flex justify-content-center align-items-center">
                                     <form action="{{ route('basket-item.increase', $bookmark->book) }}" method="post">
                                         @csrf
-                                        <button style="width: 200px; background-color: red; color: white"
-                                                class="rounded-pill btn d-flex justify-content-center align-items-center">
+                                        <button style="width: 200px;  color: white"
+                                                class=" btn btn-danger rounded-pill btn d-flex justify-content-center align-items-center">
                                             В корзину
                                         </button>
                                     </form>
@@ -42,8 +42,8 @@
                                     <form action="{{ route('home.bookmarks.destroy', ['bookmark' => $bookmark->id]) }}" method="post">
                                         @csrf
                                         @method('delete')
-                                        <button style="width: 200px; background-color: red; color: white"
-                                                class="rounded-pill btn d-flex justify-content-center align-items-center">
+                                        <button style="width: 200px;  color: white"
+                                                class="btn btn-danger rounded-pill btn d-flex justify-content-center align-items-center">
                                             Удалить закладку
                                         </button>
                                     </form>

@@ -11,19 +11,33 @@ use Illuminate\Support\Facades\Auth;
 class CategoryController extends Controller
 {
 
-    public function categoriesTop(Request $request,$type)
+    public function specialCategories(Request $request, $slug)
     {
         $query = Book::query();
-        $bookmarkTaskUser = Bookmark::where('user_id', Auth::id())->pluck('book_id')->toArray();
-        if ($type === 'bestsellers') {
-            $query->bestsellers();
-        } elseif ($type === 'newest') {
-            $query->newest();
-        } elseif ($type === 'sales') {
-            $query->sales();
-        }
-        $books = Book::filters($request)->get();
-        return view($type, compact('books', 'bookmarkTaskUser'));
+        $bookmarkTaskUser = Auth::check() ?
+            Bookmark::where('user_id', Auth::id())->pluck('book_id')->toArray() : null;
+
+        match ($slug) {
+            'bestsellers' => $query->bestsellers(),
+            'newest' => $query->newest(),
+            'sales' => $query->sales(),
+            default => null
+        };
+
+        $books = Book::filters($request)->paginate(10);
+        return view($slug, compact('books', 'bookmarkTaskUser'));
+    }
+
+    public function show(Request $request, $slug)
+    {
+        $category = Category::where('slug', $slug)->first();
+        $bookmarkTaskUser = Auth::check() ?
+            Bookmark::where('user_id', Auth::id())->pluck('book_id')->toArray() : null;
+
+        $query = $category->books();
+
+        $books = $query->filters($request)->get();
+        return view('categoryBooks', compact('books', 'category', 'bookmarkTaskUser'));
     }
 
 

@@ -11,11 +11,7 @@
             {{ session('error') }}
         </div>
     @endif
-    <div class="d-flex gap-3 my-2">
-        <a class="navbar-brand" href="{{ route('sale') }}">Акции</a>
-        <a class="nav-link d-inline-block" href="{{ route('bestsellers') }}">Бестселлеры</a>
-        <a class="nav-link d-inline-block" href="{{ route('newest') }}">Новинки</a>
-    </div>
+
 
     <div class="row">
         <div class="col ">
@@ -31,13 +27,13 @@
 
                 <div class="carousel-inner rounded-5">
                     @foreach($slides as $key =>$slide)
-                    <div class="carousel-item  {{$key == 0? 'active':''}}">
+                        <div class="carousel-item  {{$key == 0? 'active':''}}">
                             <a href="#" class="">
                                 <img src="{{ Storage::url('imageSlide/' . $slide->image) }}"
                                      alt="#" class="d-block w-100 " style="height: 400px;">
                             </a>
 
-                    </div>
+                        </div>
                     @endforeach
 
                 </div>
@@ -58,7 +54,8 @@
                             <option
                                 value="{{ $key }}" {{ request('filter') === $key ? 'selected' : '' }}>{{ $value }}</option>
                         @endforeach
-                    </select></form>
+                    </select>
+                </form>
             </div>
             {{--FILTER--}}
             {{--BOOKS--}}

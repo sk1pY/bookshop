@@ -13,7 +13,7 @@
                     </div>
                     {{-- BOOKMARK end--}}
                 @endauth
-                <a href="{{ route('books.book', ['book' => $book->id]) }}"
+                <a href="{{ route('books.book', $book) }}"
                    style="text-decoration: none; color: inherit;">
                     <div class="d-flex justify-content-center align-items-center image-container">
                         <img src="{{ Storage::url('booksImages/' . $book->image) }}"
@@ -32,24 +32,32 @@
                                 <div class="fw-bold" style="font-size: 1.5rem">{{$book->price}} р.</div>
                             @endif
                         </div>
-                        <span class="card-title pt-0 mb-0">
+                        <span class="card-title pt-0 mb-0 fs-5 ">
                                             {{ substr($book->title,0,18)}}
                                         </span>
                     </div>
                 </a>
-                <div class="card-body ">
-                    <div style="font-size: 0.8rem">
-                        @if($book->author_id)
+                <div class="card-body  p-0  ps-3">
+                    <div style="font-size: 1rem" >
+                        @if($book->category)
+                            <a href="{{ route('categories.show', $book->category->slug) }}">
+                                {{ $book->category->name ?? 'Без категории' }}
+                            </a>
+                        @else
+                            <span class="text-muted">Без категории</span>
+                        @endif
+                        <br>
+                        @if($book->author)
                             <a href="{{ route('authors.index',$book->author->id) }}">
                                 {{ $book->author->surname . ' ' . $book->author->name }}</a>
-                        @else
-                            <div>без автора</div>
-                        @endif
+                            @else
+                                <span class="text-muted"> Без автора </span>
+                            @endif
                     </div>
                     <div class="mb-3">
                         Отзывы: {{ $book->commentaries_count }}
                         <i style="color:#ff9100"
-                           class="ms-2 me-1 fa-solid fa-star"></i>{{ $book->avgRating }}
+                           class="ms-2 me-1 bi bi-star-fill"></i>{{ $book->avgRating }}
                     </div>
 
                     @if($book->stock > 0)

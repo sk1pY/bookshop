@@ -20,7 +20,6 @@ use App\Http\Controllers\Home\BookmarkController as HomeBookmarkController;
 use App\Http\Controllers\Home\HomeController;
 use App\Http\Controllers\Home\OrderController as HomeOrderController;
 use App\Http\Controllers\SearchController;
-use App\Http\Controllers\UserCategoryController;
 use Illuminate\Support\Facades\Route;
 
 //SEARCH
@@ -31,14 +30,12 @@ Route::get('/authors/{author}', [AuthorController::class, 'index'])->name('autho
 
 //КНИГИ
 Route::get('/', [BookController::class, 'index'])->name('books.index');
-Route::get('/book/{book}', [BookController::class, 'book'])->name('books.book');
+Route::get('/books/{book}', [BookController::class, 'books'])->name('books.book');
 
 
 //------------------------------------------------CATEGORIES------------------------------------------------
-Route::get('/category/{category}', [UserCategoryController::class, 'categoryBooks'])->name('categories.public.show');
-Route::get('/bestsellers', [CategoryController::class, 'categoriesTop'])->defaults('type', 'bestsellers')->name('bestsellers');
-Route::get('/newest', [CategoryController::class, 'categoriesTop'])->defaults('type', 'newest')->name('newest');
-Route::get('/sale', [CategoryController::class, 'categoriesTop'])->defaults('type', 'sales')->name('sale');
+Route::get('/categories/{slug}',[CategoryController::class,'show'])->name('categories.show');
+Route::get('/categories-special/{slug}',[CategoryController::class,'specialCategories'])->whereIn('slug', ['bestsellers', 'sales', 'newest'])->name('specialCategories.show');
 
 //------------------------------------------------BASKET------------------------------------------------
 Route::prefix('basket')->group(function () {

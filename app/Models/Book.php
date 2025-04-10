@@ -34,9 +34,9 @@ class Book extends Model
     public function scopeFilters(Builder $query, $request)
     {
         return $query
-            ->when($request->filter === 'cheap', fn($q) => $q->orderBy('created_at', 'desc'))
-            ->when($request->filter === 'expensive', fn($q) => $q->orderBy('created_at', 'asc'))
-            ->when($request->filter === 'rating', fn($q) => $q->orderBy('avgRating', 'asc'));
+            ->when($request->filter === 'cheap', fn($q) => $q->orderBy('price', 'asc'))
+            ->when($request->filter === 'expensive', fn($q) => $q->orderBy('price', 'desc'))
+            ->when($request->filter === 'rating', fn($q) => $q->orderBy('avgRating', 'desc'));
     }
 
     public function scopeSales(Builder $query)

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class CategoryController extends Controller
 {
@@ -34,7 +35,7 @@ class CategoryController extends Controller
         $validated = $request->validate([
             'name' => 'required|alpha|max:30'
         ]);
-        Category::create($validated);
+        Category::create(array_merge($validated,['slug'=>Str::slug($validated['name'])]));
         return to_route('admin.categories.index')->with('successCategoryAdd', 'Категория добавлена');
     }
 

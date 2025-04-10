@@ -8,6 +8,7 @@ use App\Models\Category;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class CategorySeeder extends Seeder
 {
@@ -23,6 +24,7 @@ class CategorySeeder extends Seeder
         for ($i = 0; $i < count($arr); $i++) {
             Category::create([
                 'name' => $arr[$i],
+                'slug' => Str::slug($arr[$i])
             ]);
         }
 

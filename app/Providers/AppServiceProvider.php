@@ -68,36 +68,16 @@ class AppServiceProvider extends ServiceProvider
             }
         });
 
-        View::composer(['newest','sale','index','bestsellers'], function ($view,) {
-            $request = app(Request::class);
-            $query = Book::withCount(['commentaries']);
-            if ($request->filled('filter')) {
-                switch ($request->input('filter')) {
-                    case 'cheap':
-                        $query->orderBy('price', 'asc');
-                        break;
-                    case 'expensive':
-                        $query->orderBy('price', 'desc');
-                        break;
-                    case 'rating':
-                        $query->orderBy('avgRating', 'desc');
-                }
-                $books = $query->paginate(10);
-            }
-            $books = $query->paginate(10);
-            $view->with('books', $books);
-        });
-
         View::composer('*', function ($view) {
             if (Auth::guard()->check()) {
                 $countOrdersforUser = Auth::user()->orders()->where('status', 'Готов к выдаче')->count();
                 $view->with('countOrdersforUser', $countOrdersforUser);
             }
         });
+
         View::composer('partials.nav', function ($view) {
             if (Auth::guard()->check()) {
                 $notifOrders = Auth::user()->orders()->where('status','Готов к выдаче')->pluck('id')->all();
-
                 $view->with('notifOrders', $notifOrders);
             }
             $categories = Category::all();
