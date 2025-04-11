@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\InterfaceSite;
 use App\Models\User;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -23,7 +24,10 @@ class DatabaseSeeder extends Seeder
             PermissionSeeder::class,
             UserSeeder::class,
             OrderSeeder::class,
-            CommentSeeder::class
+            CommentSeeder::class,
+
         ]);
+        InterfaceSite::factory()->count(3)->create();
+
     }
 }

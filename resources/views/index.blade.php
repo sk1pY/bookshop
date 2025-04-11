@@ -29,7 +29,7 @@
                     @foreach($slides as $key =>$slide)
                         <div class="carousel-item  {{$key == 0? 'active':''}}">
                             <a href="#" class="">
-                                <img src="{{ Storage::url('imageSlide/' . $slide->image) }}"
+                                <img src="{{ Storage::url('slideImages/' . $slide->image) }}"
                                      alt="#" class="d-block w-100 " style="height: 400px;">
                             </a>
 

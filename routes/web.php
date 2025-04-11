@@ -26,7 +26,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/search', [SearchController::class, 'search'])->name('live.search');
 
 //Автор
-Route::get('/authors/{author}', [AuthorController::class, 'index'])->name('authors.index');
+Route::get('/authors/{author:slug}', [AuthorController::class, 'index'])->name('authors.index');
 
 //КНИГИ
 Route::get('/', [BookController::class, 'index'])->name('books.index');
@@ -34,7 +34,7 @@ Route::get('/books/{book}', [BookController::class, 'books'])->name('books.book'
 
 
 //------------------------------------------------CATEGORIES------------------------------------------------
-Route::get('/categories/{slug}',[CategoryController::class,'show'])->name('categories.show');
+Route::get('/categories/{category:slug}',[CategoryController::class,'show'])->name('categories.show');
 Route::get('/categories-special/{slug}',[CategoryController::class,'specialCategories'])->whereIn('slug', ['bestsellers', 'sales', 'newest'])->name('specialCategories.show');
 
 //------------------------------------------------BASKET------------------------------------------------

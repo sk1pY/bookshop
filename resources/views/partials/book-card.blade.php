@@ -48,7 +48,7 @@
                         @endif
                         <br>
                         @if($book->author)
-                            <a href="{{ route('authors.index',$book->author->id) }}">
+                            <a href="{{ route('authors.index',$book->author) }}">
                                 {{ $book->author->surname . ' ' . $book->author->name }}</a>
                             @else
                                 <span class="text-muted"> Без автора </span>

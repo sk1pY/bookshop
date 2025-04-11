@@ -12,11 +12,19 @@
                 Купили {{ $book->numberOfPurchased }} раз
             </div>
             <h1> {{ $book -> title }}</h1>
-            @if($book->author_id)
-                <a href="{{route('authors.index', $book->author )}}">
-                    <h5> {{ $book -> author -> name .' '. $book -> author -> surname  }}</h5></a>
-                <p>
-                    @endif
+
+
+            <div class="d-flex align-items-center gap-3 flex-wrap">
+                @if($book->author)
+                    <div>
+                        <a href="{{route('authors.index', $book->author )}}">
+                            <h5> {{ $book -> author -> name .' '. $book -> author -> surname  }}</h5>
+
+                        </a>
+                    </div>
+
+                @endif
+                <div class="d-flex align-items-center gap-1 fs-5">
                     @php
                         $fullStars = floor($book->avgRating);
 
@@ -33,29 +41,46 @@
                         <i class="bi bi-star text-warning"></i>
                     @endfor
                     <span> {{ $book -> avgRating }}</span>
-                </p>
-                <div class="d-flex align-items-center">
-                    <h2 class="fw-bold mb-0">{{ $book->price }}р.</h2>
                 </div>
-                @auth()
-                    @if($book->stock > 0)
-                        <form action="{{ route('basket-item.increase', $book) }}" method="post">
-                            @csrf
-                            <input type="text" hidden name="book_id" value="{{ $book->id }}">
-                            <button style="width: 160px; height: 30px;"
-                                    class="btn btn-outline-success d-flex justify-content-center align-items-center">
-                                В корзину
-                            </button>
-                        </form>
-                    @else
-                        <button style="width: 160px; height: 30px;"
-                                class="btn btn-outline-danger d-flex justify-content-center align-items-center disabled ">
-                            Нет в наличии
-                        </button>
-                    @endif
+            </div>
 
-                @endauth
-                <p class="text-start mt-3">{{ $book -> description }}</p>
+            <a><h6> {{ $book -> category->name?? 'без категории'}}</h6></a>
+            <p>
+
+            </p>
+            <div class="d-flex align-items-center">
+                @if($book->discount > 0)
+                    <div class="fw-bold text-danger fs-2"
+                         style="font-size: 1.5rem">{{$book->price}} р.
+                    </div>
+                    <div class="ms-1 mb-3 fw-bold text-secondary">
+                        <del>{{$book->original_price}}</del>
+
+                    </div>
+                    <span class="ms-2">Ваша скидка {{$book->discount .'%'}}</span>
+                @else
+                    <div class="fw-bold" style="font-size: 1.5rem">{{$book->price}} р.</div>
+                @endif            </div>
+            @auth()
+                @if($book->stock > 0)
+                    <form action="{{ route('basket-item.increase', $book) }}" method="post">
+                        @csrf
+                        <input type="text" hidden name="book_id" value="{{ $book->id }}">
+                        <button style="width: 350px; height: 70px;"
+                                class="btn btn-danger d-flex justify-content-center align-items-center">
+
+                            <span class="fw-bold fs-4"><i class="bi bi-cart-fill me-2"></i>Положить в корзину</span>
+                        </button>
+                    </form>
+                @else
+                    <button style="width: 160px; height: 30px;"
+                            class="btn btn-danger d-flex justify-content-center align-items-center disabled ">
+                        Нет в наличии
+                    </button>
+                @endif
+
+            @endauth
+            <p class="text-start mt-3">{{ $book -> description }}</p>
         </div>
     </div>
 

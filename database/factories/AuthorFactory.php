@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Author>
@@ -15,9 +16,12 @@ class AuthorFactory extends Factory
      */
     public function definition(): array
     {
+        $name =  fake('ru_RU')->firstName();
+        $surname = fake('ru_RU')->lastName();
         return [
-            'name' => fake('ru_RU')->firstName(),
-            'surname' => fake('ru_RU')->lastName(),
+            'name' => $name,
+            'surname' => $surname,
+            'slug' => Str::slug($name.'-'.$surname),
         ];
     }
 }

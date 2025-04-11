@@ -21,7 +21,7 @@ class InterfaceController extends Controller
        ]);
 //
         if ($request->hasFile('image')) {
-           $validated['image'] = basename($request->file('image')->store('imageSlide','public'));
+           $validated['image'] = basename($request->file('image')->store('slideImages','public'));
        }
 
         InterfaceSite::create($validated);

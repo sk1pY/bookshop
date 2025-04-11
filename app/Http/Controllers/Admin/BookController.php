@@ -7,6 +7,7 @@ use App\Models\Author;
 use App\Models\Book;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class BookController extends Controller
 {
@@ -50,6 +51,12 @@ class BookController extends Controller
 
         if ($request->hasFile('file')) {
             $validated['image'] = basename($request->file('file')->store('booksImages', 'public'));
+        }else{
+
+            $localPath = public_path('defaultImages/defaultImage.jpg');
+            $newPath = Storage::disk('public')->putFile('booksImages', $localPath);
+            $validated['image']  = basename($newPath);
+
         }
         if( Book::create($validated)){
             return redirect()->route('admin.books.index')->with('success', 'book added success');
