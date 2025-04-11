@@ -37,6 +37,6 @@
 
         </tbody>
     </table>
-
+    <h3>Сумма заказа: {{$order->price}}р.</h3>
 
 @endsection

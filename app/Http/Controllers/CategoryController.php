@@ -28,9 +28,8 @@ class CategoryController extends Controller
         return view($slug, compact('books', 'bookmarkTaskUser'));
     }
 
-    public function show(Request $request, $slug)
+    public function show(Request $request, Category $category)
     {
-        $category = Category::where('slug', $slug)->first();
         $bookmarkTaskUser = Auth::check() ?
             Bookmark::where('user_id', Auth::id())->pluck('book_id')->toArray() : null;
 

@@ -30,7 +30,7 @@ Route::get('/authors/{author:slug}', [AuthorController::class, 'index'])->name('
 
 //КНИГИ
 Route::get('/', [BookController::class, 'index'])->name('books.index');
-Route::get('/books/{book}', [BookController::class, 'books'])->name('books.book');
+Route::get('/books/{book:slug}', [BookController::class, 'show'])->name('books.book');
 
 
 //------------------------------------------------CATEGORIES------------------------------------------------
@@ -54,10 +54,11 @@ Route::name('home.')->prefix('home')->middleware('role:user|admin')->group(funct
     Route::post('/bookmarks', [HomeBookmarkController::class, 'store'])->name('bookmarks.store');
     Route::delete('/bookmarks/{bookmark}', [HomeBookmarkController::class, 'destroy'])->name('bookmarks.destroy');
     Route::get('/orders', [HomeOrderController::class, 'orders'])->name('orders.index');
-    Route::get('/orders/{order}', [HomeOrderController::class, 'aboutOrders'])->name('orders.show');
+    Route::get('/orders/{order}', [HomeOrderController::class, 'show'])->name('orders.show');
     Route::delete('/orders/{order}', [HomeOrderController::class, 'cancelOrder'])->name('orders.destroy');
     Route::get('/info', [HomeController::class, 'info'])->name('info.index');
     Route::patch('/info/{user}', [HomeController::class, 'infoUpdate'])->name('info.update');
+    Route::delete('users/{user}',[HomeController::class,'destroy'])->name('users.destroy');
 });
 
 //------------------------------------------------Commentaries------------------------------------------------

@@ -9,6 +9,7 @@ use App\Models\Category;
 use Faker\Provider\ru_RU\Address;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Book>
@@ -34,10 +35,11 @@ class BookFactory extends Factory
             File::copy($file->getPathname(), $destination);
         }
 
-
+        $title = fake()->sentence(1);
         return [
-            'title' => fake()->sentence(1),
+            'title' => $title,
             'description' => fake()->text(1000),
+            'slug' => Str::slug($title),
             'price' => fake()->randomFloat(2, 5, 100),
             'image' => $files ? $files[array_rand($files)]->getFilename() : null,
             'stock' => 10,

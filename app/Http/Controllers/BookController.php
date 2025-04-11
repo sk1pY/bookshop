@@ -33,7 +33,7 @@ class BookController extends Controller
     }
 
 
-    public function books(Book $book)
+    public function show(Book $book)
     {
         $orders = Order::where('user_id', Auth::id())->where('status', 'Получен')->pluck('id');
         $book_id = OrderItem::whereIn('order_id', $orders)->pluck('book_id')->toArray();

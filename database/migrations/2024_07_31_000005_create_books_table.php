@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('title',50);
             $table->string('description',1000);
+            $table->string('slug');
             $table->float('price');
             $table->float('original_price')->nullable();
 //            $table->float('priceBeforeDiscount')->nullable();

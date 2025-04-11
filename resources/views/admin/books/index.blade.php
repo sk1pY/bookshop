@@ -35,7 +35,7 @@
                 <td>
                     <img alt="logo" src="{{ Storage::url('booksImages/' . $book->image) }}" style="width: 30px;">
                     <a class="text-decoration-none text-black "
-                       href="{{ route('books.book', $book  )}}">{{$book -> title}}</a>
+                       href="{{ route('books.book', $book)}}">{{$book -> title}}</a>
                 </td>
                 <td class=" text-center ">
                     {{$book->price}} р.

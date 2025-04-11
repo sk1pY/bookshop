@@ -44,5 +44,10 @@ class HomeController extends Controller
     }
 
 
+    public function destroy(User $user){
+        $user->delete();
+        return to_route('books.index');
+
+    }
 
 }

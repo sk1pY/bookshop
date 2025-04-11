@@ -14,26 +14,31 @@ class OrderController extends Controller
 {
     public function orders(Request $request)
     {
-        $status = $request->query('status','all');
+        $status = $request->query('status', 'all');
         $user = Auth::user();
-        if($status == 'all'){
-            $orders = $user->orders()->orderBy('created_at','desc')->get();
+        if ($status == 'all') {
+            $orders = $user->orders()->orderBy('created_at', 'desc')->get();
 
-        }elseif($status == 'delivered'){
+        } elseif ($status == 'delivered') {
             $orders = $user->orders()->where('status', 'Получен')->get();
         }
 
         return view('home.orders', compact('orders'));
     }
 
-    public function aboutOrders(Order $order)
+    public function show(Order $order)
     {
-        $orderItems =  $order->order_items()->get();
+        $this->authorize('show', $order);
+        $orderItems = $order->order_items()->get();
 
-        return view('home.about_order', compact('order','orderItems'));
+       // $fullPrice = $order->price;
+
+
+        return view('home.about_order', compact('order', 'orderItems'));
     }
 
-    public function cancelOrder(Order $order){
+    public function cancelOrder(Order $order)
+    {
 
         $booksBoughtUpdate = $order->order_items()->get();
 
@@ -44,7 +49,7 @@ class OrderController extends Controller
 
         $order->delete();
 
-        return to_route('home.orders.index')->with('success','Заказ успешно отменен');
+        return to_route('home.orders.index')->with('success', 'Заказ успешно отменен');
     }
 
 
