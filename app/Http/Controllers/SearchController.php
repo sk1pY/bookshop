@@ -4,22 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Models\Book;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class SearchController extends Controller
 {
     public function search(Request $request)
     {
-        if ($request->ajax()) {
-            $output = "";
-            $books = Book::where('title', 'LIKE', '%' . $request->search . "%")->get();
-            if ($books->count() > 0) {
-                foreach ($books as $book) {
-                    $output .= '<a class=" link-secondary text-decoration-none text-dark" href="'.route('books.book',$book->id). '"><li class="list-group-item ">'.$book->title.'</li></a>';
-                }
-            } else {
-                $output = '<li class="list-group-item">No results found</li>';
-            }
-            return response($output);
+        Log::info($request->input('search'));
+        $books = Book::where('title', 'like', '%' . $request->input('search') . '%')->get();
+
+        $html = '';
+        foreach ($books as $book) {
+            $html .= view('partials.book-card', compact('book'))->render();
         }
+        return response()->json(['html' => $html]);
     }
 }

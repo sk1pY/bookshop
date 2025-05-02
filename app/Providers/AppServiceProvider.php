@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Models\Basket;
 use App\Models\BasketItem;
 use App\Models\Book;
+use App\Models\Bookmark;
 use App\Models\Category;
 use App\Models\Order;
 use App\Models\OrderItem;
@@ -70,9 +71,14 @@ class AppServiceProvider extends ServiceProvider
 
         View::composer('*', function ($view) {
             if (Auth::guard()->check()) {
+                $bookmarkBookUser = Bookmark::where('user_id', Auth::id())->pluck('book_id')->toArray();
                 $countOrdersforUser = Auth::user()->orders()->where('status', 'Готов к выдаче')->count();
-                $view->with('countOrdersforUser', $countOrdersforUser);
+            }else{
+                $bookmarkBookUser = [];
+                $countOrdersforUser = 0;
             }
+            $view->with(['countOrdersforUser'=>$countOrdersforUser,'bookmarkBookUser'=>$bookmarkBookUser]);
+
         });
 
         View::composer('partials.nav', function ($view) {

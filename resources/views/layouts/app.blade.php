@@ -6,7 +6,6 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
@@ -20,10 +19,12 @@
         margin: 0;
         padding: 0;
     }
+
     a {
         color: black;
         text-decoration: none;
     }
+
     .dropdown-center:hover .dropdown-menu {
         display: block;
         margin-top: 0;
@@ -31,20 +32,17 @@
     }
 
 
-
-
-
 </style>
-<body >
-    @include('partials.nav')
-<div class="container">
-<main>
+<body class="container " style="max-width: 1200px">
+@include('partials.nav')
+<div  >
+    @include('partials.alert.error')
+    @include('partials.alert.success')
     @yield('content')
-</main>
 
-<footer class="">
-    @include('partials.footer')
-</footer>
+    <footer >
+        @include('partials.footer')
+    </footer>
 </div>
 </body>
 </html>

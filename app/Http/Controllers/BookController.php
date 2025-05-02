@@ -24,12 +24,24 @@ class BookController extends Controller
 {
     public function index(Request $request)
     {
-        $bookmarkTaskUser = Bookmark::where('user_id', Auth::id())->pluck('book_id')->toArray();
         $slides = InterfaceSite::where('type', 'slide')->get();
+        $bookQuery = Book::latest();
 
-        $books = Book::filters($request)->paginate(10);
+        if ($request->filled('filter')) {
+            switch ($request->input('filter')) {
+                case 'cheap':
+                    $bookQuery->orderBy('price');
+                    break;
+                case 'expensive':
+                    $bookQuery->orderBy('price', 'desc');
+                    break;
+                case 'rating':
+                    $bookQuery->orderBy('avgRating', 'desc');
+            }
+        }
+        $books = $bookQuery->paginate(10);
 
-        return view('index', compact('books', 'bookmarkTaskUser', 'slides'));
+        return view('index', compact('books', 'slides'));
     }
 
 

@@ -7,31 +7,14 @@
     <title>Admin</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-    <style>
 
-        .row {
-            margin: 0;
-        }
-
-        .col-2 {
-            color: white;
-        }
-
-
-    </style>
 </head>
-<body>
-<div class="row">
-    <div class="col-2 d-flex flex-column flex-shrink-0 p-3 bg-dark w-auto h-auto">
-        <a href="/" class="d-flex align-items-center mb-3 text-white text-decoration-none">
-            <svg class="bi me-2" width="40" height="32">
-
-            </svg>
+<body class="min-vh-100">
+<div class="row g-0 min-vh-100">
+    <div class="col-2 d-flex flex-column flex-shrink-0 p-2  bg-dark  sticky-top " style="font-size: 0.9rem">
+            <a href="/admin" class="d-flex justify-content-center mb-3 text-white text-decoration-none">
             <span class="fs-4">Admin Panel</span>
         </a>
-        <hr class="bg-white">
-
-
         <ul class="according nav nav-pills flex-column mb-auto ">
             <li>
                 <div class="alert alert-danger" role="alert">
@@ -52,12 +35,12 @@
                 <h2 class="accordion-header nav-link text-white d-flex">
                     <i class="bi bi-plus-circle-dotted me-2"></i>
                     <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" >
                         Добавить
                     </button>
                     <i class="bi bi-caret-down ms-auto"></i>
                 </h2>
-                <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                <div id="collapseOne" class="accordion-collapse collapse show " data-bs-parent="#accordionExample">
                     <div class="accordion-body">
                         <a href="{{ route('admin.books.create') }}" class="nav-link text-white">
                             Книга
@@ -85,7 +68,7 @@
                     </button>
                     <i class="bi bi-caret-down ms-auto"></i>
                 </h2>
-                <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                <div id="collapseTwo" class="accordion-collapse collapse show " data-bs-parent="#accordionExample">
                     <div class="accordion-body">
                         <a href="{{ route('admin.books.index') }}" class="nav-link text-white">
                             Книги
@@ -140,31 +123,7 @@
                 </a>
             </li>
         </ul>
-        <hr>
 
-        <div class="dropdown">
-            <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
-               id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-                @auth()
-                    <strong>{{Auth::user()->name}}</strong>
-                @endauth
-            </a>
-            <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
-
-                <li><a class="dropdown-item" href="{{route('home.info.index')}}">Profile</a></li>
-                <li>
-                    <hr class="dropdown-divider">
-                </li>
-                <li>
-                    <form action="{{ route('logout') }}" method="post">
-                        @csrf
-                        <button type="submit" class="dropdown-item">Sign out</button>
-
-                    </form>
-                </li>
-
-            </ul>
-        </div>
     </div>
 
 

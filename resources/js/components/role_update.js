@@ -1,4 +1,3 @@
-document.addEventListener("DOMContentLoaded", function () {
     document.querySelectorAll('.role-update').forEach(select => {
         select.addEventListener('change', function () {
             let selectedRole = this.value;
@@ -13,4 +12,4 @@ document.addEventListener("DOMContentLoaded", function () {
                 });
         });
     });
-});
+

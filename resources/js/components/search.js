@@ -1,32 +1,12 @@
-document.addEventListener('DOMContentLoaded', function () {
-    const searchInput = document.getElementById('search');
-    const searchResult = document.querySelector('.search-result');
+const searchInput = document.getElementById('search');
+const resultsBox = document.getElementById('search-cards');
 
-    if (searchInput) {
-        searchInput.addEventListener('keyup', function () {
-            const value = this.value;
+searchInput.addEventListener('keyup', function () {
+    const value = this.value.trim();
 
-            if (value.trim() === '') {
-                searchResult.style.display = 'none';
-                return;
-            }
-
-            axios.get('/search', { params: { search: value } })
-                .then(response => {
-                    searchResult.innerHTML = response.data;
-                    searchResult.style.display = 'block';
-                })
-                .catch(error => {
-                    console.error('Ошибка при поиске:', error);
-                });
-        });
-    }
-
-    document.addEventListener('click', function (event) {
-        const target = event.target;
-
-        if (!searchInput.contains(target) && !searchResult.contains(target)) {
-            searchResult.style.display = 'none';
-        }
+    axios.get('/search', {
+        params: { search: value }
+    }).then(res => {
+        resultsBox.innerHTML = res.data.html;
     });
 });

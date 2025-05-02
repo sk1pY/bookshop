@@ -1,17 +1,5 @@
 @extends('layouts.app')
 @section('content')
-    @if (session('success'))
-        <div class="alert alert-success d-flex px-4">
-            <div>{{ session('success') }}</div>
-            <a href="{{route('basket.index')}}" class="alert-link ms-auto">Перейти в корзину</a>
-        </div>
-    @endif
-    @if (session('error'))
-        <div class="alert alert-danger">
-            {{ session('error') }}
-        </div>
-    @endif
-
 
     <div class="row">
         <div class="col ">
@@ -30,7 +18,7 @@
                         <div class="carousel-item  {{$key == 0? 'active':''}}">
                             <a href="#" class="">
                                 <img src="{{ Storage::url('slideImages/' . $slide->image) }}"
-                                     alt="#" class="d-block w-100 " style="height: 400px;">
+                                     alt="#" class="d-block w-100 " style="height: 350px;">
                             </a>
 
                         </div>
@@ -59,12 +47,23 @@
             </div>
             {{--FILTER--}}
             {{--BOOKS--}}
-            @include('partials.book-card')
-            {{--BOOKS--}}
-            <div class="mt-4">
-                {{ $books->links('pagination::bootstrap-5') }}
-            </div>
+                <div class="row row-cols-2 row-cols-md-4 row-cols-lg-5 g-4" id="search-cards">
+                @forelse($books as $book)
+                        <div class="col">
+                            @include('partials.book-card')
+                        </div>
+                    @empty
+                        <div class="col">
+                            <h3>Ничего не найдено</h3>
+                        </div>
+                    @endforelse
+                </div>
+
+                {{-- Pagination --}}
+                <div class="mt-4">
+                    {{ $books->links('pagination::bootstrap-5') }}
+                </div>
+
         </div>
-    </div>
 
 @endsection

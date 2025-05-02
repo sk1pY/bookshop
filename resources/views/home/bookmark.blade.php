@@ -1,6 +1,6 @@
 @extends('home.index')
 @section('content-home')
-    <h1>Избранное</h1>
+    <h4>Избранное</h4>
     <div class="row g-4 mt-3">
         @forelse($bookmarks as $bookmark)
             <div class="col-12 col-md-3">
@@ -11,13 +11,19 @@
                     </div>
                     <div class="card-body ">
                         <div style="font-size: 0.8rem">
+                            <a class="card-title pt-0 mb-0 fs-5" href="{{ route('books.book', $bookmark->book) }}">
+                                {{ $bookmark->book->title }}
+                            </a>
+                            <br>
                             @if($bookmark->book->author_id)
-                                    <a href="{{ route('authors.index',$bookmark->book->author->id) }}">
-                                    {{ $bookmark->book->author->surname . ' ' . $bookmark->book->author->name }}</a>
+                                <a href="{{ route('authors.index', $bookmark->book->author->id) }}">
+                                    {{ $bookmark->book->author->surname . ' ' . $bookmark->book->author->name }}
+                                </a>
                             @else
                                 <div>без автора</div>
                             @endif
                         </div>
+
                         <div class="mb-3">
                             Отзывы: {{ $bookmark->book->commentaries_count }}
                             <i style="color:#ff9100" class="ms-2 me-1 fa-solid fa-star"></i>{{ $bookmark->book->avgRating }}

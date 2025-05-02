@@ -20,7 +20,7 @@ class BookController extends Controller
         $books = Book::with('author')->orderBy('created_at', 'desc')->paginate(10);
         $authors = Author::get();
 
-        return view('admin.books.index', compact('books','authors'));
+        return view('admin.books.index', compact('books', 'authors'));
     }
 
     /**
@@ -52,18 +52,18 @@ class BookController extends Controller
 
         if ($request->hasFile('file')) {
             $validated['image'] = basename($request->file('file')->store('booksImages', 'public'));
-        }else{
+        } else {
 
             $localPath = public_path('defaultImages/defaultImage.jpg');
             $newPath = Storage::disk('public')->putFile('booksImages', $localPath);
-            $validated['image']  = basename($newPath);
+            $validated['image'] = basename($newPath);
 
         }
-        if( Book::create($validated)){
+        if (Book::create($validated)) {
             return redirect()->route('admin.books.index')->with('success', 'book added success');
 
         }
-        return to_route('admin.books.index')->with('info','book added error');
+        return to_route('admin.books.index')->with('info', 'book added error');
     }
 
     /**
@@ -88,28 +88,39 @@ class BookController extends Controller
     public function update(Request $request, Book $book)
     {
         $validated = $request->validate([
-            'title' => 'sometimes|string|max:255',
-            'price' => 'sometimes|numeric|min:0',
-            'stock' => 'sometimes|numeric|min:0',
-            'image' => 'sometimes|image|mimes:jpeg,png,jpg|max:2048',
-            'author_id' => 'sometimes|nullable|numeric|exists:authors,id'
+            'title' => 'required|string|max:255',
+            'price' => 'required|numeric|min:0',
+            'stock' => 'required|numeric|min:0',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'author_id' => 'nullable|numeric|exists:authors,id'
 
         ]);
         if ($request->hasFile('image')) {
+
+            if($book->image){
+                Storage::disk('public')->delete('booksImages'.$book->image);
+            }
             $validated['image'] = basename($request->file('image')->store('booksImages', 'public'));
+        } else {
+            unset($validated['image']);
         }
 
-        if ($book->update($validated)) {
-            return to_route('admin.books.index')->with('success', 'book update success');
-        }
-        return to_route('admin.books.index')->with('info','book update error');
 
+
+        try {
+            $book->update($validated);
+        } catch (\Throwable $e) {
+            report($e);
+            return back()->with('error', 'book updated error');
+        }
+        return to_route('admin.books.index')->with('success', 'book update success');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Book $book)
+    public
+    function destroy(Book $book)
     {
         $book->delete();
         return to_route('admin.books.index');

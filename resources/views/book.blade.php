@@ -69,7 +69,7 @@
                         <button style="width: 350px; height: 70px;"
                                 class="btn btn-danger d-flex justify-content-center align-items-center">
 
-                            <span class="fw-bold fs-4"><i class="bi bi-cart-fill me-2"></i>Положить в корзину</span>
+                            <span class="fw-bold fs-4"><i class="bi bi-cart-fill me-2"></i>ДОБАВИТЬ В КОРЗИНУ</span>
                         </button>
                     </form>
                 @else

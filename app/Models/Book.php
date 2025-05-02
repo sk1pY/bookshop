@@ -37,13 +37,6 @@ class Book extends Model
     public function commentaries(){
         return $this->hasMany(Commentary::class);
     }
-    public function scopeFilters(Builder $query, $request)
-    {
-        return $query
-            ->when($request->filter === 'cheap', fn($q) => $q->orderBy('price', 'asc'))
-            ->when($request->filter === 'expensive', fn($q) => $q->orderBy('price', 'desc'))
-            ->when($request->filter === 'rating', fn($q) => $q->orderBy('avgRating', 'desc'));
-    }
 
     public function scopeSales(Builder $query)
     {

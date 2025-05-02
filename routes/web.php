@@ -1,24 +1,30 @@
 <?php
-
-use App\Http\Controllers\Admin\AddressController;
-use App\Http\Controllers\Admin\AdminController;
+//Admin
+use  App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\AuthorController as AdminAuthorController;
 use App\Http\Controllers\Admin\BookController as AdminBookController;
 use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
+use App\Http\Controllers\Admin\AddressController;
 use App\Http\Controllers\Admin\DiscountController;
+use App\Http\Controllers\Admin\InterfaceController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\RolesPermissions\PermissionController;
 use App\Http\Controllers\Admin\RolesPermissions\RoleController;
 use App\Http\Controllers\Admin\RolesPermissions\RolePermissionController;
+use App\Http\Controllers\Admin\UserController;
+
+//Home
+use App\Http\Controllers\Home\BookmarkController as HomeBookmarkController;
+use App\Http\Controllers\Home\HomeController;
+use App\Http\Controllers\Home\OrderController as HomeOrderController;
+//
+
 use App\Http\Controllers\AuthorController;
 use App\Http\Controllers\BasketController;
 use App\Http\Controllers\BasketItemController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CommentaryController;
-use App\Http\Controllers\Home\BookmarkController as HomeBookmarkController;
-use App\Http\Controllers\Home\HomeController;
-use App\Http\Controllers\Home\OrderController as HomeOrderController;
 use App\Http\Controllers\SearchController;
 use Illuminate\Support\Facades\Route;
 
@@ -88,7 +94,7 @@ Route::name('admin.')->prefix('admin')->middleware('role:admin')->group(function
     //Categories
     Route::resource('categories', AdminCategoryController::class);
     //Users
-    Route::resource('users', \App\Http\Controllers\Admin\UserController::class);
+    Route::resource('users', UserController::class);
     //Orders
     Route::get('/orders', [AdminOrderController::class, 'orders'])->name('orders.index');
     Route::get('/orders-history', [AdminOrderController::class, 'orderHistory'])->name('orders.history');
@@ -103,13 +109,13 @@ Route::name('admin.')->prefix('admin')->middleware('role:admin')->group(function
     Route::delete('/discounts/{book}', [DiscountController::class, 'destroy'])->name('discounts.destroy');
     Route::delete('/discounts', [DiscountController::class, 'discountDeleteAll'])->name('discounts.destroyAll');
     //Interface
-    Route::get('/interfaces', [\App\Http\Controllers\Admin\InterfaceController::class, 'index'])->name('interfaces.index');
-    Route::post('/interfaces/slides', [\App\Http\Controllers\Admin\InterfaceController::class, 'store'])->name('interfaces.slides.store');
-    Route::delete('/interfaces/slides/{slide}', [\App\Http\Controllers\Admin\InterfaceController::class, 'destroy'])->name('interfaces.slides.destroy');
-    //ADRESSES
+    Route::get('/interfaces', [InterfaceController::class, 'index'])->name('interfaces.index');
+    Route::post('/interfaces/slides', [InterfaceController::class, 'store'])->name('interfaces.slides.store');
+    Route::delete('/interfaces/slides/{slide}', [InterfaceController::class, 'destroy'])->name('interfaces.slides.destroy');
+    //ADDRESSED
     Route::resource('addresses', AddressController::class)->except('show', 'edit', 'create');
     Route::get('/addresses-deleted', [AddressController::class, 'addressesDeleted'])->name('addresses.deleted');
-    Route::put('/addresses-deleted/{address}/restore', [AddressController::class, 'addressesRestore'])->name('addresses.restore')->withTrashed();;
+    Route::put('/addresses-deleted/{address}/restore', [AddressController::class, 'addressesRestore'])->name('addresses.restore')->withTrashed();
 });
 
 

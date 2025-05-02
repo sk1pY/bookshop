@@ -1,4 +1,3 @@
-document.addEventListener("DOMContentLoaded", function () {
     document.querySelectorAll('.bookmark-button').forEach(function (button) {
         button.addEventListener('click', function () {
             let bookmarkId = this.dataset.bookmarkId;
@@ -22,7 +21,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 .catch(error => console.error('Ошибка:', error));
         });
     });
-});
+
 
 
 
