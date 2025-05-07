@@ -9,7 +9,7 @@
 </head>
 <body>
 <h1>Register</h1>
-<form method="POST" action="{{ route('register') }}">
+<form action="{{ route('register') }}" method="POST" >
     @csrf
     <div>
         <label for="name">Name:</label>

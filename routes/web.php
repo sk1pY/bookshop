@@ -26,7 +26,10 @@ use App\Http\Controllers\BookController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CommentaryController;
 use App\Http\Controllers\SearchController;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
+
+
 
 //SEARCH
 Route::get('/search', [SearchController::class, 'search'])->name('live.search');
@@ -44,7 +47,7 @@ Route::get('/categories/{category:slug}',[CategoryController::class,'show'])->na
 Route::get('/categories-special/{slug}',[CategoryController::class,'specialCategories'])->whereIn('slug', ['bestsellers', 'sales', 'newest'])->name('specialCategories.show');
 
 //------------------------------------------------BASKET------------------------------------------------
-Route::prefix('basket')->group(function () {
+Route::prefix('basket')->middleware('verified')->group(function () {
     Route::get('/', [BasketController::class, 'index'])->name('basket.index');
     Route::post('/make-order', [BasketController::class, 'makeOrder'])->name('basket.order');
     Route::post('/basket-items/book/{book}/increase', [BasketItemController::class, 'increase'])->name('basket-item.increase');
@@ -54,7 +57,7 @@ Route::prefix('basket')->group(function () {
 
 
 //------------------------------------------------HOME PROFILE------------------------------------------------
-Route::name('home.')->prefix('home')->middleware('role:user|admin')->group(function () {
+Route::name('home.')->prefix('home')->middleware('role:user|admin','verified',)->group(function () {
     Route::get('/', [HomeController::class, 'index'])->name('index');
     Route::get('/bookmarks', [HomeBookmarkController::class, 'index'])->name('bookmarks.index');
     Route::post('/bookmarks', [HomeBookmarkController::class, 'store'])->name('bookmarks.store');

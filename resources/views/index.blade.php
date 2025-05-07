@@ -33,36 +33,24 @@
                 </button>
             </div>
             {{--слайдшоу--}}
-            {{--FILTER--}}
-            <div class="my-4">
-                <form action="{{ route('books.index') }}" id="filterForm" method="get">
-                    <select class="form-select w-25" name="filter" onchange="this.form.submit()">
-                        <option value="">Выберите фильтр</option>
-                        @foreach(['cheap' => 'Сначала дешевые', 'expensive' => 'Сначала дорогие', 'rating' => 'По рейтингу'] as $key => $value)
-                            <option
-                                value="{{ $key }}" {{ request('filter') === $key ? 'selected' : '' }}>{{ $value }}</option>
-                        @endforeach
-                    </select>
-                </form>
-            </div>
-            {{--FILTER--}}
+            @include('partials.filter')
             {{--BOOKS--}}
-                <div class="row row-cols-2 row-cols-md-4 row-cols-lg-5 g-4" id="search-cards">
+            <div class="row row-cols-2 row-cols-md-4 row-cols-lg-5 g-4" id="search-cards">
                 @forelse($books as $book)
-                        <div class="col">
-                            @include('partials.book-card')
-                        </div>
-                    @empty
-                        <div class="col">
-                            <h3>Ничего не найдено</h3>
-                        </div>
-                    @endforelse
-                </div>
-
-                {{-- Pagination --}}
-                <div class="mt-4">
-                    {{ $books->links('pagination::bootstrap-5') }}
-                </div>
+                    <div class="col">
+                        @include('partials.book-card')
+                    </div>
+                @empty
+                    <div class="col">
+                        <h3>Ничего не найдено</h3>
+                    </div>
+                @endforelse
+            </div>
+            {{--BOOKS--}}
+            {{-- Pagination --}}
+            <div class="mt-4">
+                {{ $books->links('pagination::bootstrap-5') }}
+            </div>
 
         </div>
 

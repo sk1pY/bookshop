@@ -1,24 +1,5 @@
 @extends('layouts.app')
 @section('content')
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
-    @if ( session('error') )
-        <div class="alert alert-danger d-flex px-4">
-            <div>{{ session('error') }}</div>
-        </div>
-    @endif
-    @if ( session('success') )
-        <div class="alert alert-success d-flex px-4">
-            <div>{{ session('success') }}</div>
-        </div>
-    @endif
     <div class="row">
         <div class="col-6 rounded-5 bg-white ms-4 p-4 table-responsive">
 
@@ -30,11 +11,6 @@
                         <td class="align-middle">
 
                             <div class="d-flex w-auto align-items-center">
-                                <div class="form-check" style="transform:scale(1.3);">
-                                    <input class="form-check-input" type="checkbox" id="inlineCheckbox1"
-                                           value="{{ json_encode($book) }}" checked >
-                                    <label class="form-check-label" for="inlineCheckbox1"></label>
-                                </div>
                                 <img style="width: 80px" src="{{ Storage::url('booksImages/' .$book->image) }}"
                                      alt="">
                                 <div class="ms-3">
@@ -134,35 +110,4 @@
             </div>
         @endauth
     </div>
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const selectedBooks = [];
-
-            document.querySelectorAll('.form-check-input').forEach(checkbox => {
-                if (checkbox.checked) {
-                    selectedBooks.push(JSON.parse(checkbox.value));
-                }
-
-                checkbox.addEventListener('change', function () {
-                    const book = JSON.parse(this.value);
-
-                    if (this.checked) {
-                        selectedBooks.push(book);
-                    } else {
-                        const index = selectedBooks.findIndex(item => item.id === book.id);
-                        if (index > -1) {
-                            selectedBooks.splice(index, 1);
-                        }
-                    }
-                    console.log(selectedBooks);
-                });
-            });
-
-            document.getElementById('bookForm').addEventListener('submit', function () {
-                document.getElementById('basket').value = JSON.stringify(selectedBooks);
-            });
-        });
-
-
-    </script>
 @endsection

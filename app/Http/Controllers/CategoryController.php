@@ -13,19 +13,31 @@ class CategoryController extends Controller
 
     public function specialCategories(Request $request, $slug)
     {
-        $query = Book::query();
-        $bookmarkTaskUser = Auth::check() ?
-            Bookmark::where('user_id', Auth::id())->pluck('book_id')->toArray() : null;
+        $bookQuery = Book::query();
+        if ($request->filled('filter')) {
+            switch ($request->input('filter')) {
+                case 'cheap':
+                    $bookQuery->orderBy('price');
+                    break;
+                case 'expensive':
+                    $bookQuery->orderBy('price', 'desc');
+                    break;
+                case 'rating':
+                    $bookQuery->orderBy('avgRating', 'desc');
+            }
+        }
 
         match ($slug) {
-            'bestsellers' => $query->bestsellers(),
-            'newest' => $query->newest(),
-            'sales' => $query->sales(),
+            'bestsellers' => $bookQuery->bestsellers(),
+            'newest' => $bookQuery->newest(),
+            'sales' => $bookQuery->sales(),
             default => null
         };
 
-        $books = Book::filters($request)->paginate(10);
-        return view($slug, compact('books', 'bookmarkTaskUser'));
+
+
+        $books = $bookQuery->paginate(10);
+        return view($slug, compact('books'));
     }
 
     public function show(Request $request, Category $category)

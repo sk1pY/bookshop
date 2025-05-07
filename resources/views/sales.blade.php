@@ -1,26 +1,19 @@
 @extends('layouts.app')
 @section('content')
     <h1>Книги на акции</h1>
-    {{--FILTER--}}
-    <div class="my-4">
-        <form  id="filterForm" method="get">
+    @include('partials.filter')
 
-            <select class="form-select w-25" id="rating" name="filter" form="filterForm"
-                    onchange="this.form.submit()">
-
-                <option value="">Выберите фильтр</option>
-                <option value="cheap" {{ request('filter') === 'cheap' ? 'selected' : '' }} >Сначала дешевые
-                </option>
-                <option value="expensive" {{ request('filter') === 'expensive' ? 'selected' : '' }}>Сначала
-                    дорогие
-                </option>
-                <option value="rating" {{ request('filter') === 'rating' ? 'selected' : '' }}>По рейтингу
-                </option>
-            </select></form>
+    {{--BOOKS--}}
+    <div class="row row-cols-2 row-cols-md-4 row-cols-lg-5 g-4" id="search-cards">
+        @forelse($books as $book)
+            <div class="col">
+                @include('partials.book-card')
+            </div>
+        @empty
+            <div class="col">
+                <h3>Ничего не найдено</h3>
+            </div>
+        @endforelse
     </div>
-    {{--FILTER--}}
     {{--BOOKS--}}
-    @include('partials.book-card')
-    {{--BOOKS--}}
-
 @endsection('content')

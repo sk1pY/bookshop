@@ -35,7 +35,7 @@
 </style>
 <body class="container " style="max-width: 1200px">
 @include('partials.nav')
-<div  >
+<div>
     @include('partials.alert.error')
     @include('partials.alert.success')
     @yield('content')
