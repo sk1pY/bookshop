@@ -33,18 +33,16 @@ class OrderFactory extends Factory
     public function configure()
     {
         return $this->afterCreating(function (Order $order) {
-            $books = Book::inRandomOrder()->limit(rand(1, 5))->get();
+            $books = Book::inRandomOrder()->limit(random_int(1, 5))->get();
             $orderPrice = 0;
             foreach ($books as $book) {
-                $quantity = rand(1, 3);
-
+                $quantity = random_int(1, 3);
                OrderItem::create([
                     'order_id' => $order->id,
                     'book_id' => $book->id,
                     'quantity' => $quantity,
                 ]);
                 $book->increment('numberOfPurchased', $quantity);;
-
                 $orderPrice += $quantity * $book->price;
             }
             $order->update(['price' => $orderPrice]);

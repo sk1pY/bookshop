@@ -16,18 +16,16 @@ class BasketController extends Controller
     {
         $basket = app('basket');
         $total_price = 0;
-        $books_session = collect(session()->get('books', []));
+        $books_auth = collect();
+        $books_session = collect(session()->get('books', collect()));
         $books = collect(session()->get('books', []));
-        $books_auth = [];
 
         // ЕСЛИ ЮЗЕР НЕ АВТОРИЗОВАН, КНИГИ БЕРУТСЯ ИЗ СЕССИИ
         if (session()->has('books')) {
-            $books = collect(session()->get('books', []));
-            $total_price = $books->sum(function ($item) {
+            $total_price = $books_session->sum(function ($item) {
                 return $item->quantity * $item->price;
             });
         }
-
         // ЕСЛИ ЮЗЕР АВТОРИЗОВАН
         if (Auth::check()) {
             $books_auth = $basket->basket_items()
@@ -38,34 +36,36 @@ class BasketController extends Controller
                     $book->quantity = $item->quantity;
                     return $book;
                 });
-
-
-            // группировка по айди и не больше стока колво книг
             $books = $books_session->merge($books_auth)
+                //групирует дубликаты из сессии и auth
                 ->groupBy('id')
-                ->map(function ($group) {
-                    $firstBook = $group->first();
-                    $firstBook->quantity = min($group->sum('quantity'), $firstBook->stock);
-                    return $firstBook;
-                })
-                ->values();
-            $books->each(function ($book) use ($basket) {
-                $basketitem = BasketItem::where(['book_id' => $book->id, 'basket_id' => $basket->id])->first();
+                ->map(function ($group_item_book) {
+                    $book = $group_item_book->first();
+                    $book->quantity = min($group_item_book->sum('quantity'), $book->stock);
+                    return $book;
+                });
 
-                if ($basketitem) {
+            $books->each(function ($book) use ($basket) {
+                $basketitem = BasketItem::firstOrCreate(
+                    [   'book_id' => $book->id,
+                        'basket_id' => $basket->id
+                    ],
+                        ['quantity' => $book->quantity]);
                     $basketitem->update([
                         'quantity' => $book->quantity,
                     ]);
                     $basketitem->save();
-                }
+
             });
             $total_price = $books->sum(function ($item) {
                 return $item->quantity * $item->price;
             });
+
             session()->forget('books');
+
         }
 
-        $addresses = Address::all();
+        $addresses = Address::latest()->get();
 
         return view('basket', compact('books', 'total_price', 'addresses'));
     }
@@ -80,8 +80,9 @@ class BasketController extends Controller
             'phone.regex' => 'Номер телефона должен начинаться с +375 и содержать 7 цифр после кода оператора. 25|29|33|44'
         ]);
 
-        $books = json_decode($request->input('basket'));
         $basket = app('basket');
+        $user = Auth::user();
+        $books = $basket->basket_items()->get();
 
         if ($basket->price == 0) {
             return redirect()->route('basket.index')->with('error', 'Корзина пуста');
@@ -89,7 +90,8 @@ class BasketController extends Controller
             return redirect()->route('basket.index')->with('error', 'Выберите книги для покупки');
         }
 
-        Auth::user()->update($validated);
+        $user->update($validated);
+
         $order_user = Order::create([
             'user_id' => Auth::id(),
             'price' => $request['total_price'],
@@ -99,7 +101,7 @@ class BasketController extends Controller
 
         foreach ($books as $basket_item) {
             OrderItem::create([
-                'book_id' => $basket_item->id,
+                'book_id' => $basket_item->book_id,
                 'quantity' => $basket_item->quantity,
                 'order_id' => $order_user->id,
             ]);
@@ -110,9 +112,7 @@ class BasketController extends Controller
             $book->stock -= $item->quantity;
             $book->save();
         });
-
         $basket->delete();
-        $request->session()->forget('books');
         return to_route('basket.index')->with('success', 'Заказ успешно оформлен');
     }
 

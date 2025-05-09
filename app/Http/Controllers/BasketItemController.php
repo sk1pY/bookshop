@@ -22,17 +22,17 @@ class BasketItemController extends Controller
         $basket = app('basket');
         $books = collect(session()->get('books', []));
         $bookId = $book->id;
+        // ЕСЛИ АВТОРИЗОВАН
         if (Auth::check()) {
             if (session()->has('books')) {
-
+                //ПЕРЕБОР КНИГ ИЗ  СЕССИИ
                 $books->each(function ($item) use ($basket) {
                     $stock = Book::where(['id' => $item->id])->first()->stock;
-
                     $basket_item_book = BasketItem::where(['book_id' => $item->id, 'basket_id' => $basket->id])->first();
 
                     if (!$basket_item_book) {
                         BasketItem::create(
-                            ['book_id' => $item->id,
+                            [   'book_id' => $item->id,
                                 'basket_id' => $basket->id,
                                 'quantity' => $item->quantity
                             ]);
@@ -51,7 +51,7 @@ class BasketItemController extends Controller
             $stock = Book::where(['id' => $book->id])->first()->stock;
             if (!$basket_item_book) {
                 $basket_item_book = BasketItem::create(
-                    [   'book_id' => $bookId,
+                    ['book_id' => $bookId,
                         'basket_id' => $basket->id,
                         'quantity' => 1
                     ]
@@ -69,7 +69,9 @@ class BasketItemController extends Controller
             } elseif ($basket_item_book->quantity == $stock) {
                 return to_route('basket.index')->with('error', 'Выбрано максимальное количество книг');
             }
-        } else {
+        }
+        // ЕСЛИ НЕ АВТОРИЗОВАН
+        else {
             $books = collect(session()->get('books', []));
             $book_exist = false;
             $stock = false;

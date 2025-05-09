@@ -66,10 +66,10 @@
                     <form action="{{ route('basket-item.increase', $book) }}" method="post">
                         @csrf
                         <input type="text" hidden name="book_id" value="{{ $book->id }}">
-                        <button style="width: 350px; height: 70px;"
+                        <button style="width: 350px; height: 55px;"
                                 class="btn btn-danger d-flex justify-content-center align-items-center">
 
-                            <span class="fw-bold fs-4"><i class="bi bi-cart-fill me-2"></i>ДОБАВИТЬ В КОРЗИНУ</span>
+                            <span class="fw-bold fs-5"><i class="bi bi-cart-fill me-2"></i>ДОБАВИТЬ В КОРЗИНУ</span>
                         </button>
                     </form>
                 @else

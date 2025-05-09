@@ -14,12 +14,6 @@
             @endforeach
         </ul>
     @endif
-    @if (session('status'))
-        <div class="mb-4 font-medium text-sm text-green-600">
-            {{ session('status') }}
-        </div>
-    @endif
-
     <div class="row ">
         <div class="col-3 border rounded-5 bg-white p-4 ms-2">
             <div class="d-flex align-items-center">
@@ -94,8 +88,21 @@
                 </div>
             </div>
             <div class="d-flex flex-column">
-                <p class="mb-1 text-body-tertiary">{{ $user->email ?:'не указана' }}</p>
-                <p class="mb-0 text-body-tertiary">{{ $user->phone ?: 'не указан' }}</p>
+                <p class="mb-1 text-body-tertiary">{{ $user->email ??'не указана' }}</p>
+                @if($user->email_verified_at)
+
+                    <span class="badge text-bg-success">Email подтвержден</span>
+                @else
+                    <span class="badge text-bg-warning">Email не подтвержден
+                        <form method="POST" action="{{ route('verification.send') }}">
+                                @csrf
+                                  <button type="submit"
+                                          class="btn btn-sm bg-transparent fw-bold text-decoration-underline">Отправить письмо</button>
+                         </form>
+                    </span>
+                @endif
+
+                {{--                <p class="mb-0 text-body-tertiary">{{ $user->phone ?? 'телефон не указан' }}</p>--}}
             </div>
 
         </div>

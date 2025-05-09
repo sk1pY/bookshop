@@ -8,15 +8,14 @@ use App\Models\Book;
 use App\Models\Bookmark;
 use App\Models\Category;
 use App\Models\Order;
-use App\Models\OrderItem;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use App\Listeners\MergeBasket;
 
 class AppServiceProvider extends ServiceProvider
 {

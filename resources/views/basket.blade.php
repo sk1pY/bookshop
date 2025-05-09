@@ -37,7 +37,7 @@
                                 </form>
 
                             </div>
-{{--                            Цена: {{ $book ->price * $book-> quantity  }}--}}
+                            {{--                            Цена: {{ $book ->price * $book-> quantity  }}--}}
                         </td>
                         <td class="align-middle">
                             <form action="{{ route('basket-item.deleteAll', $book)}}" method="post"
@@ -70,7 +70,15 @@
         @auth
 
             <div class="col">
+                @if(!Auth::user()->email_verified_at)
+                    <span class="badge text-bg-warning p-3">Email не подтвержден
 
+                            <form method="POST" action="{{ route('verification.send') }}">
+                                @csrf
+                                <button type="submit"
+                                        class="btn btn-sm bg-transparent fw-bold text-decoration-underline">Отправить письмо</button>
+                            </form>
+                    @endif
                 <div class="border rounded-5 bg-white ms-4 p-4">
                     <form id="bookForm" class="d-flex flex-column" action="{{ route('basket.order') }}" method="post">
                         @csrf
@@ -84,25 +92,22 @@
                                value="{{ Auth::user()->surname ?? old('surname') }}">
                         <label for="phone">Телефон</label>
                         <input class="mb-3 form-control" id="phone" name="phone" type="text"
-                               value="{{ Auth::user()->phone?Auth::user()->phone:'+375'}}" maxlength="13">
+                               value="{{ Auth::user()->phone?? '+375'}}" maxlength="13">
                         <label for="address">Самовывоз</label>
                         <select name="address" class="form-select mb-3">
                             @foreach($addresses as $address)
                                 <option value="{{$address->id}}">{{$address->name}}</option>
-
                             @endforeach
                         </select>
-                        <input class="btn btn-danger w-25 w-auto" type="submit" value="Сделать заказ">
+
+                        <input class="btn btn-danger w-25 w-auto {{!Auth::user()->email_verified_at?'disabled':''}}" type="submit" value="Сделать заказ">
                     </form>
+
                 </div>
                 <div class="border rounded-5 bg-white ms-4 p-4 mt-3 fs-5">
                     <div class="d-flex justify-content-between">
                         <div>Итого</div>
                         <div>{{ $total_price }}р.</div>
-                    </div>
-                    <div class="d-flex justify-content-between">
-                        <div>Доставка</div>
-                        <div>0р.</div>
                     </div>
                 </div>
 

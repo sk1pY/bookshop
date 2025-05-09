@@ -36,6 +36,7 @@
 <body class="container " style="max-width: 1200px">
 @include('partials.nav')
 <div>
+    @include('partials.alert.validation')
     @include('partials.alert.error')
     @include('partials.alert.success')
     @yield('content')
