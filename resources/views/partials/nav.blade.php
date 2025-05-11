@@ -120,16 +120,16 @@
                 </li>
             @endauth
             <li class="nav-item">
-                <a class="nav-link d-flex flex-column align-items-center"
-                   href="{{ route('basket.index') }}">
-                    <i class="bi bi-cart fs-5  d-flex p-0 m-0">
+                <a href="{{ route('basket.index') }}" type="button"
+                   class="nav-link d-flex flex-column align-items-center ">
+                    <i class="bi bi-cart fs-5 d-flex justify-content-center"></i>
+                    <div class="d-flex ">
+                        <span class="">Корзина</span>
                         @auth
-                            <span class="badge rounded-circle text-bg-danger text-center"
-                                  style="font-size: 1rem; width: 25px; height: 25px; display: flex; align-items: center; justify-content: center;">
-        {{ $bookInBasket }}</span>
+                            <span class="badge text-bg-danger ms-1 align-content-center">{{ $bookInBasket }}</span>
                         @endauth
-                    </i>
-                    <span>Корзина</span>
+                    </div>
+
                 </a>
             </li>
             @guest

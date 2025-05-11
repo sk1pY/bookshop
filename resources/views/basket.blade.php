@@ -22,22 +22,22 @@
                         </td>
                         <td class="align-middle">
                             <div class="d-flex align-items-center">
-                                <form action="{{ route('basket-item.decrease',$book) }}" method="post"
-                                      style="margin-right: 10px;">
-                                    @csrf
-                                    @method('delete')
+                                <div class="decrease-button"
+                                     data-url="{{ route('basket-item.decrease', $book) }}"
+                                     data-book-id="{{$book->id}}">
                                     <button class="btn btn-light">-</button>
-                                </form>
-
-                                <div class="  d-flex text-center ">{{ $book->quantity }}</div>
-                                <form action="{{ route('basket-item.increase', $book) }}" method="post"
-                                      style="margin-left: 10px;">
-                                    @csrf
-                                    <button class="btn btn-light">+</button>
-                                </form>
-
+                                </div>
+                                <div class="basket-item-count d-flex text-center"
+                                     data-book-id="{{$book->id}}">{{ $book->quantity }}</div>
+                                <div class="increase-button"
+                                     data-url="{{ route('basket-item.increase', $book) }}"
+                                     data-book-id="{{$book->id}}">
+                                    <button class=" btn btn-light">+</button>
+                                </div>
+                                <span class="ms-2 fw-bold text fs-6"
+                                      data-book-id="{{$book->id}}">
+                                    {{ $book ->price * $book-> quantity  }} р.</span>
                             </div>
-                            {{--                            Цена: {{ $book ->price * $book-> quantity  }}--}}
                         </td>
                         <td class="align-middle">
                             <form action="{{ route('basket-item.deleteAll', $book)}}" method="post"
@@ -71,14 +71,15 @@
 
             <div class="col">
                 @if(!Auth::user()->email_verified_at)
-                    <span class="badge text-bg-warning p-3">Email не подтвержден
+                    <span class="badge text-bg-warning p-3">Email не подтвержден</span>
 
-                            <form method="POST" action="{{ route('verification.send') }}">
-                                @csrf
-                                <button type="submit"
-                                        class="btn btn-sm bg-transparent fw-bold text-decoration-underline">Отправить письмо</button>
-                            </form>
-                    @endif
+                    <form method="POST" action="{{ route('verification.send') }}">
+                        @csrf
+                        <button type="submit"
+                                class="btn btn-sm bg-transparent fw-bold text-decoration-underline">Отправить письмо
+                        </button>
+                    </form>
+                @endif
                 <div class="border rounded-5 bg-white ms-4 p-4">
                     <form id="bookForm" class="d-flex flex-column" action="{{ route('basket.order') }}" method="post">
                         @csrf
@@ -100,14 +101,16 @@
                             @endforeach
                         </select>
 
-                        <input class="btn btn-danger w-25 w-auto {{!Auth::user()->email_verified_at?'disabled':''}}" type="submit" value="Сделать заказ">
+
+                        <input class="btn btn-danger w-25 w-auto {{!Auth::user()->email_verified_at?'disabled':''}}"
+                               type="submit" value="Сделать заказ">
                     </form>
 
                 </div>
                 <div class="border rounded-5 bg-white ms-4 p-4 mt-3 fs-5">
                     <div class="d-flex justify-content-between">
                         <div>Итого</div>
-                        <div>{{ $total_price }}р.</div>
+                        <div class="basket_price">{{ $total_price }}р.</div>
                     </div>
                 </div>
 

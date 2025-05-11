@@ -9,6 +9,7 @@ if (window.location.pathname.startsWith('/admin')) {
 } else {
     import ("./components/bookmark.js")
     import ("./components/search.js")
+    import("./components/increase_decrease_book_basket.js")
 }
 
 

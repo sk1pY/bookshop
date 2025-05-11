@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Author;
 use App\Models\Basket;
 use App\Models\Basket_items;
+use App\Models\BasketItem;
 use App\Models\Book;
 use App\Models\Bookmark;
 use App\Models\Category;
@@ -25,23 +26,37 @@ class BookController extends Controller
     public function index(Request $request)
     {
         $slides = InterfaceSite::where('type', 'slide')->get();
-        $bookQuery = Book::latest();
+        $basket = app('basket');
+
+
+        $books = Book::latest();
 
         if ($request->filled('filter')) {
             switch ($request->input('filter')) {
                 case 'cheap':
-                    $bookQuery->orderBy('price');
+                    $books->orderBy('price');
                     break;
                 case 'expensive':
-                    $bookQuery->orderBy('price', 'desc');
+                    $books->orderBy('price', 'desc');
                     break;
                 case 'rating':
-                    $bookQuery->orderBy('avgRating', 'desc');
+                    $books->orderBy('avgRating', 'desc');
             }
         }
-        $books = $bookQuery->paginate(10);
+        $books = $books->get();
 
-        return view('index', compact('books', 'slides'));
+        $books = $books->map(function ($book) {
+            $basketitem = BasketItem::where('book_id', $book->id)->first();
+            if (BasketItem::where('book_id', $book->id)->exists()) {
+                $book->quantity = $basketitem->quantity;
+            }
+            return $book;
+        });
+
+        $booksArrayIds = Book::all()->pluck('id')->toArray();
+        $bookBasket = BasketItem::wherein('book_id', $booksArrayIds)->pluck('book_id')->toarray();
+
+        return view('index', compact('books', 'slides', 'bookBasket'));
     }
 
 
