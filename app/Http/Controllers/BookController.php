@@ -53,10 +53,7 @@ class BookController extends Controller
             return $book;
         });
 
-        $booksArrayIds = Book::all()->pluck('id')->toArray();
-        $bookBasket = BasketItem::wherein('book_id', $booksArrayIds)->pluck('book_id')->toarray();
-
-        return view('index', compact('books', 'slides', 'bookBasket'));
+        return view('index', compact('books', 'slides'));
     }
 
 

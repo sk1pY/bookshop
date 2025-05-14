@@ -50,8 +50,8 @@ Route::get('/categories-special/{slug}',[CategoryController::class,'specialCateg
 Route::prefix('basket')->group(function () {
     Route::get('/', [BasketController::class, 'index'])->name('basket.index');
     Route::post('/make-order', [BasketController::class, 'makeOrder'])->name('basket.order');
-    Route::post('/basket-items/book/{book}/increase', [BasketItemController::class, 'increase'])->name('basket-item.increase');
-    Route::post('/basket-items/book/{book}/decrease', [BasketItemController::class, 'decrease'])->name('basket-item.decrease');
+    Route::post('/basket-items/book/increase', [BasketItemController::class, 'increase'])->name('basket-item.increase');
+    Route::post('/basket-items/book/decrease', [BasketItemController::class, 'decrease'])->name('basket-item.decrease');
     Route::delete('/basket-items/book/{book}', [BasketItemController::class, 'deleteAllByBook'])->name('basket-item.deleteAll');
 });
 

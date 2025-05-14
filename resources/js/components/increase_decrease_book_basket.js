@@ -1,37 +1,51 @@
 document.addEventListener('click', function (e) {
-    if (e.target.closest('.increase-button') || e.target.closest('.decrease-button')) {
-        const button = e.target.closest('.increase-button') || e.target.closest('.decrease-button');
+    if (e.target.closest('.increase-button') || e.target.closest('.decrease-button') || e.target.closest('.in-basket-button')) {
+        const button = e.target.closest('.increase-button, .decrease-button, .in-basket-button');
         const url = button.dataset.url;
         const bookId = button.dataset.bookId;
         const general = button.closest('.increase_decrease_buttons');
+        const inputQuantityBook = general.querySelector('.basket_item_count');
 
-        const buttonIncrease = general.querySelector('.button_increase');
-        const buttonDecrease = general.querySelector('.button_decrease');
-        const inputQuntityBook = general.querySelector('.basket_item_count');
+        if (window.location.pathname === '/basket') {
+            const in_basket_button = general.querySelector('.in-basket-button');
+            const buttonsIncDec = general.querySelector('.button-inc-dec');
+        }
 
         axios.post(url, {book_id: bookId})
             .then(response => {
                 if (response.data.success) {
                     const basketPrice = document.querySelector('.basket_price');
-                    buttonIncrease.classList.remove('bg-danger', 'rounded-pill' ,'btn',
-                        'd-flex', 'justify-content-center', 'align-items-center', 'text-white');
+                    const quantity = response.data.quantity;
+                    const basketCount = document.getElementById('basket-count');
+                    const bookfullPrice = document.getElementById('full-price-book')
+                    const bookInBasketQuantity = response.data.bookInBasketQuantity;
+                    basketCount.textContent = bookInBasketQuantity;
 
-                    buttonIncrease.textContent = '+';
+                    if (window.location.pathname !== '/basket') {
+                        const in_basket_button = general.querySelector('.in-basket-button');
+                        const buttonsIncDec = general.querySelector('.button-inc-dec');
 
+                        if (quantity === 0) {
+                            in_basket_button.classList.remove('d-none');
+                            buttonsIncDec.classList.add('d-none');
+                        } else {
+                            in_basket_button.classList.add('d-none');
+                            buttonsIncDec.classList.remove('d-none');
+                        }
+                    }else{
+                        if(quantity === 0){
+                            const tr = button.closest('tr');
+                            tr.remove();
 
-                    buttonDecrease.style.display = '';
-                    buttonDecrease.textContent = '-';
-                    inputQuntityBook.textContent = response.data.quantity;
-                    if(basketPrice){
+                        }
+                    }
+                    inputQuantityBook.textContent = quantity;
+
+                    if (basketPrice) {
+                        console.log(response.data.basketPrice);
                         basketPrice.textContent = response.data.basketPrice;
                     }
-                    if(!response.data.quantity){
-                        buttonDecrease.style.display = 'none';
-
-                        buttonIncrease.textContent = 'в корзину';
-                        buttonIncrease.classList.add('bg-danger', 'rounded-pill', 'btn', 'd-flex', 'justify-content-center', 'align-items-center');
-
-                    }
+                    console.log(response.data.message);
                 } else {
 
                     const message = document.getElementById('message');

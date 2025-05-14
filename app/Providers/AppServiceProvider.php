@@ -15,8 +15,6 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Gate;
-use App\Listeners\MergeBasket;
-
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -46,8 +44,8 @@ class AppServiceProvider extends ServiceProvider
         });
 
         Carbon::setLocale('ru');
-        Route::pattern('id','[0-9]+');
-        Route::pattern('','[0-9]+');
+        Route::pattern('id', '[0-9]+');
+        Route::pattern('', '[0-9]+');
         View::composer('admin.layouts.index', function ($view) {
             $countOrders = Order::whereIn('status', ['Новый заказ', 'Готов к выдаче'])->count();
 
@@ -55,39 +53,60 @@ class AppServiceProvider extends ServiceProvider
         });
 
         View::composer('*', function ($view) {
+
             if (Auth::guard()->check()) {
-                $basket = Basket::where(['user_id' => Auth::id()])->first();
-                if (!$basket) {
-                    $bookInBasket = 0;
-                } else {
-                    $bookInBasket = BasketItem::where(['basket_id' => $basket->id])->pluck('quantity')->toArray();
-                    $bookInBasket = array_sum($bookInBasket);
+
+                $books = collect(session()->get('books', []));
+                $bookInBasketQuantity_session = $books->pluck('quantity')->sum();
+
+                $basket = app('basket');
+                $basketPrice = $basket->price;
+                $booksInBasketArray = $basket->basket_items()->pluck('book_id')->toarray();
+                $bookInBasketQuantity = $bookInBasketQuantity_session;
+                if ($basket->basket_items()) {
+                    $bookInBasketQuantity += $basket->basket_items()->pluck('quantity')->sum();
                 }
 
-                $view->with('bookInBasket', $bookInBasket);
+                $view->with([
+                    'bookInBasketQuantity' => $bookInBasketQuantity,
+                    'booksInBasketArray' => $booksInBasketArray,
+                    'basketPrice' => $basketPrice,
+                ]);
+            } else {
+                $books = collect(session()->get('books', []));
+                $booksInBasketArray = $books->pluck('id')->toArray();
+                $bookInBasketQuantity = $books->pluck('quantity')->sum();
+                $view->with([
+                    'booksInBasketArray' => $booksInBasketArray,
+                    'bookInBasketQuantity' => $bookInBasketQuantity,
+                ]);
+
             }
         });
+
+
+
 
         View::composer('*', function ($view) {
             if (Auth::guard()->check()) {
                 $bookmarkBookUser = Bookmark::where('user_id', Auth::id())->pluck('book_id')->toArray();
                 $countOrdersforUser = Auth::user()->orders()->where('status', 'Готов к выдаче')->count();
-            }else{
+            } else {
                 $bookmarkBookUser = [];
                 $countOrdersforUser = 0;
             }
-            $view->with(['countOrdersforUser'=>$countOrdersforUser,'bookmarkBookUser'=>$bookmarkBookUser]);
+            $view->with(['countOrdersforUser' => $countOrdersforUser, 'bookmarkBookUser' => $bookmarkBookUser]);
 
         });
 
         View::composer('partials.nav', function ($view) {
             if (Auth::guard()->check()) {
-                $notifOrders = Auth::user()->orders()->where('status','Готов к выдаче')->pluck('id')->all();
+                $notifOrders = Auth::user()->orders()->where('status', 'Готов к выдаче')->pluck('id')->all();
                 $view->with('notifOrders', $notifOrders);
             }
             $categories = Category::all();
 
-            $view ->with('categories', $categories);
+            $view->with('categories', $categories);
 
         });
     }

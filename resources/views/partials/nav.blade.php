@@ -1,4 +1,4 @@
-<nav class=" navbar navbar-expand-lg bg-white">
+<nav class="sticky-top navbar navbar-expand-lg bg-white">
 
     <a class="navbar-brand fw-bold navbar-brand-custom" href="{{ route('books.index') }}">
         #BookShop <i class="fa-solid fa-book"></i>
@@ -119,37 +119,37 @@
                     </a>
                 </li>
             @endauth
+                @guest
+                    <li class="nav-item">
+                        <a class="nav-link d-flex flex-column align-items-center"
+                           href="{{ route('login') }}">
+                            <i class="bi bi-box-arrow-in-right fs-5 d-flex justify-content-center"></i>
+
+                            <span>Войти</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link d-flex flex-column align-items-center"
+                           href="{{ route('register') }}">
+                            <i class="bi bi-journal-plus fs-5 d-flex justify-content-center"></i>
+
+                            <span>Регистрация</span>
+                        </a>
+                    </li>
+                @endguest
             <li class="nav-item">
                 <a href="{{ route('basket.index') }}" type="button"
                    class="nav-link d-flex flex-column align-items-center ">
                     <i class="bi bi-cart fs-5 d-flex justify-content-center"></i>
                     <div class="d-flex ">
                         <span class="">Корзина</span>
-                        @auth
-                            <span class="badge text-bg-danger ms-1 align-content-center">{{ $bookInBasket }}</span>
-                        @endauth
+                            <span id="basket-count"
+                                  class="badge text-bg-danger ms-1 align-content-center">{{ $bookInBasketQuantity }}</span>
                     </div>
 
                 </a>
             </li>
-            @guest
-                <li class="nav-item">
-                    <a class="nav-link d-flex flex-column align-items-center"
-                       href="{{ route('login') }}">
-                        <i class="bi bi-box-arrow-in-right fs-3 d-flex  p-0 m-0"></i>
 
-                        <span>Войти</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link d-flex flex-column align-items-center"
-                       href="{{ route('register') }}">
-                        <i class="bi bi-journal-plus fs-3 d-flex  p-0 m-0"></i>
-
-                        <span>Регистрация</span>
-                    </a>
-                </li>
-            @endguest
 
         </ul>
 

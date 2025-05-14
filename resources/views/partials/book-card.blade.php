@@ -34,7 +34,7 @@
                         </span>
         </div>
     </a>
-    <div class="card-body p-0 ps-3 d-flex flex-column">
+    <div class="card-body d-flex flex-column">
         <div style="font-size: 0.9rem">
             @if($book->category)
                 <a href="{{ route('categories.show', $book->category->slug) }}">
@@ -58,27 +58,38 @@
         </div>
 
         @if($book->stock > 0)
-            <div class=" rounded-pill increase_decrease_buttons d-flex justify-content-center align-items-center mt-auto"
-                 style="width: 200px;">
-                <div class="decrease-button"
-                     data-url="{{ route('basket-item.decrease', $book) }}"
-                     data-book-id="{{$book->id}}">
-                    <button
-                        class="button_decrease btn btn-light
-                        {{!in_array($book->id, $bookBasket, true)?'d-none':''}}">
-                        {{in_array($book->id, $bookBasket, true)?'-':''}}</button>
-                </div>
-                <div class="basket_item_count d-flex text-center text-dark"
-                     data-book-id="{{$book->id}}">
-                    {{ $book->quantity??''}}
-                </div>
-                <div class="increase-button"
+            <div class="increase_decrease_buttons mt-auto bg-light rounded-pill ">
+                <div class="in-basket-button
+                {{ in_array($book->id, $booksInBasketArray, true)?'d-none':'' }}"
                      data-url="{{ route('basket-item.increase', $book) }}"
                      data-book-id="{{$book->id}}">
-                    <button
-                        class="btn button_increase">{{in_array($book->id, $bookBasket, true)?'+':'В корзину'}}</button>
+                    <button class="button_basket btn bg-danger w-100 rounded-pill text-white">
+                        В корзину
+                    </button>
                 </div>
 
+                <div class="button-inc-dec justify-content-between d-flex
+                    {{ !in_array($book->id,$booksInBasketArray,true)?'d-none':'' }}">
+                    <div class="decrease-button"
+                         data-url="{{ route('basket-item.decrease', $book) }}"
+                         data-book-id="{{$book->id}}">
+                        <button class="btn">
+                            -
+                        </button>
+                    </div>
+                    <div class="basket_item_count text-dark d-flex justify-content-center align-items-center"
+                         data-book-id="{{$book->id}}">
+                        {{ $book->quantity ?? '' }}
+                    </div>
+
+                    <div class="increase-button"
+                         data-url="{{ route('basket-item.increase', $book) }}"
+                         data-book-id="{{$book->id}}">
+                        <button class="btn">
+                            +
+                        </button>
+                    </div>
+                </div>
             </div>
         @else
             <button

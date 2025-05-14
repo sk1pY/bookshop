@@ -48,18 +48,20 @@ class BasketController extends Controller
             $books->each(function ($book) use ($basket) {
                 $basketitem = BasketItem::firstOrCreate(
                     [   'book_id' => $book->id,
-                        'basket_id' => $basket->id
-                    ],
-                        ['quantity' => $book->quantity]);
-                    $basketitem->update([
-                        'quantity' => $book->quantity,
-                    ]);
-                    $basketitem->save();
+                        'basket_id' => $basket->id],
+                    [   'quantity' => $book->quantity]);
+                $basketitem->update([
+                    'quantity' => $book->quantity,
+                ]);
+                $basketitem->save();
 
             });
+
             $total_price = $books->sum(function ($item) {
                 return $item->quantity * $item->price;
             });
+            $basket->price = $total_price;
+            $basket->save();
 
             session()->forget('books');
 

@@ -21,23 +21,37 @@
                             </div>
                         </td>
                         <td class="align-middle">
-                            <div class="d-flex align-items-center">
-                                <div class="decrease-button"
-                                     data-url="{{ route('basket-item.decrease', $book) }}"
-                                     data-book-id="{{$book->id}}">
-                                    <button class="btn btn-light">-</button>
+                            <div class="increase_decrease_buttons mt-auto bg-light rounded-pill ">
+                                <div
+                                    class="button-inc-dec justify-content-between d-flex">
+                                    <div class="decrease-button"
+                                         data-url="{{ route('basket-item.decrease', $book) }}"
+                                         data-book-id="{{$book->id}}">
+                                        <button class="btn">
+                                            -
+                                        </button>
+                                    </div>
+                                    <div
+                                        class="basket_item_count text-dark d-flex justify-content-center align-items-center"
+                                        data-book-id="{{$book->id}}">
+                                        {{ $book->quantity ?? '' }}
+                                    </div>
+
+                                    <div class="increase-button"
+                                         data-url="{{ route('basket-item.increase', $book) }}"
+                                         data-book-id="{{$book->id}}">
+                                        <button class="btn">
+                                            +
+                                        </button>
+                                    </div>
                                 </div>
-                                <div class="basket-item-count d-flex text-center"
-                                     data-book-id="{{$book->id}}">{{ $book->quantity }}</div>
-                                <div class="increase-button"
-                                     data-url="{{ route('basket-item.increase', $book) }}"
-                                     data-book-id="{{$book->id}}">
-                                    <button class=" btn btn-light">+</button>
-                                </div>
-                                <span class="ms-2 fw-bold text fs-6"
-                                      data-book-id="{{$book->id}}">
-                                    {{ $book ->price * $book-> quantity  }} р.</span>
                             </div>
+                        </td>
+                        <td class="align-middle">
+                            {{$book->price}} р/шт
+                        </td>
+                        <td id="full-price-book" class="align-middle">
+                            {{$book->price * $book->quantity}} р/шт
                         </td>
                         <td class="align-middle">
                             <form action="{{ route('basket-item.deleteAll', $book)}}" method="post"
@@ -64,7 +78,6 @@
                 <p>Зарегистрируйтесь или авторизуйтесь, чтобы сделать заказ</p>
                 <a class="btn btn-secondary" href="{{ route('register') }}">Регистрация</a>
                 <a class="btn btn-secondary" href="{{ route('login') }}">Войти</a>
-
             </div>
         @endguest
         @auth
