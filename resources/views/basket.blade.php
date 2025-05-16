@@ -21,6 +21,9 @@
                             </div>
                         </td>
                         <td class="align-middle">
+                            <div class="d-flex flex-column">
+
+                            </div>
                             <div class="increase_decrease_buttons mt-auto bg-light rounded-pill ">
                                 <div
                                     class="button-inc-dec justify-content-between d-flex">
@@ -46,12 +49,16 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="d-flex justify-content-center text-muted " style="font-size: 0.7rem">
+                                {{$book->price }} р./шт
+                            </div>
                         </td>
                         <td class="align-middle">
-                            {{$book->price}} р/шт
                         </td>
-                        <td id="full-price-book" class="align-middle">
-                            {{$book->price * $book->quantity}} р/шт
+                        <td class="align-middle">
+                            <span id="full-price-book-{{$book->id}}">
+                                {{$book->fullPrice}}
+                            </span>р.
                         </td>
                         <td class="align-middle">
                             <form action="{{ route('basket-item.deleteAll', $book)}}" method="post"
@@ -108,7 +115,7 @@
                         <input class="mb-3 form-control" id="phone" name="phone" type="text"
                                value="{{ Auth::user()->phone?? '+375'}}" maxlength="13">
                         <label for="address">Самовывоз</label>
-                        <select name="address" class="form-select mb-3">
+                        <select name="addressId" class="form-select mb-3">
                             @foreach($addresses as $address)
                                 <option value="{{$address->id}}">{{$address->name}}</option>
                             @endforeach
@@ -123,7 +130,7 @@
                 <div class="border rounded-5 bg-white ms-4 p-4 mt-3 fs-5">
                     <div class="d-flex justify-content-between">
                         <div>Итого</div>
-                        <div class="basket_price">{{ $total_price }}р.</div>
+                        <div class="basket_price">{{ $total_price }}</div>
                     </div>
                 </div>
 

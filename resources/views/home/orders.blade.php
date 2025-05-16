@@ -1,10 +1,5 @@
 @extends('home.index')
 @section('content-home')
-    @if (session('success'))
-        <div class="alert alert-success d-flex px-4">
-            <div>{{ session('success') }}</div>
-        </div>
-    @endif
     <form action="{{ route('home.orders.index') }}" method="get">
 
         <div class="d-flex mb-3">

@@ -62,12 +62,13 @@ class BookController extends Controller
         $orders = Order::where('user_id', Auth::id())->where('status', 'Получен')->pluck('id');
         $book_id = OrderItem::whereIn('order_id', $orders)->pluck('book_id')->toArray();
 
+        $bookQuantityInBakset = BasketItem::where('book_id', $book->id)->first()->quantity?:0;
 
         in_array($book->id, $book_id) ? $bought = true : $bought = false;
 
         $commentaries = Commentary::where('book_id', $book->id)->orderBy('created_at', 'desc')->get();
 
-        return view('book', compact('book', 'commentaries', 'bought'));
+        return view('book', compact('book', 'commentaries', 'bought','bookQuantityInBakset'));
     }
 
 

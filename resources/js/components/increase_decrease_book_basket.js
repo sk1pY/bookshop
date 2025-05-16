@@ -17,7 +17,7 @@ document.addEventListener('click', function (e) {
                     const basketPrice = document.querySelector('.basket_price');
                     const quantity = response.data.quantity;
                     const basketCount = document.getElementById('basket-count');
-                    const bookfullPrice = document.getElementById('full-price-book')
+                    const bookPrice = document.getElementById(`full-price-book-${bookId}`);
                     const bookInBasketQuantity = response.data.bookInBasketQuantity;
                     basketCount.textContent = bookInBasketQuantity;
 
@@ -41,11 +41,12 @@ document.addEventListener('click', function (e) {
                     }
                     inputQuantityBook.textContent = quantity;
 
+
                     if (basketPrice) {
-                        console.log(response.data.basketPrice);
                         basketPrice.textContent = response.data.basketPrice;
+                        bookPrice.textContent  =  response.data.bookFullPrice;
                     }
-                    console.log(response.data.message);
+                 //   console.log(response.data.message);
                 } else {
 
                     const message = document.getElementById('message');

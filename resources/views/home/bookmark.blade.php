@@ -30,22 +30,47 @@
                         </div>
                         @auth
                             @if($bookmark->book->stock > 0)
-                                <div class="d-flex justify-content-center align-items-center">
-                                    <form action="{{ route('basket-item.increase', $bookmark->book) }}" method="post">
-                                        @csrf
-                                        <button style="width: 200px;  color: white"
-                                                class=" btn btn-danger rounded-pill btn d-flex justify-content-center align-items-center">
+                                <div class="increase_decrease_buttons mt-auto bg-light rounded-pill ">
+                                    <div class="in-basket-button
+                {{ in_array($bookmark->book->id, $booksInBasketArray, true)?'d-none':'' }}"
+                                         data-url="{{ route('basket-item.increase') }}"
+                                         data-book-id="{{$bookmark->book->id}}">
+                                        <button class="button_basket btn bg-danger w-100 rounded-pill text-white">
                                             В корзину
                                         </button>
-                                    </form>
+                                    </div>
+
+                                    <div class="button-inc-dec justify-content-between d-flex
+                    {{ !in_array($bookmark->book->id,$booksInBasketArray,true)?'d-none':'' }}">
+                                        <div class="decrease-button"
+                                             data-url="{{ route('basket-item.decrease') }}"
+                                             data-book-id="{{$bookmark->book->id}}">
+                                            <button class="btn">
+                                                -
+                                            </button>
+                                        </div>
+                                        <div class="basket_item_count text-dark d-flex justify-content-center align-items-center"
+                                             data-book-id="{{$bookmark->book->id}}">
+                                            {{ $bookmark->quantity ?? '' }}
+                                        </div>
+
+                                        <div class="increase-button"
+                                             data-url="{{ route('basket-item.increase') }}"
+                                             data-book-id="{{$bookmark->book->id}}">
+                                            <button class="btn">
+                                                +
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                             @else
-                                <div class="d-flex justify-content-center align-items-center">
-                                    <span>нет в наличии</span>
-                                </div>
+                                <button
+                                    class="w-auto rounded-pill btn d-flex justify-content-center align-items-center">
+                                    нет в наличии
+                                </button>
                             @endif
                                 <div class="d-flex justify-content-center align-items-center mt-2">
-                                    <form action="{{ route('home.bookmarks.destroy', ['bookmark' => $bookmark->id]) }}" method="post">
+                                    <form action="{{ route('home.bookmarks.destroy',$bookmark  ) }}" method="post">
                                         @csrf
                                         @method('delete')
                                         <button style="width: 200px;  color: white"

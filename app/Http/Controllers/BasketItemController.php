@@ -44,8 +44,15 @@ class BasketItemController extends Controller
                         $basket->price += $basket_item_book->book->price;
                         $basket->save();
 
-                        $bookFullPrice = $basket->$item->price*$basket_item_book->quantity;
-                        return response()->json(['success' => true, 'quantity' => $basket_item_book->quantity, 'basketPrice' => round($basket->price, 2)]);
+                        $bookFullPrice = $basket_item_book->book->price * $basket_item_book->quantity;
+                          Log::info($bookFullPrice);
+
+                        return response()->json([
+                            'success' => true,
+                            'quantity' => $basket_item_book->quantity,
+                            'basketPrice' => round($basket->price, 2),
+                            'bookFullPrice' => round($bookFullPrice, 2),
+                            'message' => 'книг прабавлено 1']);
                     }
                 });
                 $request->session()->forget('books');
@@ -61,21 +68,48 @@ class BasketItemController extends Controller
                 $basket->price += $basket_item_book->book->price;
                 $basket->save();
                 $bookInBasketQuantity = $basket->basket_items()->pluck('quantity')->sum();
+                $bookFullPrice = $basket_item_book->book->price * $basket_item_book->quantity;
+                  Log::info($bookFullPrice);
 
-                return response()->json(['success' => true, 'quantity' => $basket_item_book->quantity, 'basketPrice' => round($basket->price, 2), 'bookInBasketQuantity' => $bookInBasketQuantity, 'message' => 'успешно добавлена в коризину']);
+
+                return response()->json([
+                    'success' => true,
+                    'quantity' => $basket_item_book->quantity,
+                    'basketPrice' => round($basket->price, 2),
+                    'bookInBasketQuantity' => $bookInBasketQuantity,
+                    'bookFullPrice' => round($bookFullPrice, 2),
+                    'message' => 'успешно добавлена в коризину']);
             } elseif ($basket_item_book->quantity < $stock) {
-
                 $basket_item_book->increment('quantity');
                 $basket->price += $basket_item_book->book->price;
                 $basket->save();
                 $bookInBasketQuantity = $basket->basket_items()->pluck('quantity')->sum();
 
-                return response()->json(['success' => true, 'quantity' => $basket_item_book->quantity, 'basketPrice' => round($basket->price, 2), 'bookInBasketQuantity' => $bookInBasketQuantity]);
+                $bookFullPrice = $basket_item_book->book->price * $basket_item_book->quantity;
+
+                Log::info($bookFullPrice);
+
+                return response()->json([
+                    'success' => true,
+                    'quantity' => $basket_item_book->quantity,
+                    'basketPrice' => round($basket->price, 2),
+                    'bookInBasketQuantity' => $bookInBasketQuantity,
+                    'bookFullPrice' => round($bookFullPrice, 2),
+                ]);
 
             } elseif ($basket_item_book->quantity == $stock) {
                 $bookInBasketQuantity = $basket->basket_items()->pluck('quantity')->sum();
+                $bookFullPrice = $basket_item_book->book->price * $basket_item_book->quantity;
 
-                return response()->json(['success' => true, 'quantity' => $basket_item_book->quantity, 'bookInBasketQuantity' => $bookInBasketQuantity, 'basketPrice' => round($basket->price, 2), 'message' => 'Выбрано максимальное количество книг']);
+                  Log::info($bookFullPrice);
+
+                return response()->json([
+                    'success' => true,
+                    'quantity' => $basket_item_book->quantity,
+                    'bookInBasketQuantity' => $bookInBasketQuantity,
+                    'basketPrice' => round($basket->price, 2),
+                    'bookFullPrice' => round($bookFullPrice, 2),
+                    'message' => 'Выбрано максимальное количество книг']);
 
             }
         } // ЕСЛИ НЕ АВТОРИЗОВАН
@@ -146,20 +180,30 @@ class BasketItemController extends Controller
                     $basket->delete();
                 }
                 $bookInBasketQuantity = $basket->basket_items()->pluck('quantity')->sum();
+                $bookFullPrice = $bookInBasket->book->price * $bookInBasket->quantity;
 
-                return response()->json(['success' => true, 'quantity' => 0, 'basketPrice' => round($basket->price, 2), 'bookInBasketQuantity' => $bookInBasketQuantity, 'message' => 'последняя книга удалена из корзины']);
+                return response()->json([
+                    'success' => true,
+                    'quantity' => 0,
+                    'basketPrice' => round($basket->price, 2),
+                    'bookInBasketQuantity' => $bookInBasketQuantity,
+                    'bookFullPrice' => round($bookFullPrice, 2),
+                    'message' => 'последняя книга удалена из корзины']);
             }
             $bookInBasket->decrement('quantity');
             $basket->price -= $bookInBasket->book->price;
             $basket->save();
         }
         $bookInBasketQuantity = $basket->basket_items()->pluck('quantity')->sum();
+        $bookFullPrice = $bookInBasket->book->price * $bookInBasket->quantity;
+
 
         return response()->json([
             'success' => true,
             'quantity' => $bookInBasket->quantity,
             'basketPrice' => round($basket->price, 2),
             'bookInBasketQuantity' => $bookInBasketQuantity,
+            'bookFullPrice' => round($bookFullPrice, 2),
             'message' => 'книг уменьшено на 1']);
     }
 

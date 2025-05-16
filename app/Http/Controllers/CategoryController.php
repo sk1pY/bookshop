@@ -33,10 +33,14 @@ class CategoryController extends Controller
             'sales' => $bookQuery->sales(),
             default => null
         };
+        $basket = app('basket');
 
-
-
+        $quantities = $basket->basket_items()->pluck('quantity', 'book_id');
         $books = $bookQuery->paginate(10);
+        $books->getCollection()->each(function ($book) use ($quantities) {
+            $book->quantity = $quantities[$book->id] ?? 0;
+        });
+
         return view($slug, compact('books'));
     }
 
@@ -45,9 +49,25 @@ class CategoryController extends Controller
         $bookmarkTaskUser = Auth::check() ?
             Bookmark::where('user_id', Auth::id())->pluck('book_id')->toArray() : null;
 
-        $query = $category->books();
+        $bookQuery = $category->books();
+        if ($request->filled('filter')) {
+            switch ($request->input('filter')) {
+                case 'cheap':
+                    $bookQuery->orderBy('price');
+                    break;
+                case 'expensive':
+                    $bookQuery->orderBy('price', 'desc');
+                    break;
+                case 'rating':
+                    $bookQuery->orderBy('avgRating', 'desc');
+            }
+        }
+        if ($categoryId = $request->input('category_id')) {
+            $bookQuery->where('category_id', $categoryId);
+        }
 
-        $books = $query->filters($request)->get();
+        $books = $bookQuery->get();
+
         return view('categoryBooks', compact('books', 'category', 'bookmarkTaskUser'));
     }
 

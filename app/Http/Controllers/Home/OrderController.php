@@ -17,7 +17,7 @@ class OrderController extends Controller
         $status = $request->query('status', 'all');
         $user = Auth::user();
         if ($status == 'all') {
-            $orders = $user->orders()->orderBy('created_at', 'desc')->get();
+            $orders = $user->orders()->latest()->get();
 
         } elseif ($status == 'delivered') {
             $orders = $user->orders()->where('status', 'Получен')->get();
@@ -30,10 +30,6 @@ class OrderController extends Controller
     {
         $this->authorize('show', $order);
         $orderItems = $order->order_items()->get();
-
-       // $fullPrice = $order->price;
-
-
         return view('home.about_order', compact('order', 'orderItems'));
     }
 

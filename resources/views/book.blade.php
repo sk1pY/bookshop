@@ -63,14 +63,39 @@
                 @endif            </div>
             @auth()
                 @if($book->stock > 0)
-                    <form action="{{ route('basket-item.increase', $book) }}" method="post">
-                        @csrf
-                        <button style="width: 350px; height: 55px;"
-                                class="btn btn-danger d-flex justify-content-center align-items-center">
+                    <div class="increase_decrease_buttons mt-auto bg-light rounded-pill " style="width: 200px">
+                        <div class="in-basket-button
+                {{ in_array($book->id, $booksInBasketArray, true)?'d-none':'' }}"
+                             data-url="{{ route('basket-item.increase', $book) }}"
+                             data-book-id="{{$book->id}}">
+                            <button class="button_basket btn bg-danger w-100 rounded-pill text-white">
+                                В корзину
+                            </button>
+                        </div>
 
-                            <span class="fw-bold fs-5"><i class="bi bi-cart-fill me-2"></i>ДОБАВИТЬ В КОРЗИНУ</span>
-                        </button>
-                    </form>
+                        <div class="button-inc-dec justify-content-between d-flex
+                    {{ !in_array($book->id,$booksInBasketArray,true)?'d-none':'' }}">
+                            <div class="decrease-button"
+                                 data-url="{{ route('basket-item.decrease', $book) }}"
+                                 data-book-id="{{$book->id}}">
+                                <button class="btn">
+                                    -
+                                </button>
+                            </div>
+                            <div class="basket_item_count text-dark d-flex justify-content-center align-items-center"
+                                 data-book-id="{{$book->id}}">
+                                {{ $bookQuantityInBakset }}
+                            </div>
+
+                            <div class="increase-button"
+                                 data-url="{{ route('basket-item.increase', $book) }}"
+                                 data-book-id="{{$book->id}}">
+                                <button class="btn">
+                                    +
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 @else
                     <button style="width: 160px; height: 30px;"
                             class="btn btn-danger d-flex justify-content-center align-items-center disabled ">

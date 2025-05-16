@@ -42,6 +42,7 @@ class BasketController extends Controller
                 ->map(function ($group_item_book) {
                     $book = $group_item_book->first();
                     $book->quantity = min($group_item_book->sum('quantity'), $book->stock);
+                    $book->fullPrice = $book->quantity * $book->price;
                     return $book;
                 });
 
@@ -60,6 +61,7 @@ class BasketController extends Controller
             $total_price = $books->sum(function ($item) {
                 return $item->quantity * $item->price;
             });
+
             $basket->price = $total_price;
             $basket->save();
 
@@ -96,8 +98,8 @@ class BasketController extends Controller
 
         $order_user = Order::create([
             'user_id' => Auth::id(),
-            'price' => $request['total_price'],
-            'address_id' => $request['address'],
+            'price' => $basket->price,
+            'address_id' => $request->input('addressId'),
             'status' => 'Новый заказ'
         ]);
 
