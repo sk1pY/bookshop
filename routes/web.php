@@ -54,8 +54,6 @@ Route::prefix('basket')->group(function () {
     Route::post('/basket-items/book/decrease', [BasketItemController::class, 'decrease'])->name('basket-item.decrease');
     Route::delete('/basket-items/book/{book}', [BasketItemController::class, 'deleteAllByBook'])->name('basket-item.deleteAll');
 });
-
-
 //------------------------------------------------HOME PROFILE------------------------------------------------
 Route::name('home.')->prefix('home')->middleware('role:user|admin')->group(function () {
     Route::get('/', [HomeController::class, 'index'])->name('index');

@@ -11,7 +11,7 @@
                 @endphp
                 <tr>
                     <td>
-                        <img src="{{ Storage::url('booksImages/' . $book -> image) }}" alt="123"
+                        <img src="{{ Storage::url('booksImages/'.$book->image) }}" alt="123"
                              style ="width:30px; height: 40px" >
                         <a class="text-decoration-none text-dark" href="{{route('books.book',$book)}}">{{ $book->title }}</a>
                     </td>
@@ -26,7 +26,7 @@
         </div>
     <div class="col-4 bg-white rounded-3">
         <p>Имя: {{$order->user->name}}</p>
-        <p>Адрес самовывоза: {{$order->user->address}}</p>
+        <p>Адрес самовывоза: {{$order->address->name}}</p>
         <p>Номер телефона: {{$order->user->phone}}</p>
     </div>
     </div>

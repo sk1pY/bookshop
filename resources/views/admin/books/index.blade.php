@@ -1,125 +1,81 @@
 @extends('admin.layouts.index')
 @section('content')
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
-    @if (session('info'))
-        <div class="alert alert-success">
-            {{ session('info') }}
-        </div>
-    @endif
-    @if (session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
-    <table id="table" class="table table-sm table-bordered table-striped">
+    <div class="p-3">
+        <h4>Книги</h4>
+        <hr>
+        <table id="table" class="table table-sm table-bordered table-hover m-0">
         <thead>
-        <tr class="text-center align-middle">
-            <th scope="col" class="col-5">Книга</th>
-            <th scope="col" class="col-1">Цена</th>
-            <th scope="col" class="col-2">Автор</th>
-            <th scope="col" class="col-1">В наличии</th>
-            <th scope="col" class="col-1">Удалить/изменить</th>
+        <tr class="text-center">
+            <th class="col-1">Книга</th>
+            <th class="col-1">Цена</th>
+            <th class="col-2">Автор</th>
+            <th class="col-1">В наличии</th>
+            <th class="col-1">Действия</th>
         </tr>
         </thead>
-        <tbody id="tablecontents">
-        @foreach( $books as $book )
+        <tbody>
+        @foreach($books as $book)
             <tr class="align-middle">
                 <td>
-                    <img alt="logo" src="{{ Storage::url('booksImages/' . $book->image) }}" style="width: 30px;">
-                    <a class="text-decoration-none text-black "
-                       href="{{ route('books.book', $book)}}">{{$book -> title}}</a>
+                    <img src="{{ Storage::url('booksImages/' . $book->image) }}" style="width:25px;" alt="">
+                    <a href="{{ route('books.book', $book) }}" class="text-black text-decoration-none">{{ $book->title }}</a>
                 </td>
-                <td class=" text-center ">
-                    {{$book->price}} р.
-                </td>
-                <td class=" text-center ">
-                    <p>{{$book->author? $book->author->surname.' '.$book->author->name: 'Без автора'}}</p>
-                </td>
+                <td class="text-center">{{ $book->price }} р.</td>
                 <td class="text-center">
-                    {{$book->stock}}
-                </td>
-                <td class="text-center d-flex ">
-                    <button type="button" class="btn btn-sm" data-bs-toggle="modal"
-                            data-bs-target="#update.{{$book->id}}">
+                    <a href="{{ route('authors.index',$book->author)}}"
+                       class="text-decoration-none text-dark">
+                        {{ $book->author ? $book->author->surname.' '.$book->author->name : 'Без автора' }}
+                    </a>
+                   </td>
+                <td class="text-center">{{ $book->stock }}</td>
+                <td>
+                    <button class="btn btn-sm" data-bs-toggle="modal" data-bs-target="#update{{ $book->id }}">
                         <i class="bi bi-pencil-square"></i>
                     </button>
-                    <form action="{{ route('admin.books.destroy', $book)}}" method="post"
-                          id>
-                        @csrf
-                        @method('delete')
-                        <button class="btn btn-sm fs-3">
+                    <form action="{{ route('admin.books.destroy', $book) }}" method="post" style="display:inline;">
+                        @csrf @method('delete')
+                        <button class="btn btn-sm"
+                                onclick="return confirm('Точно удалить?')">
                             <i type="submit" class="bi bi-x"></i>
                         </button>
                     </form>
                 </td>
             </tr>
-            <!-- Modal -->
-            <div class="modal fade" id="update.{{$book->id}}" data-bs-backdrop="static" data-bs-keyboard="false"
-                 tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="staticBackdropLabel">Изменить данные книги</h1>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                    aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <form action="{{ route('admin.books.update',$book)}}"
-                                  method="post" enctype="multipart/form-data"
-                            >
-                                @csrf
-                                @method('put')
-                                <label for="title" class="form-label">Title</label>
-                                <input id="title" class="form-control" name="title"
-                                       value="{{ old('title', $book->title ) }}">
-                                <label for="price" class="form-label">Price</label>
-                                <input id="price" class="form-control" name="price" value="{{$book->price}}">
-                                <label for="author" class="form-label">author</label>
-                                <select class="form-control" name="author_id">
-                                    <option value="" {{ !$book->author_id? 'selected' : '' }}>Без автора</option>
+
+            {{-- Модалка --}}
+            <div class="modal fade" id="update{{ $book->id }}" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog"><div class="modal-content">
+                        <form action="{{ route('admin.books.update', $book) }}" method="post" enctype="multipart/form-data">
+                            @csrf @method('put')
+                            <div class="modal-header">
+                                <h5 class="modal-title">Редактировать</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                <input name="title" class="form-control mb-2" value="{{ old('title', $book->title) }}" placeholder="Название">
+                                <input name="price" class="form-control mb-2" value="{{ $book->price }}" placeholder="Цена">
+                                <select name="author_id" class="form-control mb-2">
+                                    <option value="" {{ !$book->author_id ? 'selected' : '' }}>Без автора</option>
                                     @foreach($authors as $author)
-                                        <option
-                                            value="{{$author->id}}"
-                                            {{$book->author && $book->author_id == $author->id? 'selected':''}}>
-                                            {{$author->surname.' '.$author->name}}
+                                        <option value="{{ $author->id }}" {{ $book->author_id == $author->id ? 'selected' : '' }}>
+                                            {{ $author->surname . ' ' . $author->name }}
                                         </option>
                                     @endforeach
                                 </select>
-
-                                <label for="stock" class="form-label">stock</label>
-
-                                <input id="stock" class="form-control" name="stock" value="{{$book->stock}}">
-                                <input class="my-3 form-control" type="file" name="image" value="{{$book->image}}">
-                                <img src="{{ Storage::url('booksImages/'.$book->image) }}" alt="123"
-                                     style="width: 40px;height: 40px;">
-                                <div class="modal-footer">
-                                    <button type="submit" class="btn btn-success">Принять
-                                    </button>
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close
-                                    </button>
-                                </div>
-                            </form>
-
-                        </div>
-
-                    </div>
-                </div>
+                                <input name="stock" class="form-control mb-2" value="{{ $book->stock }}" placeholder="В наличии">
+                                <input type="file" name="image" class="form-control mb-2">
+                                <img src="{{ Storage::url('booksImages/'.$book->image) }}" style="width:40px;height:40px;" alt="">
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-success btn-sm">Сохранить</button>
+                                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Отмена</button>
+                            </div>
+                        </form>
+                    </div></div>
             </div>
         @endforeach
-
         </tbody>
-
     </table>
-    <div class="mt-4">
-        {{ $books->links('pagination::bootstrap-5') }}
+    <div class="mt-3">{{ $books->links('pagination::bootstrap-5') }}</div>
     </div>
-
 @endsection

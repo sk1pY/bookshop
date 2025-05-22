@@ -21,14 +21,12 @@ class RolePermissionController extends Controller
 
     public function updatePermissionsForRole(Request $request, Role $role)
     {
-        if (!$request->input('permissions')) {
-            $role->permissions()->detach();
-            return redirect()->route('admin.permissions_roles.index')->with('success', 'Deleted');
-        }
-        $permissionName = Permission::whereIn('id', $request->input('permissions'))->pluck('name')->toArray();
-        $role->syncPermissions($permissionName);
-
-        return response()->json(['success'=>'success update']);
+        $permission = Permission::find($request->input('permissionId'));
+        Log::info($permission);
+        $role->hasPermissionTo($permission) ?
+            $role->revokePermissionTo($permission) :
+            $role->givePermissionTo($permission);
+        return response()->json();
     }
 
     public function updateRoleForUser(Request $request, User $user)

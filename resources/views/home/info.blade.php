@@ -22,7 +22,7 @@
                    class="bi bi-gear fs-5 ms-auto"></i>
             </div>
 
-
+            {{--        MODAL UPDATE PROFILE--}}
             <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
                  aria-hidden="true">
                 <div class="modal-dialog">
@@ -87,6 +87,8 @@
                     </div>
                 </div>
             </div>
+            {{--        MODAL UPDATE PROFILE--}}
+
             <div class="d-flex flex-column">
                 <p class="mb-1 text-body-tertiary">{{ $user->email ??'не указана' }}</p>
                 @if($user->email_verified_at)
@@ -111,6 +113,7 @@
             <p class="mb-0 text-body-tertiary">{{ $user->address?: 'не указан' }}</p>
         </div>
     </div>
+
     <div class="mt-4 border rounded-5 p-3 w-25">
         <button type="button" class="btn " data-bs-toggle="modal" data-bs-target="#passwordChangeModal">
             Сменить пароль

@@ -1,7 +1,8 @@
 @extends('admin.layouts.index')
 @section('content')
-    <h1>Адреса самовывоза</h1>
-    <a href="{{route('admin.addresses.deleted')}}"
+    <div class="p-3">
+        <h4>Адреса</h4>
+        <hr>    <a href="{{route('admin.addresses.deleted')}}"
     class="btn btn-primary m-2">Восстановить удаленные адреса</a>
     <form action="{{ route('admin.addresses.store') }}" method="post" class="d-flex mb-5">
         @csrf
@@ -28,8 +29,8 @@
                     <form action="{{ route('admin.addresses.destroy',  $address) }}" method="post" class="ms-1">
                         @csrf
                         @method('delete')
-                        <button type="submit" class="btn btn-sm btn-outline-danger fs-6">
-                            <i class="bi bi-x"></i>
+                        <button class="btn btn-sm">
+                            <i type="submit" class="bi bi-x "></i>
                         </button>
                     </form>
                 </td>
@@ -37,6 +38,6 @@
         @endforeach
         </tbody>
     </table>
-
+    </div>
 
 @endsection

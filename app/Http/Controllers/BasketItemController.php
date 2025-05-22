@@ -69,8 +69,6 @@ class BasketItemController extends Controller
                 $basket->save();
                 $bookInBasketQuantity = $basket->basket_items()->pluck('quantity')->sum();
                 $bookFullPrice = $basket_item_book->book->price * $basket_item_book->quantity;
-                  Log::info($bookFullPrice);
-
 
                 return response()->json([
                     'success' => true,
@@ -87,7 +85,6 @@ class BasketItemController extends Controller
 
                 $bookFullPrice = $basket_item_book->book->price * $basket_item_book->quantity;
 
-                Log::info($bookFullPrice);
 
                 return response()->json([
                     'success' => true,
@@ -100,8 +97,6 @@ class BasketItemController extends Controller
             } elseif ($basket_item_book->quantity == $stock) {
                 $bookInBasketQuantity = $basket->basket_items()->pluck('quantity')->sum();
                 $bookFullPrice = $basket_item_book->book->price * $basket_item_book->quantity;
-
-                  Log::info($bookFullPrice);
 
                 return response()->json([
                     'success' => true,

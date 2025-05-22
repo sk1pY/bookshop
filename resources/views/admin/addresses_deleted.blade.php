@@ -1,5 +1,7 @@
 @extends('admin.layouts.index')
 @section('content')
+    <div class="p-3">
+        <h4>Удаленные адреса</h4>
     <table class="table table-sm table-bordered table-striped m-0">
         <thead>
         <tr class="align-middle">
@@ -26,5 +28,5 @@
         @endforeach
         </tbody>
     </table>
-
+    </div>
 @endsection

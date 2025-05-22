@@ -90,17 +90,19 @@
         @auth
 
             <div class="col">
-                @if(!Auth::user()->email_verified_at)
-                    <span class="badge text-bg-warning p-3">Email не подтвержден</span>
-
-                    <form method="POST" action="{{ route('verification.send') }}">
-                        @csrf
-                        <button type="submit"
-                                class="btn btn-sm bg-transparent fw-bold text-decoration-underline">Отправить письмо
-                        </button>
-                    </form>
-                @endif
                 <div class="border rounded-5 bg-white ms-4 p-4">
+                    <div class="d-flex justify-content-center">
+                        @if(!Auth::user()->email_verified_at)
+                            <span class="badge text-bg-danger p-3">Email не подтвержден</span>
+                            <form method="POST" action="{{ route('verification.send') }}">
+                                @csrf
+                                <button type="submit"
+                                        class="btn btn-sm bg-transparent fw-bold text-decoration-underline">Отправить письмо
+                                </button>
+                            </form>
+                        @endif
+                    </div>
+
                     <form id="bookForm" class="d-flex flex-column" action="{{ route('basket.order') }}" method="post">
                         @csrf
                         <input type="hidden" id="basket" name="basket">

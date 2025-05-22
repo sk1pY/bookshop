@@ -16,7 +16,7 @@ use Laravel\Fortify\Http\Responses\LogoutResponse;
 
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
-class FortifyServiceProvider extends ServiceProvider
+class   FortifyServiceProvider extends ServiceProvider
 {
     /**
      * Register any application services.
@@ -39,14 +39,7 @@ class FortifyServiceProvider extends ServiceProvider
         Fortify::requestPasswordResetLinkView(fn()=>view('auth.forgot-password'));
         Fortify::resetPasswordView(fn(Request $request)=>view('auth.reset-password',['request' => $request]));
         Fortify::verifyEmailView(fn() => view('auth.verify-email'));
-
-//        Fortify::authenticateUsing(function (Request $request) {
-//            $user = User::where('email', $request->email)->first();
-//
-//            if ($user && Hash::check($request->password, $user->password)) {
-//                return $user;
-//            }
-//        });
+//      -----------------------
         Fortify::createUsersUsing(CreateNewUser::class);
         Fortify::updateUserProfileInformationUsing(UpdateUserProfileInformation::class);
         Fortify::updateUserPasswordsUsing(UpdateUserPassword::class);
@@ -57,15 +50,6 @@ class FortifyServiceProvider extends ServiceProvider
 
             return Limit::perMinute(5)->by($throttleKey);
         });
-
-//
-//        RateLimiter::for('two-factor', function (Request $request) {
-//            return Limit::perMinute(5)->by($request->session()->get('login.id'));
-//        });
-
-
-
-
 
     }
 

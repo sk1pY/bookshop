@@ -37,7 +37,6 @@
                        style=" background-color: #f4f4f5"
                        placeholder="Поиск книг"
                        aria-describedby="search-addon" name="search">
-
             </div>
         </div>
         {{--          END  SEARCH--}}
@@ -119,32 +118,32 @@
                     </a>
                 </li>
             @endauth
-                @guest
-                    <li class="nav-item">
-                        <a class="nav-link d-flex flex-column align-items-center"
-                           href="{{ route('login') }}">
-                            <i class="bi bi-box-arrow-in-right fs-5 d-flex justify-content-center"></i>
+            @guest
+                <li class="nav-item">
+                    <a class="nav-link d-flex flex-column align-items-center"
+                       href="{{ route('login') }}">
+                        <i class="bi bi-box-arrow-in-right fs-5 d-flex justify-content-center"></i>
 
-                            <span>Войти</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link d-flex flex-column align-items-center"
-                           href="{{ route('register') }}">
-                            <i class="bi bi-journal-plus fs-5 d-flex justify-content-center"></i>
+                        <span>Войти</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link d-flex flex-column align-items-center"
+                       href="{{ route('register') }}">
+                        <i class="bi bi-journal-plus fs-5 d-flex justify-content-center"></i>
 
-                            <span>Регистрация</span>
-                        </a>
-                    </li>
-                @endguest
+                        <span>Регистрация</span>
+                    </a>
+                </li>
+            @endguest
             <li class="nav-item">
                 <a href="{{ route('basket.index') }}" type="button"
                    class="nav-link d-flex flex-column align-items-center ">
                     <i class="bi bi-cart fs-5 d-flex justify-content-center"></i>
                     <div class="d-flex ">
                         <span class="">Корзина</span>
-                            <span id="basket-count"
-                                  class="badge text-bg-danger ms-1 align-content-center">{{ $bookInBasketQuantity }}</span>
+                        <span id="basket-count"
+                              class="badge text-bg-danger ms-1 align-content-center">{{ $bookInBasketQuantity }}</span>
                     </div>
 
                 </a>

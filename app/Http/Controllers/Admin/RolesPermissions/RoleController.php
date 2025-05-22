@@ -10,18 +10,21 @@ class RoleController extends Controller
 {
 
 
-    public function store(Request $request){
-        Role::create([
-            'name' => $request['role'],
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|unique:permissions,name',
         ]);
+        Role::create($validated);
 
-         return redirect()->route('admin.permissions_roles.index');
+        return redirect()->route('admin.permissions_roles.index');
     }
 
-    public function destroy(Role $role){
+    public function destroy(Role $role)
+    {
 
-        $role -> delete();
+        $role->delete();
 
-         return redirect()->route('admin.permissions_roles.index');
+        return redirect()->route('admin.permissions_roles.index');
     }
 }

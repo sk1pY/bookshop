@@ -9,11 +9,12 @@ use Spatie\Permission\Models\Permission;
 class PermissionController extends Controller
 {
     public function store(Request $request){
-        Permission::create([
-            'name' => $request['permission'],
+        $validated = $request->validate([
+            'name' => 'required|unique:permissions,name',
         ]);
+        Permission::create($validated);
 
-        return redirect()->route('admin.permissions_roles.index');
+        return redirect()->back();
     }
 
     public function destroy( Permission $permission){

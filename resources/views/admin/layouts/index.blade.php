@@ -3,20 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>Admin</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
 
+        body {
+            font-family: 'Roboto', sans-serif;
+            font-size: 16px;
+        }
+
+        .row {
+            margin: 0;
+        }
+
+
+        .accordion-body a {
+            font-size: 15px;
+        }
+
+    </style>
 
 </head>
-<body class="min-vh-100">
-<div class="row g-0 min-vh-100">
-    <div class="col-2 d-flex flex-column flex-shrink-0 p-2  bg-dark  sticky-top " style="font-size: 0.9rem">
-            <a href="/admin" class="d-flex justify-content-center mb-3 text-white text-decoration-none">
-            <span class="fs-4">Admin Panel</span>
-        </a>
-        <ul class="according nav nav-pills flex-column mb-auto ">
-            <li>
+
+<body>
+<div class="row min-vh-100">
+    <div class="col-3 d-flex flex-column flex-shrink-0 p-3" style="background-color: #273A50;">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <a href="/admin" class="text-white text-decoration-none ms-2">
+                <span class="fs-4">Admin Panel</span>
+            </a>
+            <a href="/" class="text-white text-decoration-none">
+                выйти
+            </a>
+        </div>
+        <ul class="according nav nav-pills flex-column p-0">
+            <li >
                 <div class="alert alert-danger" role="alert">
                     <a href="{{route('admin.orders.index')}}" class="nav-link text-dark">
                             <i class="bi bi-bag me-2 text-dark"></i> Активные заказы
@@ -127,7 +155,10 @@
     </div>
 
 
-    <div class="col bg-secondary-subtle p-4">
+    <div class="col p-4">
+        @include('partials.alert.validation')
+        @include('partials.alert.error')
+        @include('partials.alert.success')
         @yield('content')
     </div>
 </div>
