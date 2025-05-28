@@ -66,7 +66,7 @@
                 {{--                        DROPDOWN MENU--}}
                 <li class="nav-item">
                     <div class="dropdown-center">
-                        <div class="nav-link d-flex flex-column align-items-center dropdown-toggle">
+                        <div class="nav-link d-flex flex-column align-items-center dropdown-toggle" data-bs-toggle="dropdown">
                             <i class="bi bi-person fs-5 d-flex p-0 m-0"></i>
                             <span>{{ Auth::user() ? Auth::user()->name : 'guest' }}</span>
                         </div>
