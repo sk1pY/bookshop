@@ -20,16 +20,12 @@
         padding: 0;
     }
 
-    a {
+    a{
         color: black;
         text-decoration: none;
     }
 
-    .dropdown-center:hover .dropdown-menu {
-        display: block;
-        margin-top: 0;
 
-    }
 
 
 </style>

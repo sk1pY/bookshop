@@ -15,8 +15,8 @@ class AuthorController extends Controller
      */
     public function index()
     {
-        $authors = Author::withCount('books')->orderBy('id','asc')->paginate(15);
-        return view('admin.authors.index', compact( 'authors'));
+        $authors = Author::withCount('books')->orderBy('id', 'asc')->paginate(15);
+        return view('admin.authors.index', compact('authors'));
     }
 
     /**
@@ -42,7 +42,7 @@ class AuthorController extends Controller
             '*.alpha' => 'только буквы'
         ]);
         Author:: create($validated);
-        return to_route('admin.authors.index');
+        return back()->with('success', 'success');
     }
 
     /**
@@ -75,6 +75,7 @@ class AuthorController extends Controller
     public function destroy(Author $author)
     {
         $author->delete();
-        return to_route('admin.authors.index');
+        return back()->with('success', 'success');
+
     }
 }

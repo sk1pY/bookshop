@@ -1,5 +1,6 @@
 import "./bootstrap.js"
 
+
 if (window.location.pathname.startsWith('/admin')) {
     Promise.all([
         import ("./components/admin/permissions_update.js"),

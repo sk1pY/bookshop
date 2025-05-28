@@ -37,7 +37,7 @@ class DiscountController extends Controller
             $book->discount = $discount;
             $book->save();
         });
-        return to_route('admin.discounts.index');
+        return back()->with('success', 'book discount success');
     }
 
     public function discountForBook(Request $request)
@@ -63,7 +63,7 @@ class DiscountController extends Controller
                 $book->save();
             });
         }
-        return to_route('admin.discounts.index');
+        return back()->with('success', 'book discount success');
     }
 
 
@@ -73,7 +73,7 @@ class DiscountController extends Controller
         $book->original_price = 0;
         $book->discount = 0;
         $book->save();
-        return to_route('admin.discounts.index');
+        return back()->with('success', 'book discount destroy ');
     }
 
     public function discountDeleteAll()
@@ -85,6 +85,6 @@ class DiscountController extends Controller
             $book->discount = 0;
             $book->save();
         });
-        return to_route('admin.discounts.index');
+        return back()->with('success', 'book discount destroy ');
     }
 }

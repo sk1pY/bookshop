@@ -40,8 +40,13 @@ class CategoryController extends Controller
         $books->getCollection()->each(function ($book) use ($quantities) {
             $book->quantity = $quantities[$book->id] ?? 0;
         });
-
-        return view($slug, compact('books'));
+        $cat_rus = match ($slug) {
+            'bestsellers' => 'Бестселлеры',
+            'newest' => 'Новинки',
+            'sales' => 'Акции',
+            default => 'Неизвестно',
+        };
+        return view('categories.special_categories_show', compact('books','slug','cat_rus'));
     }
 
     public function show(Request $request, Category $category)
@@ -68,7 +73,8 @@ class CategoryController extends Controller
 
         $books = $bookQuery->get();
 
-        return view('categoryBooks', compact('books', 'category', 'bookmarkTaskUser'));
+
+        return view('categories.categories', compact('books', 'category', 'bookmarkTaskUser'));
     }
 
 

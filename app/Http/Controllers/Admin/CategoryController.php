@@ -33,10 +33,10 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required|alpha|max:30'
+            'name' => 'required|max:30'
         ]);
-        Category::create(array_merge($validated));
-        return to_route('admin.categories.index')->with('successCategoryAdd', 'Категория добавлена');
+        Category::create($validated);
+        return back()->with('success', 'Категория добавлена');
     }
 
     /**
@@ -60,10 +60,11 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category)
     {
-        $category -> update([
-            'name' => $request->input('name')
+        $validated = $request->validate([
+            'name' => 'required|max:30'
         ]);
-        return redirect()->route('admin.categories.index');
+        $category -> update($validated);
+        return redirect()->back()->with('success','success update');
     }
 
     /**
@@ -72,6 +73,6 @@ class CategoryController extends Controller
     public function destroy(Category $category)
     {
         $category->delete();
-        return redirect()->route('admin.categories.index');
+        return redirect()->back();
     }
 }

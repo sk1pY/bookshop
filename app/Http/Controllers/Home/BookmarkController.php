@@ -9,8 +9,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
 
 class BookmarkController extends Controller
 {
@@ -25,26 +23,23 @@ class BookmarkController extends Controller
         $bookmarks->each(function ($bookmark) use ($quantities) {
             $bookmark->quantity = $quantities[$bookmark->book_id] ?? 0;
         });
+
         return view('home.bookmark', compact('bookmarks'));
     }
 
     public function store(Request $request)
     {
-        $taskId = $request->input('bookmark_id');
-        $bookmark = Bookmark::with('book.author')->where(['user_id' => Auth::id(), 'book_id' => $taskId])->first();
+        $bookId = $request->input('book_id');
+        $bookmark = Bookmark::with('book.author')->where(['user_id' => Auth::id(), 'book_id' => $bookId])->first();
         if ($bookmark) {
             $bookmark->delete();
             return response()->json(['success' => true, 'bookmark' => false]);
         }
         Bookmark::create([
             'user_id' => Auth::id(),
-            'book_id' => $taskId]);
+            'book_id' => $bookId]);
         return response()->json(['success' => true, 'bookmark' => true]);
     }
 
-    public function destroy(Bookmark $bookmark)
-    {
-        $bookmark->delete();
-        return to_route('home.bookmarks.index');
-    }
+
 }

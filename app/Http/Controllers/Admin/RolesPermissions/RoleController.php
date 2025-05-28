@@ -9,22 +9,18 @@ use Spatie\Permission\Models\Role;
 class RoleController extends Controller
 {
 
-
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required|unique:permissions,name',
+            'name' => 'required|string|unique:roles,name'
         ]);
         Role::create($validated);
-
-        return redirect()->route('admin.permissions_roles.index');
+        return back();
     }
 
     public function destroy(Role $role)
     {
-
         $role->delete();
-
-        return redirect()->route('admin.permissions_roles.index');
+        return back();
     }
 }

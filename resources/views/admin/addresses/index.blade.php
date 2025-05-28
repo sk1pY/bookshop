@@ -6,7 +6,7 @@
     class="btn btn-primary m-2">Восстановить удаленные адреса</a>
     <form action="{{ route('admin.addresses.store') }}" method="post" class="d-flex mb-5">
         @csrf
-        <input class="form-control w-25" type="text" name="address">
+        <input class="form-control w-25" type="text" name="name">
         <input  class="btn btn-sm btn-primary" type="submit" value="Добавить адрес">
     </form>
 

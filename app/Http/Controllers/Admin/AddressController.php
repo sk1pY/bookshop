@@ -14,7 +14,7 @@ class AddressController extends Controller
     public function index()
     {
         $addresses = Address::get();
-        return view('admin.addresses', compact('addresses'));
+        return view('admin.addresses.index', compact('addresses'));
     }
 
     /**
@@ -31,12 +31,12 @@ class AddressController extends Controller
     public function store(Request $request)
     {
         $validate = $request->validate([
-            'address' => 'required|string|max:255'
+            'name' => 'required|string|max:255'
         ]);
 
         Address::create($validate);
 
-        return to_route('admin.addresses.index');
+        return  back()->with('success', 'success');
     }
 
     /**
@@ -69,18 +69,18 @@ class AddressController extends Controller
     public function destroy(Address $address)
     {
         $address->delete();
-        return to_route('admin.addresses.index');
+        return back()->with('success', 'success');
     }
 
     public function addressesDeleted()
     {
         $addresses = Address::onlyTrashed()->get();
-        return view('admin.addresses_deleted', compact('addresses'));
+        return view('admin.addresses.addresses_deleted', compact('addresses'));
     }
 
     public function addressesRestore(Address $address)
     {
         $address->restore();
-        return to_route('admin.addresses.index');
+        return back()->with('success', 'success');
     }
 }

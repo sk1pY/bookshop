@@ -1,19 +1,19 @@
 <?php
 
-namespace App\Http\Controllers\Api\v1;
+namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
-use App\Models\DeliveryAddress;
+use App\Models\Basket;
 use Illuminate\Http\Request;
 
-class AddressController extends Controller
+class BasketController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return DeliveryAddress::all();
+        return Basket::all();
     }
 
     /**
@@ -21,7 +21,7 @@ class AddressController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
     }
 
     /**

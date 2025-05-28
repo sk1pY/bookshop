@@ -1,7 +1,9 @@
 @extends('layouts.app')
 @section('content')
-    <h1>Bestsellers</h1>
+    <h2>{{$cat_rus}}</h2>
+
     @include('partials.filter')
+    <input type="hidden" id="special-category-slug" value="{{ $slug }}">
 
     {{--BOOKS--}}
     <div class="row row-cols-2 row-cols-md-4 row-cols-lg-5 g-4" id="search-cards">
@@ -16,7 +18,4 @@
         @endforelse
     </div>
     {{--BOOKS--}}
-    <div class="mt-4">
-        {{ $books->links('pagination::bootstrap-5') }}
-    </div>
 @endsection('content')

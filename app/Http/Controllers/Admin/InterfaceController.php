@@ -19,19 +19,18 @@ class InterfaceController extends Controller
            'image' => 'required|image|mimes:jpg,png|max:2048',
            'type' => 'required'
        ]);
-//
-        if ($request->hasFile('image')) {
-           $validated['image'] = basename($request->file('image')->store('slideImages','public'));
-       }
+
+        $validated['image'] = $request->hasfile('image')?
+            basename($request->file('image')->store('slideImages','public')):null;
 
         InterfaceSite::create($validated);
-        return to_route('admin.interfaces.index');
+        return back()->with('success', 'success');
     }
 
     public  function  destroy(InterfaceSite $slide)
     {
         $slide->delete();
-        return to_route('admin.interfaces.index');
+        return back()->with('success', 'success');
 
     }
 }

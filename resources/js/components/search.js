@@ -1,7 +1,8 @@
      const searchInput = document.getElementById('search');
     const resultsBox = document.getElementById('search-cards');
 
-     const categorySlug = document.getElementById('category-slug')?.value || '';
+     const categorySlug = document.getElementById('category-slug')?.value ||
+         document.getElementById('special-category-slug')?.value ||   '';
 
     if (searchInput) {
         searchInput.addEventListener('keyup', function () {

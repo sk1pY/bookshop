@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\Api\v1;
+namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Models\Book;
-use App\Models\Commentary;
 use Illuminate\Http\Request;
 
 class CommentaryController extends Controller
@@ -30,8 +29,7 @@ class CommentaryController extends Controller
      */
     public function show(Book $book)
     {
-     $books =   $book->commentaries()->get();
-     return $books;
+        return $book->commentaries()->get();
     }
 
     /**

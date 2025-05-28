@@ -1,6 +1,5 @@
-    <div class=" w-auto">
-        <a href="{{ route('home.info.index') }}" class="hov d-flex align-items-center  rounded-pill p-3"
-           style="text-decoration: none;">
+    <div class=" w-auto ">
+        <a href="{{ route('home.info.index') }}" class="hov d-flex align-items-center  rounded-pill p-3 ">
             <i style="font-size: 1.5rem; width: 35px;" class="bi bi-person"></i>
             <span style="font-size: 1rem" class="ms-2">Профиль</span>
         </a>

@@ -47,10 +47,6 @@
                 @endforelse
             </div>
             {{--BOOKS--}}
-            {{-- Pagination --}}
-{{--            <div class="mt-4">--}}
-{{--                {{ $books->links('pagination::bootstrap-5') }}--}}
-{{--            </div>--}}
 
         </div>
 

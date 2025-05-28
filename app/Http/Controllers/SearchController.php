@@ -14,8 +14,20 @@ class SearchController extends Controller
        // Log::info($request->input('search'));
        // Log::info($request->input('category_slug'));
         $category_slug = $request->input('category_slug');
+        $arr = ['bestsellers', 'sales', 'newest'];
+        $query = Book::query();
 
-        if ($category_slug) {
+    //    Log::info($category_slug);
+        if(in_array($category_slug, $arr)){
+            match ($category_slug) {
+                'bestsellers' => $query->bestsellers(),
+                'newest' => $query->newest(),
+                'sales' => $query->sales(),
+                default => null
+            };
+
+         $books =  $query->where('title', 'like', '%' . $request->input('search') . '%')->get();
+        } elseif ($category_slug) {
             $category = Category::where('slug', $category_slug)->first();
 
             if ($category) {
@@ -27,7 +39,7 @@ class SearchController extends Controller
             }
 
         } else {
-            $books = Book::where('title', 'like', '%' . $request->input('search') . '%')->get();
+            $books = $query->where('title', 'like', '%' . $request->input('search') . '%')->get();
         }
 
         $html = '';

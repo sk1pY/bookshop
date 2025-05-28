@@ -35,7 +35,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/search', [SearchController::class, 'search'])->name('live.search');
 
 //Автор
-Route::get('/authors/{author:slug}', [AuthorController::class, 'index'])->name('authors.index');
+Route::get('/authors/{author:slug?}', [AuthorController::class, 'index'])->name('authors.index');
 
 //КНИГИ
 Route::get('/', [BookController::class, 'index'])->name('books.index');
@@ -43,7 +43,7 @@ Route::get('/books/{book:slug}', [BookController::class, 'show'])->name('books.b
 
 
 //------------------------------------------------CATEGORIES------------------------------------------------
-Route::get('/categories/{category:slug}',[CategoryController::class,'show'])->name('categories.show');
+Route::get('/categories/{category:slug?}',[CategoryController::class,'show'])->name('categories.show');
 Route::get('/categories-special/{slug}',[CategoryController::class,'specialCategories'])->whereIn('slug', ['bestsellers', 'sales', 'newest'])->name('specialCategories.show');
 
 //------------------------------------------------BASKET------------------------------------------------
@@ -59,7 +59,6 @@ Route::name('home.')->prefix('home')->middleware('role:user|admin')->group(funct
     Route::get('/', [HomeController::class, 'index'])->name('index');
     Route::get('/bookmarks', [HomeBookmarkController::class, 'index'])->name('bookmarks.index');
     Route::post('/bookmarks', [HomeBookmarkController::class, 'store'])->name('bookmarks.store');
-    Route::delete('/bookmarks/{bookmark}', [HomeBookmarkController::class, 'destroy'])->name('bookmarks.destroy');
     Route::get('/orders', [HomeOrderController::class, 'orders'])->name('orders.index');
     Route::get('/orders/{order}', [HomeOrderController::class, 'show'])->name('orders.show');
     Route::delete('/orders/{order}', [HomeOrderController::class, 'cancelOrder'])->name('orders.destroy');
@@ -81,7 +80,6 @@ Route::name('admin.')->prefix('admin')->middleware('role:admin')->group(function
     Route::get('/', [AdminController::class, 'index'])->name('index');
     //Roles and Permission
     Route::get('/roles-permission', [RolePermissionController::class, 'index'])->name('roles.permissions.index');
-
     Route::put('/role/{role}/permissions', [RolePermissionController::class, 'updatePermissionsForRole'])->name('roles.permissions.update');
     Route::put('/role/user/{user}', [RolePermissionController::class, 'updateRoleForUser'])->name('roles.users.update');
     //Permission

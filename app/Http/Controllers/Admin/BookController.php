@@ -60,10 +60,10 @@ class BookController extends Controller
 
         }
         if (Book::create($validated)) {
-            return redirect()->route('admin.books.index')->with('success', 'book added success');
+            return back()->with('success', 'book added success');
 
         }
-        return to_route('admin.books.index')->with('info', 'book added error');
+        return back()->with('error', 'book added error');
     }
 
     /**
@@ -113,7 +113,7 @@ class BookController extends Controller
             report($e);
             return back()->with('error', 'book updated error');
         }
-        return to_route('admin.books.index')->with('success', 'book update success');
+        return back()->with('success', 'book update success');
     }
 
     /**
@@ -123,6 +123,6 @@ class BookController extends Controller
     function destroy(Book $book)
     {
         $book->delete();
-        return to_route('admin.books.index');
+        return back()->with('success', 'book deleted success');
     }
 }

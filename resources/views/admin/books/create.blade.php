@@ -1,20 +1,8 @@
 @extends('admin.layouts.index')
 @section('content')
-    <div >
-        @if ($errors->any())
-            <div class="alert alert-danger">
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
-        @if ( session('successBookAdd') )
-            <div class="alert alert-success d-flex px-4">
-                <div>{{ session('successBookAdd') }}</div>
-            </div>
-        @endif
+    <div class="p-3">
+        <h4>Добавить книгу</h4>
+        <hr>
         <div class="row  ">
             <div class="col-4">
                 <select class="form-select" name="category_id" form="addBookForm">
@@ -41,12 +29,14 @@
 
             </div>
             <div class="col">
-                <form action="{{ route('admin.books.store') }}" method="post" id="addBookForm" enctype="multipart/form-data">
+                <form action="{{ route('admin.books.store') }}" method="post" id="addBookForm"
+                      enctype="multipart/form-data">
                     @csrf
                     <label for="title" class=" form-label">Название книги</label>
                     <input class="form-control" id="title" type="text" name="title" value="{{old('title')}}">
                     <label for="description" class="form-label">Описание</label>
-                    <textarea class="form-control" id="description" type="text" name="description" >{{old('description')}}</textarea>
+                    <textarea class="form-control" id="description" type="text"
+                              name="description">{{old('description')}}</textarea>
                     <label for="price" class="form-label">Цена</label>
                     <input class="form-control" id="price" type="text" name="price" value="{{old('price')}}">
                     <label for="stock" class="form-label">Количество</label>
@@ -58,6 +48,5 @@
             </div>
         </div>
     </div>
-
 
 @endsection

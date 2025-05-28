@@ -7,7 +7,7 @@
             <thead>
             <tr>
                 <th scope="col" class="text-center">#</th>
-                <th scope="col" class="text-center">Количество книг</th>
+                <th scope="col" class="col-2 text-center">Количество книг</th>
                 <th scope="col" class="text-center">Автор</th>
                 <th scope="col" class="text-center">#</th>
             </tr>

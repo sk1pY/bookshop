@@ -5,45 +5,56 @@
             <div>{{ session('successStatusUpdate') }}</div>
         </div>
     @endif
-    <table class="table ">
-        <thead>
-        <tr>
-            <th scope="col">№</th>
-            <th scope="col">Клиент</th>
-            <th scope="col">Дата формирования заказа</th>
-            <th scope="col">#</th>
-            <th scope="col">Status</th>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach( $orders as $order )
+    <div class="p-3">
+        <h4>Активные заказы</h4>
+        <hr>
+        <table id="table" class="table table-sm table-bordered table-striped">
+            <thead>
             <tr>
-                <th scope="row">заказ №{{$order-> id}}</th>
-                <td>{{$order-> user -> name}}</td>
-                <td>
+                <th scope="col">№</th>
+                <th scope="col">Клиент</th>
+                <th scope="col">Дата формирования заказа</th>
+                <th scope="col">#</th>
+                <th scope="col">Status</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach( $orders as $order )
+                <tr>
+                    <th scope="row">заказ №{{$order-> id}}</th>
+                    <td>{{$order-> user -> name}}</td>
+                    <td>
 
                         {{ $order->created_at->format('F j, Y, g:i a') }}
-                </td>
-            <td>
-                <a href ="{{ route('admin.orders.show',$order) }}" class="btn btn-secondary">Подробнее</a>
-            </td>
-                <td>
-                    <form action="{{ route('admin.orders.status.update',  $order) }}"
-                          id="statusForm{{ $order -> id }}" method="POST">
-                        @csrf
-                        @method('PATCH')
-                        <select name="status" id="status" form="statusForm{{ $order->id }}">
-                            <option value="новый заказ" {{ $order->status == 'Новый заказ'? 'selected' :''}}>Новый заказ</option>
-                            <option value="Готов к выдаче" {{ $order->status == 'Готов к выдаче'? 'selected' :''}}>Готов к выдаче</option>
-                            <option value="Получен" {{ $order->status == 'Получен'? 'selected' :''}}>Получен</option>
-                            <option value="Отмена заказа" {{ $order->status == 'Отмена заказа'? 'selected' :''}}>Отмена Заказа</option>
-                        </select>
-                        <input type="submit" value="Обновить статус">
-                    </form>
-                </td>
+                    </td>
+                    <td>
+                        <a href="{{ route('admin.orders.show',$order) }}" class="btn btn-secondary">Подробнее</a>
+                    </td>
+                    <td>
+                        <form action="{{ route('admin.orders.status.update',  $order) }}"
+                              id="statusForm{{ $order -> id }}" method="POST">
+                            @csrf
+                            @method('PATCH')
+                            <select name="status" id="status" form="statusForm{{ $order->id }}">
+                                <option value="новый заказ" {{ $order->status === 'Новый заказ'? 'selected' :''}}>Новый
+                                    заказ
+                                </option>
+                                <option value="Готов к выдаче" {{ $order->status === 'Готов к выдаче'? 'selected' :''}}>
+                                    Готов к выдаче
+                                </option>
+                                <option value="Получен" {{ $order->status === 'Получен'? 'selected' :''}}>Получен
+                                </option>
+                                <option value="Отмена заказа" {{ $order->status === 'Отмена заказа'? 'selected' :''}}>
+                                    Отмена Заказа
+                                </option>
+                            </select>
+                            <input type="submit" value="Обновить статус">
+                        </form>
+                    </td>
 
-            </tr>
-        @endforeach
-        </tbody>
-    </table>
+                </tr>
+            @endforeach
+            </tbody>
+        </table>
+    </div>
 @endsection

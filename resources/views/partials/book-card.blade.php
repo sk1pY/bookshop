@@ -1,9 +1,9 @@
-<div class="card border-0 h-100 d-flex flex-column" style="max-width: 220px;">
+<div id="book-{{$book->id }}" class="card border-0 h-100 d-flex flex-column" style="max-width: 220px;">
     @auth
         {{-- BOOKMARK --}}
         <div style="cursor: pointer"
              class="d-flex justify-content-end bookmark-button m-3 fs-4"
-             data-bookmark-id="{{ $book->id }}"
+             data-book-id="{{ $book->id }}"
              data-url="{{route('home.bookmarks.store')}}">
             <i class="bookmark_button bi text-danger {{
                         in_array($book->id, $bookmarkBookUser, true) ? 'bi-heart-fill' : 'bi-heart' }}"></i>
