@@ -1,5 +1,5 @@
-@extends('admin.layouts.index')
-@section('content')
+@extends('layouts.admin')
+@section('admin-content')
     <h4>Заказ №{{$order->id}}</h4>
     <div class="row">
         <div class="col-6">

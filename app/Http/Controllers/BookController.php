@@ -9,7 +9,8 @@ use App\Models\BasketItem;
 use App\Models\Book;
 use App\Models\Bookmark;
 use App\Models\Category;
-use App\Models\Commentary;
+use App\Models\Comment;
+
 use App\Models\InterfaceSite;
 use App\Models\Order;
 use App\Models\OrderItem;
@@ -53,7 +54,7 @@ class BookController extends Controller
             return $book;
         });
 
-        return view('index', compact('books', 'slides'));
+        return view('front.index', compact('books', 'slides'));
     }
 
 
@@ -66,9 +67,11 @@ class BookController extends Controller
 
         in_array($book->id, $book_id) ? $bought = true : $bought = false;
 
-        $commentaries = Commentary::where('book_id', $book->id)->orderBy('created_at', 'desc')->get();
+        $commentaries = Comment::where('book_id', $book->id)->orderBy('created_at', 'desc')->paginate(6);
 
-        return view('book', compact('book', 'commentaries', 'bought','bookQuantityInBakset'));
+
+
+        return view('front.book', compact('book', 'commentaries', 'bought','bookQuantityInBakset'));
     }
 
 

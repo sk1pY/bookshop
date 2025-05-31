@@ -1,5 +1,5 @@
-@extends('admin.layouts.index')
-@section('content')
+@extends('layouts.admin')
+@section('admin-content')
     @if ( session('successStatusUpdate') )
         <div class="alert alert-success d-flex px-4">
             <div>{{ session('successStatusUpdate') }}</div>

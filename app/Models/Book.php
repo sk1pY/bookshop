@@ -35,7 +35,7 @@ class Book extends Model
     }
 
     public function commentaries(){
-        return $this->hasMany(Commentary::class);
+        return $this->hasMany(Comment::class);
     }
 
     public function scopeSales(Builder $query)

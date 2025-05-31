@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('content')
+@section('app-content')
     <div class="row">
         <div class="col-6 rounded-5 bg-white ms-4 p-4 table-responsive">
 

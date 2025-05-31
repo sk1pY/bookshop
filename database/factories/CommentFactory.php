@@ -3,7 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Book;
-use App\Models\Commentary;
+use App\Models\Comment;
 use App\Models\Order;
 use App\Models\OrderItem;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Log;
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Model>
  */
-class CommentaryFactory extends Factory
+class CommentFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -37,7 +37,7 @@ class CommentaryFactory extends Factory
 
     public function configure()
     {
-        return $this->afterCreating(function (Commentary $commentary) {
+        return $this->afterCreating(function (Comment $commentary) {
             $book = Book::where('id',$commentary->book_id)->first();
             $avgRating =  $book->commentaries()->avg('rating');
             $book->avgRating = $avgRating;

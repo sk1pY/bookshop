@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('content')
+@section('app-content')
 
     <div class="row">
         <div class="col ">

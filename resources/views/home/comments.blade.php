@@ -1,56 +1,47 @@
-@extends('home.index')
-@section('content-home')
-        <h1>Мои отзывы</h1>
+@extends('layouts.home')
+@section('home-content')
+    <h3>Мои отзывы</h3>
+    <hr>
+    <table id="table" class="table table-sm table-bordered table-hover m-0">
+        <thead>
+        <tr class="text-center">
+            <th>Book</th>
+            <th>Rating</th>
+            <th>#</th>
+            <th>#</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach( $comments as $comment )
+            <tr class="text-center">
+                <td style="width: 170px">
+                    <a href="{{route('books.book',$comment->book)}}">{{$comment->book->title}}</a>
+                </td>
+                <td style="width: 200px">
+                    @php
+                        $fullStars = floor($comment->rating);
+                    @endphp
+                    @for ($i = 0; $i < $fullStars; $i++)
+                        <i class="bi bi-star-fill text-warning"></i>
+                    @endfor
 
+                </td>
 
-        <table class="table">
-            <thead>
-
-            </thead>
-            <tbody>
-            @foreach( $comments as $comment )
-                <tr>
-                    <td style="width: 170px">
-                        <a href="{{route('books.book',$comment->book)}}">{{$comment->book->title}}</a>
-                    </td>
-                    <td style="width: 200px">
-                        @php
-                            $fullStars = floor($comment->rating);
-                            $halfStars = ($comment->rating - $fullStars) > 0;
-                        @endphp
-
-
-                        @for ($i = 0; $i < $fullStars; $i++)
-                            <i class="fas fa-star text-warning"></i>
-                        @endfor
-
-                        @if($halfStars)
-                            {
-                            <i class="fas fa-star-half-alt text-warning"></i>
-                            }
-                        @endif
-
-                        @for( $i = 5 - $fullStars - ($halfStars?1:0); $i >  0; $i-- )
-
-                            <i class="fa-regular fa-star text-warning"></i>
-                        @endfor
-                    </td>
-
-                    <td>{{$comment -> text}}</td>
-                    <td>
-                        <form action="{{ route('comments.destroy',$comment)}}" method="post"
-                              id>
-                            @csrf
-                            @method('delete')
-                            <button style="font-size: 1.5rem" class="btn"><i class="fa-regular fa-trash-can"></i>
-                            </button>
-                            {{--                        <input class="btn btn-danger" type="submit" value="Удалить">--}}
-                        </form>
-                    </td>
-                </tr>
-            @endforeach
-            </tbody>
-        </table>
+                <td>{{$comment -> text}}</td>
+                <td>
+                    <form action="{{ route('home.comments.destroy',$comment)}}" method="post">
+                        @csrf
+                        @method('delete')
+                        <button class="btn btn-sm"
+                                onclick="return confirm('Точно удалить?')">
+                            <i type="submit" class="bi bi-x"></i>
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        @endforeach
+        </tbody>
+    </table>
 
 
 @endsection

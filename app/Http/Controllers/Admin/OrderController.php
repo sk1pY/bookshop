@@ -45,7 +45,7 @@ class OrderController extends Controller
                     ->increment('stock', $item->quantity);
             });
         }
-        return bakc()->with('success', 'Статус заказа обновлен');
+        return back()->with('success', 'Статус заказа обновлен');
 
     }
     public function aboutOrderAdmin(Order $order)

@@ -71,7 +71,7 @@ class BasketController extends Controller
 
         $addresses = Address::latest()->get();
 
-        return view('basket', compact('books', 'total_price', 'addresses'));
+        return view('front.basket', compact('books', 'total_price', 'addresses'));
     }
 
     public function makeOrder(Request $request)

@@ -26,7 +26,6 @@ class BookmarkController extends Controller
 
         return view('home.bookmark', compact('bookmarks'));
     }
-
     public function store(Request $request)
     {
         $bookId = $request->input('book_id');

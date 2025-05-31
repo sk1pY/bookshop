@@ -14,7 +14,7 @@
        style="text-decoration: none; color: inherit;">
         <div class="d-flex justify-content-center align-items-center image-container">
             <img src="{{ Storage::url('booksImages/' . $book->image) }}"
-                 alt="Responsive image" class="img-fluid" style="height: 170px">
+                 alt="Responsive image" class="img-fluid" style="height: 200px">
         </div>
         <div class="card-body pb-0 pt-0">
             <div class="d-flex mt-2">

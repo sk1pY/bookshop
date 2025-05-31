@@ -1,33 +1,34 @@
 <?php
 //Admin
-use  App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\AddressController;
+use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\AuthorController as AdminAuthorController;
 use App\Http\Controllers\Admin\BookController as AdminBookController;
 use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
-use App\Http\Controllers\Admin\AddressController;
 use App\Http\Controllers\Admin\DiscountController;
 use App\Http\Controllers\Admin\InterfaceController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\RolesPermissions\PermissionController;
 use App\Http\Controllers\Admin\RolesPermissions\RoleController;
 use App\Http\Controllers\Admin\RolesPermissions\RolePermissionController;
-use App\Http\Controllers\Admin\UserController;
-
-//Home
-use App\Http\Controllers\Home\BookmarkController as HomeBookmarkController;
-use App\Http\Controllers\Home\HomeController;
-use App\Http\Controllers\Home\OrderController as HomeOrderController;
+use App\Http\Controllers\Admin\UserController as AdminUserController;
 //
-
 use App\Http\Controllers\AuthorController;
 use App\Http\Controllers\BasketController;
 use App\Http\Controllers\BasketItemController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\CommentaryController;
+use App\Http\Controllers\CommentController;
+//Home
+use App\Http\Controllers\Home\BookmarkController as HomeBookmarkController;
+use App\Http\Controllers\Home\HomeController;
+use App\Http\Controllers\Home\OrderController as HomeOrderController;
+use App\Http\Controllers\Home\UserController as HomeUserController;
+use App\Http\Controllers\Home\CommentController as HomeCommentController;
+//
 use App\Http\Controllers\SearchController;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
+
 
 
 
@@ -54,25 +55,25 @@ Route::prefix('basket')->group(function () {
     Route::post('/basket-items/book/decrease', [BasketItemController::class, 'decrease'])->name('basket-item.decrease');
     Route::delete('/basket-items/book/{book}', [BasketItemController::class, 'deleteAllByBook'])->name('basket-item.deleteAll');
 });
-//------------------------------------------------HOME PROFILE------------------------------------------------
+//------------------------------------------------PROFILE------------------------------------------------
 Route::name('home.')->prefix('home')->middleware('role:user|admin')->group(function () {
-    Route::get('/', [HomeController::class, 'index'])->name('index');
+    //BOOKMARKS
     Route::get('/bookmarks', [HomeBookmarkController::class, 'index'])->name('bookmarks.index');
     Route::post('/bookmarks', [HomeBookmarkController::class, 'store'])->name('bookmarks.store');
+    //COMMENTS
+    Route::resource('/comments', HomeCommentController::class)->only(['index','update','destroy']);
+    //ORDERS
     Route::get('/orders', [HomeOrderController::class, 'orders'])->name('orders.index');
     Route::get('/orders/{order}', [HomeOrderController::class, 'show'])->name('orders.show');
-    Route::delete('/orders/{order}', [HomeOrderController::class, 'cancelOrder'])->name('orders.destroy');
-    Route::get('/info', [HomeController::class, 'info'])->name('info.index');
-    Route::patch('/info/{user}', [HomeController::class, 'infoUpdate'])->name('info.update');
-    Route::delete('users/{user}',[HomeController::class,'destroy'])->name('users.destroy');
+    Route::delete('/orders/{order}', [HomeOrderController::class, 'destroy'])->name('orders.destroy');
+    //USER INFO
+    Route::get('/info', [HomeUserController::class, 'infoUser'])->name('info');
+    Route::patch('/info', [HomeUserController::class, 'infoUserUpdate'])->name('info.update');
+    Route::delete('/user',[HomeController::class,'userDelete'])->name('user.destroy');
 });
 
-//------------------------------------------------Commentaries------------------------------------------------
-Route::name('comments.')->group(function () {
-    Route::get('/comments', [CommentaryController::class, 'index'])->name('index');
-    Route::post('/books/{book}/comments', [CommentaryController::class, 'store'])->name('store');
-    Route::delete('/books/comments/{comment}', [CommentaryController::class, 'destroy'])->name('destroy');
-});
+//------------------------------------------------Comments------------------------------------------------
+Route::resource('books.comments', CommentController::class)->only(['destroy', 'store', 'update']);
 
 
 //------------------------------------------------ADMIN-PANEL--------------------------------------------//
@@ -93,7 +94,7 @@ Route::name('admin.')->prefix('admin')->middleware('role:admin')->group(function
     //Categories
     Route::resource('categories', AdminCategoryController::class);
     //Users
-    Route::resource('users', UserController::class);
+    Route::resource('users', AdminUserController::class);
     //Orders
     Route::get('/orders', [AdminOrderController::class, 'orders'])->name('orders.index');
     Route::get('/orders-history', [AdminOrderController::class, 'orderHistory'])->name('orders.history');

@@ -46,7 +46,7 @@ class CategoryController extends Controller
             'sales' => 'Акции',
             default => 'Неизвестно',
         };
-        return view('categories.special_categories_show', compact('books','slug','cat_rus'));
+        return view('front.categories.special_categories_show', compact('books','slug','cat_rus'));
     }
 
     public function show(Request $request, Category $category)
@@ -74,7 +74,7 @@ class CategoryController extends Controller
         $books = $bookQuery->get();
 
 
-        return view('categories.categories', compact('books', 'category', 'bookmarkTaskUser'));
+        return view('front.categories.categories', compact('books', 'category', 'bookmarkTaskUser'));
     }
 
 

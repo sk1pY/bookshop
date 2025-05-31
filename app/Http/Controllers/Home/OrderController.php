@@ -33,7 +33,7 @@ class OrderController extends Controller
         return view('home.about_order', compact('order', 'orderItems'));
     }
 
-    public function cancelOrder(Order $order)
+    public function destroy(Order $order)
     {
 
         $booksBoughtUpdate = $order->order_items()->get();

@@ -1,5 +1,5 @@
-@extends('admin.layouts.index')
-@section('content')
+@extends('layouts.admin')
+@section('admin-content')
     <div class="p-3">
         <h4>Добавить категорию</h4>
         <hr>

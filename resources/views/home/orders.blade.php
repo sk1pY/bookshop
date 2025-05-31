@@ -1,5 +1,5 @@
-@extends('home.index')
-@section('content-home')
+@extends('layouts.home')
+@section('home-content')
     <form action="{{ route('home.orders.index') }}" method="get">
 
         <div class="d-flex mb-3">
@@ -20,7 +20,7 @@
                 Заказ: {{ $order->id }}
                 <p>цена: {{ $order -> price }}</p>
                 <p>Статус заказа: {{ $order -> status }}</p>
-                @if($order->status == "Новый заказ"  )
+                @if($order->status === "Новый заказ"  )
                     <form action="{{ route('home.orders.destroy',$order) }}" method="post">
                         @csrf
                         @method('delete')

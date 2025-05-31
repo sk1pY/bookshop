@@ -18,36 +18,4 @@ class HomeController extends Controller
     {
         return view('home.index');
     }
-
-    public function info()
-    {
-        $user = Auth::user();
-        $addresses = Address::get();
-
-        return view('home.info', compact('user', 'addresses'));
-    }
-
-    public function infoUpdate(UpdateInfoRequest $request, User $user)
-    {
-        $validated = $request->validated();
-
-        foreach ($validated as $key => $value) {
-            if ($value !== null && $value !== '' && $value !== $user->$key) {
-                $user->$key = $value;
-            }
-        }
-
-        $user->save();
-
-        return to_route('home.info.index');
-
-    }
-
-
-    public function destroy(User $user){
-        $user->delete();
-        return to_route('books.index');
-
-    }
-
 }

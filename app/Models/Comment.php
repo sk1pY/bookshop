@@ -5,10 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Commentary extends Model
+class Comment extends Model
 {
     use HasFactory;
-
+    protected $table = 'comments';
     protected $fillable = ['text','book_id','rating','user_id'];
 
     public function book(){

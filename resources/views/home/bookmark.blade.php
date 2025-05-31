@@ -1,5 +1,5 @@
-@extends('home.index')
-@section('content-home')
+@extends('layouts.home')
+@section('home-content')
     <h4>Избранное</h4>
     <div class="row g-4 mt-3">
         @forelse($bookmarks as $bookmark)

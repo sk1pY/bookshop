@@ -20,6 +20,6 @@ class AuthorController extends Controller
         $books->each(function ($book) use ($quantities) {
             $book->quantity = $quantities[$book->id] ?? 0;
         });
-        return view('author', compact('books', 'bookmarkTaskUser', 'author'));
+        return view('front.author', compact('books', 'bookmarkTaskUser', 'author'));
     }
 }
