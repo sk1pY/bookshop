@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BasketItem;
 use App\Models\Book;
 use App\Models\Bookmark;
 use App\Models\Category;
@@ -14,6 +15,7 @@ class CategoryController extends Controller
     public function specialCategories(Request $request, $slug)
     {
         $bookQuery = Book::query();
+
         if ($request->filled('filter')) {
             switch ($request->input('filter')) {
                 case 'cheap':
@@ -33,20 +35,34 @@ class CategoryController extends Controller
             'sales' => $bookQuery->sales(),
             default => null
         };
-        $basket = app('basket');
 
-        $quantities = $basket->basket_items()->pluck('quantity', 'book_id');
+
+        $basket = app('basket');
         $books = $bookQuery->paginate(10);
-        $books->getCollection()->each(function ($book) use ($quantities) {
-            $book->quantity = $quantities[$book->id] ?? 0;
-        });
+
+        //ADD QUANTITY BOOK
+        $books_session = collect(session('books', []));
+        $quantities = Auth::check() ?
+            $basket->basket_items()->pluck('quantity', 'book_id') :
+            $books_session->pluck('quantity', 'id');
+
+
+        $books->setCollection(
+            $books->getCollection()->map(function ($book) use ($quantities) {
+                $book->quantity = $quantities[$book->id] ?? 0;
+                return $book;
+            })
+        );
+
         $cat_rus = match ($slug) {
             'bestsellers' => 'Бестселлеры',
             'newest' => 'Новинки',
             'sales' => 'Акции',
             default => 'Неизвестно',
         };
-        return view('front.categories.special_categories_show', compact('books','slug','cat_rus'));
+
+
+        return view('front.categories.special_categories_show', compact('books', 'slug', 'cat_rus'));
     }
 
     public function show(Request $request, Category $category)
@@ -54,7 +70,12 @@ class CategoryController extends Controller
         $bookmarkTaskUser = Auth::check() ?
             Bookmark::where('user_id', Auth::id())->pluck('book_id')->toArray() : null;
 
-        $bookQuery = $category->books();
+        $bookQuery = Book::where('category_id', $category->id);
+
+//        $bookQuery = Auth::check() ?
+//            Book::where('category_id', $category->id) :
+//            Book::whereIn('id', $bookIds);
+
         if ($request->filled('filter')) {
             switch ($request->input('filter')) {
                 case 'cheap':
@@ -67,11 +88,24 @@ class CategoryController extends Controller
                     $bookQuery->orderBy('avgRating', 'desc');
             }
         }
-        if ($categoryId = $request->input('category_id')) {
-            $bookQuery->where('category_id', $categoryId);
-        }
 
-        $books = $bookQuery->get();
+
+        $basket = app('basket');
+        $books = $bookQuery->paginate(10);
+
+        //ADD QUANTITY BOOK
+        $books_session = collect(session('books', []));
+        $quantities = Auth::check() ?
+            $basket->basket_items()->pluck('quantity', 'book_id') :
+            $books_session->pluck('quantity', 'id');
+
+
+        $books->setCollection(
+            $books->getCollection()->map(function ($book) use ($quantities) {
+                $book->quantity = $quantities[$book->id] ?? 0;
+                return $book;
+            })
+        );
 
 
         return view('front.categories.categories', compact('books', 'category', 'bookmarkTaskUser'));

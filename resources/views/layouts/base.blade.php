@@ -25,14 +25,13 @@
 
 </style>
 <body>
+@include('partials.alert.toast')
 @include('partials.alert.auth')
 @include('partials.alert.validation')
 @include('partials.alert.error')
 @include('partials.alert.success')
 @if (Request::is('admin*'))
-    <div class="container-fluid min-vh-100 d-flex">
         @yield('content')
-    </div>
 @else
     <div class="container" style="max-width: 1100px">
         @if (!Request::is('admin*'))

@@ -1,6 +1,7 @@
 @extends('layouts.app')
 @section('content')
-    <h1>{{ $category->name }}</h1>
+    <h4 class="text-center">{{ $category->name }}</h4>
+    <hr>
     {{--FILTER--}}
     <div class="my-4">
         <form id="filterForm" method="get">
@@ -27,10 +28,10 @@
                 @include('partials.book-card')
             </div>
         @empty
-            <div class="col">
-                <h3>Ничего не найдено</h3>
-            </div>
+                <h3 class="w-auto">Ничего не найдено</h3>
         @endforelse
     </div>
     {{--BOOKS--}}
+    <div class="mt-3 ">{{$books->links('pagination::bootstrap-5')}}</div>
+
 @endsection

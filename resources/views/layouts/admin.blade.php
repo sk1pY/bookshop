@@ -1,9 +1,12 @@
 @extends('layouts.base')
+
 @section('content')
-    <div class="container-fluid min-vh-100 d-flex">
-        <div class="row flex-grow-1 w-100">
-            @include('admin.partials.sidebar')
-            <div class="col p-4">
+    <div class="container-fluid min-vh-100 d-flex flex-column">
+        <div class="row flex-grow-1">
+            <div class="col-3  p-0" style="background-color: #273A50;">
+                @include('admin.partials.sidebar')
+            </div>
+            <div class="col-9 p-4">
                 @yield('admin-content')
             </div>
         </div>

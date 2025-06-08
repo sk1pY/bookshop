@@ -106,7 +106,7 @@
                     <form id="bookForm" class="d-flex flex-column" action="{{ route('basket.order') }}" method="post">
                         @csrf
                         <input type="hidden" id="basket" name="basket">
-                        <input class="form-control" type="hidden" name="total_price" value="{{ $total_price }}">
+                        <input class="form-control" type="hidden" name="total_price" value="{{ $basket_full_price }}">
                         <label for="name">Имя</label>
                         <input class="mb-3 form-control" id="name" name="name" type="text"
                                value="{{ Auth::user()->name ?? old('name') }}">
@@ -132,7 +132,7 @@
                 <div class="border rounded-5 bg-white ms-4 p-4 mt-3 fs-5">
                     <div class="d-flex justify-content-between">
                         <div>Итого</div>
-                        <div class="basket_price">{{ $total_price }}</div>
+                        <div class="basket_price">{{ $basket_full_price }}</div>
                     </div>
                 </div>
 

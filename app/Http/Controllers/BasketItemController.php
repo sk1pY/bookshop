@@ -15,86 +15,40 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use function PHPSTORM_META\map;
 use function PHPUnit\Framework\isEmpty;
+use function Sodium\increment;
 
 class BasketItemController extends Controller
 {
     public function increase(Request $request)
     {
-
         $bookId = $request->input('book_id');
         $book = Book::find($bookId);
         $basket = app('basket');
-        $books = collect(session()->get('books', []));
         // ЕСЛИ АВТОРИЗОВАН
         if (Auth::check()) {
-            if (session()->has('books')) {
-                //ПЕРЕБОР КНИГ ИЗ  СЕССИИ
-                $books->each(function ($item) use ($basket) {
-                    $stock = Book::where(['id' => $item->id])->first()->stock;
-                    $basket_item_book = BasketItem::where(['book_id' => $item->id, 'basket_id' => $basket->id])->first();
-                    // ЕСЛИ КНИГА ВПЕРВЫЕ В КОРЗИНЕ
-                    if (!$basket_item_book) {
-                        BasketItem::create(
-                            ['book_id' => $item->id,
-                                'basket_id' => $basket->id,
-                                'quantity' => $item->quantity
-                            ]);
-                    } elseif ($basket_item_book->quantity < $stock) {
-                        $basket_item_book->increment('quantity');
-                        $basket->price += $basket_item_book->book->price;
-                        $basket->save();
-
-                        $bookFullPrice = $basket_item_book->book->price * $basket_item_book->quantity;
-                          Log::info($bookFullPrice);
-
-                        return response()->json([
-                            'success' => true,
-                            'quantity' => $basket_item_book->quantity,
-                            'basketPrice' => round($basket->price, 2),
-                            'bookFullPrice' => round($bookFullPrice, 2),
-                            'message' => 'книг прабавлено 1']);
-                    }
-                });
-                $request->session()->forget('books');
-            }
-            $basket_item_book = BasketItem::where(['book_id' => $bookId, 'basket_id' => $basket->id])->first();
             $stock = $book->stock;
-            if (!$basket_item_book) {
-                $basket_item_book = BasketItem::create([
-                        'book_id' => $bookId,
-                        'basket_id' => $basket->id,
-                        'quantity' => 1]
-                );
-                $basket->price += $basket_item_book->book->price;
-                $basket->save();
-                $bookInBasketQuantity = $basket->basket_items()->pluck('quantity')->sum();
-                $bookFullPrice = $basket_item_book->book->price * $basket_item_book->quantity;
-
-                return response()->json([
-                    'success' => true,
-                    'quantity' => $basket_item_book->quantity,
-                    'basketPrice' => round($basket->price, 2),
-                    'bookInBasketQuantity' => $bookInBasketQuantity,
-                    'bookFullPrice' => round($bookFullPrice, 2),
-                    'message' => 'успешно добавлена в коризину']);
-            } elseif ($basket_item_book->quantity < $stock) {
+            // ЕСЛИ КНИГА ВПЕРВЫЕ В КОРЗИНЕ то создат баскетитем с quantity
+            $basket_item_book = BasketItem::firstOrCreate([
+                'book_id' => $bookId,
+                'basket_id' => $basket->id,],
+                ['quantity' => 0]);
+            //ЕСЛИ ВСЕ ОК И МЕНЬШЕ СТОКА ТО +1 QUANTITY
+            if ($basket_item_book->quantity < $stock) {
                 $basket_item_book->increment('quantity');
                 $basket->price += $basket_item_book->book->price;
                 $basket->save();
-                $bookInBasketQuantity = $basket->basket_items()->pluck('quantity')->sum();
-
                 $bookFullPrice = $basket_item_book->book->price * $basket_item_book->quantity;
-
+                $bookInBasketQuantity = $basket->basket_items()->pluck('quantity')->sum();
 
                 return response()->json([
                     'success' => true,
                     'quantity' => $basket_item_book->quantity,
-                    'basketPrice' => round($basket->price, 2),
                     'bookInBasketQuantity' => $bookInBasketQuantity,
+                    'basketPrice' => round($basket->price, 2),
                     'bookFullPrice' => round($bookFullPrice, 2),
-                ]);
-
-            } elseif ($basket_item_book->quantity == $stock) {
+                    'message' => 'книг прабавлено 1']);
+            } //ЕСЛИ КНИГ === СТОК
+            elseif ($basket_item_book->quantity == $stock) {
                 $bookInBasketQuantity = $basket->basket_items()->pluck('quantity')->sum();
                 $bookFullPrice = $basket_item_book->book->price * $basket_item_book->quantity;
 
@@ -104,40 +58,63 @@ class BasketItemController extends Controller
                     'bookInBasketQuantity' => $bookInBasketQuantity,
                     'basketPrice' => round($basket->price, 2),
                     'bookFullPrice' => round($bookFullPrice, 2),
+                    'bookMax' => true,
                     'message' => 'Выбрано максимальное количество книг']);
-
             }
         } // ЕСЛИ НЕ АВТОРИЗОВАН
         else {
             $books = collect(session()->get('books', []));
             $book_exist = false;
-            $stock = false;
-            $books = $books->map(function ($item) use (&$stock, &$book_exist, $bookId) {
+            $stock_max = false;
+            $books = $books->map(function ($item) use (&$stock_max, &$book_exist, $bookId) {
                 if ($item->id == $bookId) {
                     if ($item->quantity < $item->stock) {
+                        Log::info($item->quantity);
                         $item->quantity++;
-                        $book_exist = true;
-                        return $item;
                     } else {
-                        $stock = true;
+                        $stock_max = true;
                     }
+                    $book_exist = true;
                 }
                 return $item;
             });
+            session(['books' => $books]);
+            $bookInBasketQuantity = $books->pluck('quantity')->sum();
 
-            if ($stock) {
-                return response()->json(['success' => false, 'message' => 'Выбрано максимальное количество книг',]);
-            }
-            if (!$book_exist) {
+            if (!$stock_max && $book_exist) {
+                $book = $books->where('id', $bookId)->first();
+
+                return response()->json([
+                    'success' => true,
+                    'quantity' => $book->quantity,
+                    'bookInBasketQuantity' => $bookInBasketQuantity,
+                    'message' => '+1 book']);
+            } elseif ($stock_max && $book_exist) {
+                $book = $books->where('id', $bookId)->first();
+
+                return response()->json([
+                    'success' => true,
+                    'quantity' => $book->quantity,
+                    'bookInBasketQuantity' => $bookInBasketQuantity,
+                    'bookMax' => true,
+                    'message' => 'max book quantity'
+                ]);
+            } //ЕСЛИ НЕТ ВООБЩЕ КНИГИ В БАСКЕТЕ
+            elseif (!$book_exist) {
                 $book->quantity = 1;
                 $books->push($book);
-            }
-            session(['books' => $books]);
-        }
-        $bookInBasketQuantity = $books->pluck('quantity')->sum();
+                $bookInBasketQuantity = $books->pluck('quantity')->sum();
 
-        return response()->json(['success' => true, 'quantity' => $book->quantity, 'bookInBasketQuantity' => $bookInBasketQuantity]);
+                return response()->json([
+                    'success' => true,
+                    'quantity' => $book->quantity,
+                    'bookInBasketQuantity' => $bookInBasketQuantity,
+                    'message' => 'first book'
+                ]);
+            }
+        }
     }
+
 
     public function decrease(Request $request)
     {
@@ -147,30 +124,43 @@ class BasketItemController extends Controller
         // ЕСЛИ НЕ АВТОРИЗОВАН
         if (session()->has('books')) {
             $books = collect(session()->get('books', []));
-            $update = false;
-            $books = $books->map(function ($book) use ($bookId, &$update) {
-                if ($book->id == $bookId && $book->quantity > 1) {
-                    $book->quantity--;
-                    $update = true;
-                    return $book;
-                } else {
-                    $book = null;
-                    $update = true;
+            $book_zero = false;
+            $books = $books->map(function ($book) use ($bookId, &$book_zero) {
+                if ($book->id == $bookId) {
+                    if ($book->quantity > 1) {
+                        $book->quantity--;
+                    } else {
+                        $book = null;
+                        $book_zero = true;
+                    }
                 }
                 return $book;
             })->filter();
+
             session(['books' => $books]);
-            if ($update) {
-                return response()->json(['success' => true, 'quantity' => $book->quantity]);
+            $bookInBasketQuantity = $books->pluck('quantity')->sum();
+            if ($book_zero) {
+                $quantity = 0;
+            } else {
+                $book = $books->where('id', $bookId)->firstOrFail();
+                $quantity = $book->quantity;
+
             }
+            return response()->json([
+                'success' => true,
+                'quantity' => $quantity,
+                'bookInBasketQuantity' => $bookInBasketQuantity,
+                'message' => '-1']);
         }
         //ЕСЛИ АВТОРИЗОВАН
         if (Auth::check()) {
             $basket = app('basket');
-            $bookInBasket = BasketItem::where(['basket_id' => $basket->id])->firstWhere('book_id', $bookId);
+            $bookInBasket = BasketItem::where('basket_id', $basket->id)->where('book_id', $bookId)->first();
+            //ЕСЛИ 1 КНИГА ОСТАЛАСЬ
             if ($bookInBasket->quantity == 1) {
                 $bookInBasket->delete();
-                if (BasketItem::where('basket_id', $basket->id)->count() === 0) {
+                //ЕСЛИ ЭТО ПОСЛЕДНЯЯ КНИГА В БАСКЕТЕ
+                if (BasketItem::where('basket_id', $basket->id)->count() == 0) {
                     $basket->price -= $bookInBasket->book->price;
                     $basket->delete();
                 }
@@ -185,31 +175,41 @@ class BasketItemController extends Controller
                     'bookFullPrice' => round($bookFullPrice, 2),
                     'message' => 'последняя книга удалена из корзины']);
             }
+
             $bookInBasket->decrement('quantity');
             $basket->price -= $bookInBasket->book->price;
             $basket->save();
+            $bookInBasketQuantity = $basket->basket_items()->pluck('quantity')->sum();
+            $bookFullPrice = $bookInBasket->book->price * $bookInBasket->quantity;
+
+
+            return response()->json([
+                'success' => true,
+                'quantity' => $bookInBasket->quantity,
+                'basketPrice' => round($basket->price, 2),
+                'bookInBasketQuantity' => $bookInBasketQuantity,
+                'bookFullPrice' => round($bookFullPrice, 2),
+                'message' => 'книг уменьшено на 1']);
         }
-        $bookInBasketQuantity = $basket->basket_items()->pluck('quantity')->sum();
-        $bookFullPrice = $bookInBasket->book->price * $bookInBasket->quantity;
 
-
-        return response()->json([
-            'success' => true,
-            'quantity' => $bookInBasket->quantity,
-            'basketPrice' => round($basket->price, 2),
-            'bookInBasketQuantity' => $bookInBasketQuantity,
-            'bookFullPrice' => round($bookFullPrice, 2),
-            'message' => 'книг уменьшено на 1']);
     }
 
     public function deleteAllByBook(Request $request, Book $book)
     {
         $basket = app('basket');
+        $books = collect(session()->get('books', []));
+        if (!auth()->check()) {
+            $books = $books->reject(function ($item) use ($books, $book) {
+                return $item->id == $book->id;
+            });
+            session(['books' => $books]);
+        } else {
+            BasketItem::where(['book_id' => $book->id, 'basket_id' => $basket->id])->delete();
+            // $request->session()->forget('books');
+        }
 
-        BasketItem::where(['book_id' => $book->id, 'basket_id' => $basket->id])->delete();
-        $request->session()->forget('books');
 
-        return to_route('basket.index');
+        return back();
 
     }
 }

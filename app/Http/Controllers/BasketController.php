@@ -14,64 +14,39 @@ class BasketController extends Controller
 {
     public function index(request $request)
     {
+      // session()->invalidate();
         $basket = app('basket');
-        $total_price = 0;
-        $books_auth = collect();
-        $books_session = collect(session()->get('books', collect()));
-        $books = collect(session()->get('books', []));
-
-        // ЕСЛИ ЮЗЕР НЕ АВТОРИЗОВАН, КНИГИ БЕРУТСЯ ИЗ СЕССИИ
+        $books = collect(session()->get('books', collect()));
+        $basket_full_price = 0;
+        // ЕСЛИ ЮЗЕР НЕ АВТОРИЗОВАН
         if (session()->has('books')) {
-            $total_price = $books_session->sum(function ($item) {
+            $basket_full_price = $books->sum(function ($item) {
                 return $item->quantity * $item->price;
             });
         }
         // ЕСЛИ ЮЗЕР АВТОРИЗОВАН
         if (Auth::check()) {
-            $books_auth = $basket->basket_items()
+            $books = $basket->basket_items()
                 ->with('book')
                 ->get()
                 ->map(function ($item) {
                     $book = $item->book;
                     $book->quantity = $item->quantity;
-                    return $book;
-                });
-            $books = $books_session->merge($books_auth)
-                //групирует дубликаты из сессии и auth
-                ->groupBy('id')
-                ->map(function ($group_item_book) {
-                    $book = $group_item_book->first();
-                    $book->quantity = min($group_item_book->sum('quantity'), $book->stock);
                     $book->fullPrice = $book->quantity * $book->price;
                     return $book;
                 });
 
-            $books->each(function ($book) use ($basket) {
-                $basketitem = BasketItem::firstOrCreate(
-                    [   'book_id' => $book->id,
-                        'basket_id' => $basket->id],
-                    [   'quantity' => $book->quantity]);
-                $basketitem->update([
-                    'quantity' => $book->quantity,
-                ]);
-                $basketitem->save();
-
-            });
-
-            $total_price = $books->sum(function ($item) {
+            $basket_full_price = $books->sum(function ($item) {
                 return $item->quantity * $item->price;
             });
 
-            $basket->price = $total_price;
+            $basket->price = $basket_full_price;
             $basket->save();
-
-            session()->forget('books');
-
         }
 
         $addresses = Address::latest()->get();
 
-        return view('front.basket', compact('books', 'total_price', 'addresses'));
+        return view('front.basket', compact('books', 'basket_full_price', 'addresses'));
     }
 
     public function makeOrder(Request $request)

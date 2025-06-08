@@ -33,44 +33,31 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-
         Gate::define('check-bought-book', function (User $user, Book $book) {
             return $user->orders()->whereHas('order_items', function ($query) use ($book) {
                 $query->where('book_id', $book->id);
             })->exists();
         });
-        Gate::before(function ($user, $ability) {
-            return $user->hasRole('super-admin') ? true : null;
-        });
 
         Carbon::setLocale('ru');
         Route::pattern('id', '[0-9]+');
         Route::pattern('', '[0-9]+');
-        View::composer('admin.layouts.index', function ($view) {
-            $countOrders = Order::whereIn('status', ['Новый заказ', 'Готов к выдаче'])->count();
 
+        View::composer('layouts.admin', function ($view) {
+            $countOrders = Order::whereIn('status', ['Новый заказ', 'Готов к выдаче'])->count();
             $view->with('countOrders', $countOrders);
         });
 
         View::composer('*', function ($view) {
 
             if (Auth::guard()->check()) {
-
-                $books = collect(session()->get('books', []));
-                $bookInBasketQuantity_session = $books->pluck('quantity')->sum();
-
                 $basket = app('basket');
-                $basketPrice = $basket->price;
-                $booksInBasketArray = $basket->basket_items()->pluck('book_id')->toarray();
-                $bookInBasketQuantity = $bookInBasketQuantity_session;
-                if ($basket->basket_items()) {
-                    $bookInBasketQuantity += $basket->basket_items()->pluck('quantity')->sum();
-                }
+                $booksInBasketArray = $basket->basket_items()->pluck('book_id')->toArray();
+                $booksInBasketQuantity = $basket->basket_items()->pluck('quantity')->sum();
 
                 $view->with([
-                    'bookInBasketQuantity' => $bookInBasketQuantity,
                     'booksInBasketArray' => $booksInBasketArray,
-                    'basketPrice' => $basketPrice,
+                    'bookInBasketQuantity' => $booksInBasketQuantity,
                 ]);
             } else {
                 $books = collect(session()->get('books', []));

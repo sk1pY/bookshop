@@ -1,6 +1,5 @@
 @extends('layouts.app')
 @section('app-content')
-
     <div class="row">
         <div class="col ">
             {{--слайдшоу--}}

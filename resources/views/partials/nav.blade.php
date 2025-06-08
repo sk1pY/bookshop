@@ -1,5 +1,4 @@
 <nav class="sticky-top navbar navbar-expand-lg bg-white">
-
     <a class="navbar-brand fw-bold navbar-brand-custom" href="{{ route('books.index') }}">
         #BookShop <i class="fa-solid fa-book"></i>
     </a>
@@ -7,7 +6,6 @@
         <button class="btn btn-danger dropdown-toggle" type="button" data-bs-toggle="dropdown"
                 aria-expanded="false">
             Категории книг
-
         </button>
 
         <ul class="dropdown-menu p-2 w-auto">
@@ -66,7 +64,8 @@
                 {{--                        DROPDOWN MENU--}}
                 <li class="nav-item">
                     <div class="dropdown-center">
-                        <div class="nav-link d-flex flex-column align-items-center dropdown-toggle" data-bs-toggle="dropdown">
+                        <div class="nav-link d-flex flex-column align-items-center dropdown-toggle"
+                             data-bs-toggle="dropdown">
                             <i class="bi bi-person fs-5 d-flex p-0 m-0"></i>
                             <span>{{ Auth::user() ? Auth::user()->name : 'guest' }}</span>
                         </div>
@@ -155,12 +154,24 @@
     </div>
 
 </nav>
+<style>
+    .nav-tabs .nav-link.active {
+        background-color: #dc3545 !important;
+        color: white !important;
+        border-color: #dc3545 #dc3545 #fff !important;
+    }
+</style>
 
-<div class="container my-2">
-    <div class="d-flex justify-content-start gap-3 fs-5">
-        <a class="nav-link" href="{{ route('specialCategories.show','sales') }}">Акции</a>
-        <a class="nav-link" href="{{ route('specialCategories.show','bestsellers') }}">Бестселлеры</a>
-        <a class="nav-link" href="{{ route('specialCategories.show','newest') }}">Новинки</a>
-    </div>
-</div>
+<ul class="nav nav-tabs ">
+    <li class="nav-item ">
+        <a class="text-dark nav-link {{ request()->routeIs('specialCategories.show') && request()->route('slug') === 'sales' ? 'active' : '' }}" href="{{ route('specialCategories.show','sales') }}">Акции</a>
+    </li>
+    <li class="nav-item">
+        <a class="text-dark nav-link {{ request()->routeIs('specialCategories.show') && request()->route('slug') === 'bestsellers' ? 'active' : '' }}" href="{{ route('specialCategories.show','bestsellers') }}">Бестселлеры</a>
+    </li>
+    <li class="nav-item">
+        <a class="text-dark nav-link {{ request()->routeIs('specialCategories.show') && request()->route('slug') === 'newest' ? 'active' : '' }}" href="{{ route('specialCategories.show','newest') }}">Новинки</a>
+    </li>
+</ul>
+
 

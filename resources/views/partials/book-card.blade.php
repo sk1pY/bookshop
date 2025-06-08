@@ -34,7 +34,7 @@
                         </span>
         </div>
     </a>
-    <div class="card-body d-flex flex-column">
+    <div class="card-body d-flex flex-column ">
         <div style="font-size: 0.9rem">
             @if($book->category)
                 <a href="{{ route('categories.show', $book->category->slug) }}">
@@ -79,7 +79,7 @@
                     </div>
                     <div class="basket_item_count text-dark d-flex justify-content-center align-items-center"
                          data-book-id="{{$book->id}}">
-                        {{ $book->quantity ?? '' }}
+                        {{ $book->quantity }}
                     </div>
 
                     <div class="increase-button"
@@ -93,7 +93,7 @@
             </div>
         @else
             <button
-                class="w-auto rounded-pill btn d-flex justify-content-center align-items-center">
+                class="w-auto rounded-pill btn d-flex justify-content-center align-items-center mt-auto">
                 нет в наличии
             </button>
         @endif

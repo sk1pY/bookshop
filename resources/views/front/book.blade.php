@@ -11,7 +11,7 @@
             <div style="background-color: #daebe6; color: #10b37e" class="px-1 border rounded-4  d-inline-block">
                 Купили {{ $book->numberOfPurchased }} раз
             </div>
-            <h1> {{ $book -> title }}</h1>
+            <h1> {{ $book -> title}}</h1>
 
 
             <div class="d-flex align-items-center gap-3 flex-wrap">
@@ -85,6 +85,7 @@
                             <div class="basket_item_count text-dark d-flex justify-content-center align-items-center"
                                  data-book-id="{{$book->id}}">
                                 {{ $bookQuantityInBakset }}
+
                             </div>
 
                             <div class="increase-button"
@@ -107,30 +108,29 @@
             <p class="text-start mt-3">{{ $book -> description }}</p>
         </div>
     </div>
-
-    {{--    @can('check-bought-book',$book)--}}
     <div class="mt-5">
-        {{--            БЛОК НАПИСАНИЕ КОМЕНТА--}}
-        <form action="{{ route('books.comments.store',$book)  }}" id="commentaryForm"
-              method="post" class="d-flex gap-3">
-            @csrf
-            <textarea name="text" class="form-control" rows="2"
-                      placeholder="Какие ваши впечатления о книге?"></textarea>
-            <button class="btn btn-sm btn-primary pull-right" type="submit"><i
-                    class="fa fa-pencil fa-fw"></i> Отправить
-            </button>
-            <select style="width: 160px" class="form-control p-0" id="rating" name="rating"
-                    form="commentaryForm">
-                <option value="5" selected>⭐⭐⭐⭐⭐</option>
-                <option value="4">⭐⭐⭐⭐</option>
-                <option value="3">⭐⭐⭐</option>
-                <option value="2">⭐⭐</option>
-                <option value="1">⭐</option>
+        @auth
+            {{--            БЛОК НАПИСАНИЕ КОМЕНТА--}}
+            <form action="{{ route('books.comments.store',$book)  }}" id="commentaryForm"
+                  method="post" class="d-flex gap-3">
+                @csrf
+                <textarea name="text" class="form-control" rows="2"
+                          placeholder="Какие ваши впечатления о книге?"></textarea>
+                <button class="btn btn-sm btn-primary pull-right" type="submit"><i
+                        class="fa fa-pencil fa-fw"></i> Отправить
+                </button>
+                <select style="width: 160px" class="form-control p-0" id="rating" name="rating"
+                        form="commentaryForm">
+                    <option value="5" selected>⭐⭐⭐⭐⭐</option>
+                    <option value="4">⭐⭐⭐⭐</option>
+                    <option value="3">⭐⭐⭐</option>
+                    <option value="2">⭐⭐</option>
+                    <option value="1">⭐</option>
 
-            </select>
-        </form>
-        {{--            @endcan--}}
-        {{--            БЛОК НАПИСАНИЕ КОМЕНТА--}}
+                </select>
+            </form>
+            {{--            БЛОК НАПИСАНИЕ КОМЕНТА--}}
+        @endauth
         {{--                    COMMENTARIES--}}
         @forelse($commentaries as $commentary)
             <div class="row py-2 justify-content-center ">

@@ -16,7 +16,7 @@
 
     @foreach( $orders as $order )
         <a href="{{ route('home.orders.show', $order ) }}">
-            <div class=" border rounded-4 bg-white p-4 mb-3">
+                <div class=" border rounded-4 bg-white p-4 mb-3">
                 Заказ: {{ $order->id }}
                 <p>цена: {{ $order -> price }}</p>
                 <p>Статус заказа: {{ $order -> status }}</p>

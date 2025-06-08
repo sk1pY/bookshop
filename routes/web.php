@@ -69,12 +69,11 @@ Route::name('home.')->prefix('home')->middleware('role:user|admin')->group(funct
     //USER INFO
     Route::get('/info', [HomeUserController::class, 'infoUser'])->name('info');
     Route::patch('/info', [HomeUserController::class, 'infoUserUpdate'])->name('info.update');
-    Route::delete('/user',[HomeController::class,'userDelete'])->name('user.destroy');
+    Route::delete('/user',[HomeUserController::class,'userDelete'])->name('user.destroy');
 });
 
 //------------------------------------------------Comments------------------------------------------------
-Route::resource('books.comments', CommentController::class)->only(['destroy', 'store', 'update']);
-
+Route::resource('books.comments', CommentController::class)->only(['store', 'update','destroy']);
 
 //------------------------------------------------ADMIN-PANEL--------------------------------------------//
 Route::name('admin.')->prefix('admin')->middleware('role:admin')->group(function () {

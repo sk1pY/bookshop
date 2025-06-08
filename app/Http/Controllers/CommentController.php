@@ -82,7 +82,7 @@ class CommentController extends Controller
         ]);
 
 
-        return back()->with('success', 'успешно обновлен');
+        return back()->with('success', 'success');
     }
 
     /**

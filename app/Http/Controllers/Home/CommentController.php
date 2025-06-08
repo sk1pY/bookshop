@@ -69,7 +69,7 @@ class CommentController extends Controller
         ]);
 
 
-        return back()->with('success', 'успешно обновлен');
+        return back()->with('success', 'Успешно изменен');
     }
 
     /**
@@ -77,12 +77,8 @@ class CommentController extends Controller
      */
     public function destroy(Comment $comment)
     {
-        if ($book->id !== $comment->book_id) {
-            return abort(404);
-        }
-
         $this->authorize('delete', $comment);
         $comment->delete();
-        return back()->with('success', 'Comment deleted successfully');
+        return back()->with('success', 'Успешно удален');
     }
 }

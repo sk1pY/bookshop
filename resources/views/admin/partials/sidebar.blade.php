@@ -1,4 +1,4 @@
-<div class="col-3 d-flex flex-column flex-shrink-0 p-3" style="background-color: #273A50;">
+<div class="d-flex flex-column flex-shrink-0 p-3">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <a href="/admin" class="text-white text-decoration-none ms-2">
             <span class="fs-4">Admin Panel</span>
