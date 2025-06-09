@@ -14,7 +14,6 @@ class BasketController extends Controller
 {
     public function index(request $request)
     {
-      // session()->invalidate();
         $basket = app('basket');
         $books = collect(session()->get('books', collect()));
         $basket_full_price = 0;
@@ -36,6 +35,7 @@ class BasketController extends Controller
                     return $book;
                 });
 
+            //dd($books);
             $basket_full_price = $books->sum(function ($item) {
                 return $item->quantity * $item->price;
             });
@@ -91,6 +91,25 @@ class BasketController extends Controller
             $book->stock -= $item->quantity;
             $book->save();
         });
+
+        ///ОБНОВЛЕНИЕ ВСЕХ БАСКЕТ ИТЕМСОВ ВСЕ ЮЗЕРОВ С УЧЕТОМ СДЕЛАННОГО ЗАКАЗА
+        $basket_items = BasketItem::with('book')->get()
+            ->map(function ($item) {
+                if ($item->book->stock > 0) {
+                    if ($item->quantity <= $item->book->stock) {
+                        return $item;
+
+                    } else {
+                        $item->quantity = $item->book->stock;
+                        return $item;
+                    }
+                } else {
+                    return null;
+                }
+            })->filter();
+        $basket_items->each->save();
+        ///ОБНОВЛЕНИЕ ВСЕХ БАСКЕТ ИТЕМСОВ ВСЕ ЮЗЕРОВ С УЧЕТОМ СДЕЛАННОГО ЗАКАЗА
+
         $basket->delete();
         return to_route('basket.index')->with('success', 'Заказ успешно оформлен');
     }

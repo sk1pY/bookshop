@@ -1,4 +1,4 @@
-<footer class="text-center text-lg-start  text-muted bg-white ">
+<footer class="text-center text-lg-start  text-muted bg-white sticky-bottom mt-5 ">
     <section class="container d-flex justify-content-center justify-content-lg-between p-4 border-bottom">
         <div class="me-5 d-none d-lg-block">
             <span>Наши социальные сети:</span>

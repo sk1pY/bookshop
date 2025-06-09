@@ -1,4 +1,4 @@
-<nav class="sticky-top navbar navbar-expand-lg bg-white">
+<nav class=" sticky-top navbar navbar-expand-lg bg-white rounded-3 px-3">
     <a class="navbar-brand fw-bold navbar-brand-custom" href="{{ route('books.index') }}">
         #BookShop <i class="fa-solid fa-book"></i>
     </a>

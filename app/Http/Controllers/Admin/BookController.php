@@ -41,7 +41,7 @@ class BookController extends Controller
     {
 
         $validated = $request->validate([
-            'title' => 'required|string|max:100',
+            'title' => 'required|string|max:100|unique:books,title',
             'description' => 'required|string',
             'price' => 'required|numeric|min:0',
             'stock' => 'required|numeric|min:0',

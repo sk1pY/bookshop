@@ -36,7 +36,7 @@
         </div>
     </div>
 
-    <div class="mt-4 border rounded-5 p-3 w-25">
+    <div class="mt-4 border rounded-5  w-25 bg-white p-3 mb-4">
         <button type="button" class="btn " data-bs-toggle="modal" data-bs-target="#passwordChangeModal">
             Сменить пароль
         </button>

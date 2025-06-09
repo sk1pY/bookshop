@@ -1,4 +1,4 @@
-    <div class=" border rounded-4">
+    <div class=" border rounded-4 bg-white p-2">
         <a href="{{ route('home.info') }}" class="hov d-flex align-items-center  rounded-pill p-3 ">
             <i style="font-size: 1.5rem; width: 35px;" class="bi bi-person"></i>
             <span style="font-size: 1rem" class="ms-2">Профиль</span>
