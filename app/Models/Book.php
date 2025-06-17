@@ -18,7 +18,9 @@ class Book extends Model
     {
         self::creating(function ($book){
             $book->slug = Str::slug($book->title);
+            $book->original_price = $book->price;
         });
+
     }
     public function author()
     {

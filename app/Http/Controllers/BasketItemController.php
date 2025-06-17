@@ -114,8 +114,6 @@ class BasketItemController extends Controller
             }
         }
     }
-
-
     public function decrease(Request $request)
     {
         $bookId = $request->input('book_id');
@@ -193,7 +191,6 @@ class BasketItemController extends Controller
         }
 
     }
-
     public function deleteAllByBook(Request $request, Book $book)
     {
         $basket = app('basket');
@@ -205,7 +202,6 @@ class BasketItemController extends Controller
             session(['books' => $books]);
         } else {
             BasketItem::where(['book_id' => $book->id, 'basket_id' => $basket->id])->delete();
-            // $request->session()->forget('books');
         }
 
 

@@ -2,38 +2,31 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\BasketItem;
 use App\Models\Book;
 use App\Models\Bookmark;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
 
 class CategoryController extends Controller
 {
 
-    public function specialCategories(Request $request, $slug)
+    public function specialCategories(Request $request, $slug): View
     {
         $bookQuery = Book::query();
-
-        if ($request->filled('filter')) {
-            switch ($request->input('filter')) {
-                case 'cheap':
-                    $bookQuery->orderBy('price');
-                    break;
-                case 'expensive':
-                    $bookQuery->orderBy('price', 'desc');
-                    break;
-                case 'rating':
-                    $bookQuery->orderBy('avgRating', 'desc');
-            }
-        }
-
-        match ($slug) {
+        $bookQuery = match ($slug) {
             'bestsellers' => $bookQuery->bestsellers(),
             'newest' => $bookQuery->newest(),
             'sales' => $bookQuery->sales(),
             default => null
+        };
+
+        $bookQuery = match ($request->input('filter')) {
+            'cheap' => $bookQuery->orderBy('price'),
+            'expensive' => $bookQuery->orderBy('price', 'desc'),
+            'rating' => $bookQuery->orderBy('avgRating', 'desc'),
+            default => $bookQuery->latest()
         };
 
 
@@ -70,24 +63,14 @@ class CategoryController extends Controller
         $bookmarkTaskUser = Auth::check() ?
             Bookmark::where('user_id', Auth::id())->pluck('book_id')->toArray() : null;
 
-        $bookQuery = Book::where('category_id', $category->id);
+        $bookQuery = $category->books();
 
-//        $bookQuery = Auth::check() ?
-//            Book::where('category_id', $category->id) :
-//            Book::whereIn('id', $bookIds);
-
-        if ($request->filled('filter')) {
-            switch ($request->input('filter')) {
-                case 'cheap':
-                    $bookQuery->orderBy('price');
-                    break;
-                case 'expensive':
-                    $bookQuery->orderBy('price', 'desc');
-                    break;
-                case 'rating':
-                    $bookQuery->orderBy('avgRating', 'desc');
-            }
-        }
+        $bookQuery = match ($request->input('filter')) {
+            'cheap' => $bookQuery->orderBy('price'),
+            'expensive' => $bookQuery->orderBy('price', 'desc'),
+            'rating' => $bookQuery->orderBy('avgRating', 'desc'),
+            default => $bookQuery->latest()
+        };
 
 
         $basket = app('basket');

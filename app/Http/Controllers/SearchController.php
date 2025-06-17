@@ -14,11 +14,13 @@ class SearchController extends Controller
        // Log::info($request->input('search'));
        // Log::info($request->input('category_slug'));
         $category_slug = $request->input('category_slug');
+        $author_id = $request->input('author_id');
         $arr = ['bestsellers', 'sales', 'newest'];
         $query = Book::query();
+        // Log::info($request->input('category_slug'));
 
-    //    Log::info($category_slug);
-        if(in_array($category_slug, $arr)){
+    //    Log::info($author_id);
+        if(in_array($category_slug, $arr, true)){
             match ($category_slug) {
                 'bestsellers' => $query->bestsellers(),
                 'newest' => $query->newest(),
@@ -38,6 +40,10 @@ class SearchController extends Controller
                 $books = collect();
             }
 
+        }elseif ($author_id) {
+            $query = Book::where('author_id', $author_id);
+            $books = $query->where('title', 'like', '%' . $request->input('search') . '%')->get();
+         //   Log::info($books);
         } else {
             $books = $query->where('title', 'like', '%' . $request->input('search') . '%')->get();
         }

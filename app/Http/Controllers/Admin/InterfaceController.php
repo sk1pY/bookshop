@@ -3,22 +3,22 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\InterfaceStoreRequest;
 use App\Models\InterfaceSite;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class InterfaceController extends Controller
 {
-    public function index()
+    public function index():View
     {
         $slides = InterfaceSite::where('type','slide')->get();
         return view('admin.interface',compact('slides'));
     }
-    public function store(Request $request)
+    public function store(InterfaceStoreRequest $request):RedirectResponse
     {
-       $validated = $request->validate([
-           'image' => 'required|image|mimes:jpg,png|max:2048',
-           'type' => 'required'
-       ]);
+       $validated = $request->validated();
 
         $validated['image'] = $request->hasfile('image')?
             basename($request->file('image')->store('slideImages','public')):null;
@@ -27,7 +27,7 @@ class InterfaceController extends Controller
         return back()->with('success', 'success');
     }
 
-    public  function  destroy(InterfaceSite $slide)
+    public  function  destroy(InterfaceSite $slide):RedirectResponse
     {
         $slide->delete();
         return back()->with('success', 'success');

@@ -32,7 +32,7 @@ class CommentController extends Controller
     {
         $validate = $request->validate([
             'text'  => 'required|string|max:1000',
-            'rating' => 'required|between:1,5'
+            'rating' => 'required|integer|between:1,5'
         ]);
         Comment::create(array_merge($validate,['book_id'=>$book->id,'user_id'=>Auth::id() ]));
 
@@ -64,10 +64,7 @@ class CommentController extends Controller
      */
     public function update(Request $request, Book $book,Comment $comment)
     {
-        if($book->id !== $comment->book_id){
-            return abort(404);
-        }
-
+        abort_if($book->id !== $comment->book_id, 404);
         $this->authorize('update', $comment);
 
         $validated = $request->validate([
@@ -90,10 +87,7 @@ class CommentController extends Controller
      */
     public function destroy(Book $book,Comment $comment)
     {
-        if($book->id !== $comment->book_id){
-            return abort(404);
-        }
-
+        abort_if($book->id !== $comment->book_id, 404);
         $this->authorize('delete', $comment);
         $comment->delete();
         return back()->with('success', 'Comment deleted successfully');

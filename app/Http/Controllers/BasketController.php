@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\MakeOrderRequest;
 use App\Models\Address;
 use App\Models\BasketItem;
 use App\Models\Book;
@@ -49,15 +50,9 @@ class BasketController extends Controller
         return view('front.basket', compact('books', 'basket_full_price', 'addresses'));
     }
 
-    public function makeOrder(Request $request)
+    public function makeOrder(MakeOrderRequest $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|alpha|string',
-            'surname' => 'alpha|string|nullable',
-            'phone' => ['required', 'regex:/^\+375(25|29|33|44|17)\d{7}$/'],
-        ], [
-            'phone.regex' => 'Номер телефона должен начинаться с +375 и содержать 7 цифр после кода оператора. 25|29|33|44'
-        ]);
+        $validated = $request->validated();
 
         $basket = app('basket');
         $user = Auth::user();

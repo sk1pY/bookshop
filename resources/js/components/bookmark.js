@@ -1,8 +1,8 @@
-document.querySelectorAll('.bookmark-button').forEach(function (button) {
-    button.addEventListener('click', function () {
-        let bookId = this.dataset.bookId;
-        let bookmarkButton = this.querySelector('.bookmark_button');
-        let url = this.dataset.url;
+document.addEventListener('click', function (event) {
+    const button = event.target.closest('.bookmark-button');
+    let bookId = button.dataset.bookId;
+        let bookmarkButton = button.querySelector('.bookmark_button');
+        let url = button.dataset.url;
         axios.post(url, {book_id: bookId})
             .then(response => {
                 if (response.data.success) {
@@ -31,7 +31,7 @@ document.querySelectorAll('.bookmark-button').forEach(function (button) {
             })
             .catch(error => console.error('Ошибка:', error));
     });
-});
+
 
 
 

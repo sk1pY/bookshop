@@ -78,7 +78,7 @@ class BookController extends Controller
         //ДЛЯ SESSIII
         else {
             $books_session = collect(session('books', []))->keyBy('id');
-            $bookq = $books->map(function ($book) use ($books_session) {
+            $books->map(function ($book) use ($books_session) {
                 if ($books_session->has($book->id)) {
                     $book->quantity = $books_session->get($book->id)->quantity;
                 }

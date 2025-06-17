@@ -18,8 +18,7 @@ return new class extends Migration
             $table->string('slug');
             $table->float('price');
             $table->float('original_price')->nullable();
-//            $table->float('priceBeforeDiscount')->nullable();
-            $table->string('image')->nullable();
+            $table->string('image');
             $table->foreignId('author_id')->nullable()->constrained('authors')->cascadeOnDelete();
             $table->foreignId('category_id')->nullable()->constrained('categories')->cascadeOnDelete();
             $table->integer('numberOfPurchased')->default(0);

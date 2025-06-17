@@ -36,7 +36,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/search', [SearchController::class, 'search'])->name('live.search');
 
 //Автор
-Route::get('/authors/{author:slug?}', [AuthorController::class, 'index'])->name('authors.index');
+Route::get('/authors/{author:slug}', AuthorController::class)->name('authors.index');
 
 //КНИГИ
 Route::get('/', [BookController::class, 'index'])->name('books.index');
@@ -56,7 +56,7 @@ Route::prefix('basket')->group(function () {
     Route::delete('/basket-items/book/{book}', [BasketItemController::class, 'deleteAllByBook'])->name('basket-item.deleteAll');
 });
 //------------------------------------------------PROFILE------------------------------------------------
-Route::name('home.')->prefix('home')->middleware('role:user|admin')->group(function () {
+Route::name('home.')->prefix('home')->middleware(['role:user|admin'])->group(function () {
     //BOOKMARKS
     Route::get('/bookmarks', [HomeBookmarkController::class, 'index'])->name('bookmarks.index');
     Route::post('/bookmarks', [HomeBookmarkController::class, 'store'])->name('bookmarks.store');
@@ -77,7 +77,7 @@ Route::resource('books.comments', CommentController::class)->only(['store', 'upd
 
 //------------------------------------------------ADMIN-PANEL--------------------------------------------//
 Route::name('admin.')->prefix('admin')->middleware('role:admin')->group(function () {
-    Route::get('/', [AdminController::class, 'index'])->name('index');
+    Route::get('/', AdminController::class)->name('index');
     //Roles and Permission
     Route::get('/roles-permission', [RolePermissionController::class, 'index'])->name('roles.permissions.index');
     Route::put('/role/{role}/permissions', [RolePermissionController::class, 'updatePermissionsForRole'])->name('roles.permissions.update');
@@ -112,7 +112,7 @@ Route::name('admin.')->prefix('admin')->middleware('role:admin')->group(function
     Route::post('/interfaces/slides', [InterfaceController::class, 'store'])->name('interfaces.slides.store');
     Route::delete('/interfaces/slides/{slide}', [InterfaceController::class, 'destroy'])->name('interfaces.slides.destroy');
     //ADDRESSED
-    Route::resource('addresses', AddressController::class)->except('show', 'edit', 'create');
+    Route::resource('addresses', AddressController::class)->only('index','store','destroy');
     Route::get('/addresses-deleted', [AddressController::class, 'addressesDeleted'])->name('addresses.deleted');
     Route::put('/addresses-deleted/{address}/restore', [AddressController::class, 'addressesRestore'])->name('addresses.restore')->withTrashed();
 });

@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Book;
 use App\Models\Order;
-use App\Models\OrderItem;
-use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 
 class OrderController extends Controller
 {
@@ -14,32 +14,32 @@ class OrderController extends Controller
     public const READY = 'Готов к выдаче';
     public const CANCEL = 'Отменен';
     public const RECEIVED = 'Получен';
-    public function orders()
+    public function orders():View
     {
-        $orders = Order::whereIn('status', [OrderController::NEW,OrderController::READY])->get();
+        $orders = Order::whereIn('status', [self::NEW, self::READY])->get();
 
         return view('admin.orders.index', compact('orders'));
     }
 
-    public function orderHistory()
+    public function orderHistory():View
     {
-        $orders = Order::whereIn('status', [OrderController::CANCEL, OrderController::RECEIVED])->paginate(10);
+        $orders = Order::whereIn('status', [self::CANCEL, self::RECEIVED])->paginate(10);
         return view('admin.orders.order_history', compact('orders'));
     }
 
-    public function addStatusOrder(Order $order)
+    public function addStatusOrder(Order $order):RedirectResponse
     {
         $order->update(['status' => request('status')]);
         $booksBoughtUpdate =  $order->order_items()->get();
 
-        if ($order->status == OrderController::RECEIVED) {
+        if ($order->status === self::RECEIVED) {
             $booksBoughtUpdate->each(function ($item) {
                  Book::where(['id' => $item->book_id])
                     ->increment('numberOfPurchased', $item->quantity);
             });
 
         }
-        if ($order->status == OrderController::CANCEL) {
+        if ($order->status === self::CANCEL) {
             $booksBoughtUpdate->each(function ($item) {
                 Book::where(['id' => $item->book_id])
                     ->increment('stock', $item->quantity);
@@ -48,7 +48,7 @@ class OrderController extends Controller
         return back()->with('success', 'Статус заказа обновлен');
 
     }
-    public function aboutOrderAdmin(Order $order)
+    public function aboutOrderAdmin(Order $order):View
     {
         $order_items = $order->order_items()->get();
         $order_items->each(function($q){

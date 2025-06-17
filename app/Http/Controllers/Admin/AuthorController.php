@@ -1,19 +1,19 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
-
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\AuthorStoreRequest;
 use App\Models\Author;
-use App\Models\Book;
-use App\Models\Category;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class AuthorController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index():View
     {
         $authors = Author::withCount('books')->orderBy('id', 'asc')->paginate(15);
         return view('admin.authors.index', compact('authors'));
@@ -22,7 +22,7 @@ class AuthorController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create():View
     {
         $authors = Author::get();
         return view('admin.authors.create', compact('authors'));
@@ -31,16 +31,9 @@ class AuthorController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(AuthorStoreRequest $request):RedirectResponse
     {
-        $validated = $request->validate([
-            'name' => 'required|alpha|max:30',
-            'surname' => 'required|alpha|max:30',
-        ], [
-            'name.required' => 'напишите имя автора',
-            'surname.required' => 'напишите фамилию автора',
-            '*.alpha' => 'только буквы'
-        ]);
+        $validated = $request->validated();
         Author:: create($validated);
         return back()->with('success', 'success');
     }
@@ -72,7 +65,7 @@ class AuthorController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Author $author)
+    public function destroy(Author $author):RedirectResponse
     {
         $author->delete();
         return back()->with('success', 'success');

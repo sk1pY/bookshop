@@ -58,7 +58,7 @@
                            class="text-decoration-none text-dark">{{$book -> title}}</a></td>
                     @if($book -> author)
                         <td>
-                            <a href="{{ route('authors.index',$author)}}"
+                            <a href="{{ route('authors.index',$book -> author )}}"
                                class="text-decoration-none text-dark">
                                 {{$book -> author -> surname . ' ' . $book -> author->name}}
                             </a>

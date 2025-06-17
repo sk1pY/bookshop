@@ -42,7 +42,7 @@
                 </td>
             </tr>
 
-            {{-- Модалка --}}
+            {{-- uodate Book --}}
             <div class="modal fade" id="update{{ $book->id }}" tabindex="-1" aria-hidden="true">
                 <div class="modal-dialog"><div class="modal-content">
                         <form action="{{ route('admin.books.update', $book) }}" method="post" enctype="multipart/form-data">
@@ -52,9 +52,14 @@
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                             </div>
                             <div class="modal-body">
-                                <input name="title" class="form-control mb-2" value="{{ old('title', $book->title) }}" placeholder="Название">
-                                <input name="price" class="form-control mb-2" value="{{ $book->price }}" placeholder="Цена">
-                                <select name="author_id" class="form-control mb-2">
+                                <label for="title" class="form-label">Title</label>
+                                <input name="title" id="title" class="form-control mb-2" value="{{ old('title', $book->title) }}" placeholder="Название">
+
+                                <label for="price" class="form-label">Price</label>
+                                <input name="price" id="price" class="form-control mb-2" value="{{ $book->price }}" placeholder="Цена">
+
+                                <label for="author" class="form-label">Author</label>
+                                <select name="author_id" id="author" class="form-control mb-2">
                                     <option value="" {{ !$book->author_id ? 'selected' : '' }}>Без автора</option>
                                     @foreach($authors as $author)
                                         <option value="{{ $author->id }}" {{ $book->author_id == $author->id ? 'selected' : '' }}>
@@ -62,8 +67,12 @@
                                         </option>
                                     @endforeach
                                 </select>
-                                <input name="stock" class="form-control mb-2" value="{{ $book->stock }}" placeholder="В наличии">
-                                <input type="file" name="image" class="form-control mb-2">
+
+                                <label for="stock" class="form-label">Stock</label>
+                                <input name="stock" id="stock" class="form-control mb-2" value="{{ $book->stock }}" placeholder="В наличии">
+
+                                <label for="stock" class="form-label">Image</label>
+                                <input type="file" name="image" id="iamge" class="form-control mb-2">
                                 <img src="{{ Storage::url('booksImages/'.$book->image) }}" style="width:40px;height:40px;" alt="">
                             </div>
                             <div class="modal-footer">
