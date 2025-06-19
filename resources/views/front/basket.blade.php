@@ -129,15 +129,16 @@
                     </form>
 
                 </div>
+                @endauth
                 <div class="border rounded-5 bg-white ms-4 p-4 mt-3 fs-5">
                     <div class="d-flex justify-content-between">
                         <div>Итого</div>
-                        <div class="basket_price">{{ $basket_full_price }}</div>
+                        <div class="basket_price">{{ $basket_full_price }} р.</div>
                     </div>
                 </div>
 
 
             </div>
-        @endauth
+
     </div>
 @endsection

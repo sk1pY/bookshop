@@ -23,7 +23,11 @@
         text-decoration: none;
     }
 
-
+     .modal-open .modal-backdrop {
+         backdrop-filter: blur(5px);
+         background-color: rgba(0, 0, 0, 0.5);
+         opacity: 1 !important;
+     }
 </style>
 <body>
 @include('partials.alert.toast')

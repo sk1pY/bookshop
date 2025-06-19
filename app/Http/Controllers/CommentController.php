@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CommentStoreRequest;
 use App\Models\Book;
 use App\Models\Comment;
 use Illuminate\Http\Request;
@@ -28,19 +29,18 @@ class CommentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request, Book $book)
+    public function store(CommentStoreRequest $request, Book $book)
     {
-        $validate = $request->validate([
-            'text'  => 'required|string|max:1000',
-            'rating' => 'required|integer|between:1,5'
-        ]);
-        Comment::create(array_merge($validate,['book_id'=>$book->id,'user_id'=>Auth::id() ]));
+        $validated = $request->validated();
+        $validated['user_id'] = Auth::id();
+        $book->commentaries()->create($validated);
 
-        $avgRating =  $book->commentaries()->avg('rating');
+
+        $avgRating = $book->commentaries()->avg('rating');
         $book->avgRating = $avgRating;
-        $book-> save();
+        $book->save();
 
-        return to_route('books.book',$book)->with('success', 'Comment added successfully');
+        return to_route('books.book', $book)->with('success', 'Comment added successfully');
     }
 
     /**
@@ -62,7 +62,7 @@ class CommentController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Book $book,Comment $comment)
+    public function update(Request $request, Book $book, Comment $comment)
     {
         abort_if($book->id !== $comment->book_id, 404);
         $this->authorize('update', $comment);
@@ -85,7 +85,7 @@ class CommentController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Book $book,Comment $comment)
+    public function destroy(Book $book, Comment $comment)
     {
         abort_if($book->id !== $comment->book_id, 404);
         $this->authorize('delete', $comment);

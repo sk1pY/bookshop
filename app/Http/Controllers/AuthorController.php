@@ -2,35 +2,31 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\Book\AddBookQuantityField;
+use App\Actions\Book\FilterBooks;
 use App\Models\Author;
 use App\Models\Bookmark;
+use App\Services\BasketService;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 class AuthorController extends Controller
 {
-    public function __invoke(Author $author) : View
+    public function __invoke(
+        Request              $request,
+        Author               $author,
+        AddBookQuantityField $addBookQuantityField,
+        BasketService        $basketService,
+        FilterBooks          $filterBooks): View
     {
-        $bookmarkTaskUser = Bookmark::where('user_id', Auth::id())->pluck('book_id')->toArray();
-        $books =  $author->books()->paginate(10);
+        $basket = $basketService->getBasket();
 
+        $booksQuery = $filterBooks->execute($author->books(), $request->input('filter'));
+        $books = $booksQuery->paginate(10);
 
-        $basket = app('basket');
+        $addBookQuantityField->execute($basket, $books);
 
-        //ADD QUANTITY BOOK
-        $books_session = collect(session('books', []));
-        $quantities = Auth::check() ?
-            $basket->basket_items()->pluck('quantity', 'book_id') :
-            $books_session->pluck('quantity', 'id');
-
-
-        $books->setCollection(
-            $books->getCollection()->map(function ($book) use ($quantities) {
-                $book->quantity = $quantities[$book->id] ?? 0;
-                return $book;
-            })
-        );
-
-        return view('front.author', compact('books', 'bookmarkTaskUser', 'author'));
+        return view('front.author', compact('books', 'author'));
     }
 }

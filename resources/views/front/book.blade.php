@@ -84,7 +84,7 @@
                             </div>
                             <div class="basket_item_count text-dark d-flex justify-content-center align-items-center"
                                  data-book-id="{{$book->id}}">
-                                {{ $bookQuantityInBakset }}
+                                {{ $bookQuantityInBasket }}
 
                             </div>
 
@@ -110,26 +110,28 @@
     </div>
     <div class="mt-5">
         @auth
-            {{--            БЛОК НАПИСАНИЕ КОМЕНТА--}}
-            <form action="{{ route('books.comments.store',$book)  }}" id="commentaryForm"
-                  method="post" class="d-flex gap-3">
-                @csrf
-                <textarea name="text" class="form-control" rows="2"
-                          placeholder="Какие ваши впечатления о книге?"></textarea>
-                <button class="btn btn-sm btn-primary pull-right" type="submit"><i
-                        class="fa fa-pencil fa-fw"></i> Отправить
-                </button>
-                <select style="width: 160px" class="form-control p-0" id="rating" name="rating"
-                        form="commentaryForm">
-                    <option value="5" selected>⭐⭐⭐⭐⭐</option>
-                    <option value="4">⭐⭐⭐⭐</option>
-                    <option value="3">⭐⭐⭐</option>
-                    <option value="2">⭐⭐</option>
-                    <option value="1">⭐</option>
+            @if($bought)
+                {{--            БЛОК НАПИСАНИЕ КОМЕНТА--}}
+                <form action="{{ route('books.comments.store',$book)  }}" id="commentaryForm"
+                      method="post" class="d-flex gap-3">
+                    @csrf
+                    <textarea name="text" class="form-control" rows="2"
+                              placeholder="Какие ваши впечатления о книге?"></textarea>
+                    <button class="btn btn-sm btn-primary pull-right" type="submit"><i
+                            class="fa fa-pencil fa-fw"></i> Отправить
+                    </button>
+                    <select style="width: 160px" class="form-control p-0" id="rating" name="rating"
+                            form="commentaryForm">
+                        <option value="5" selected>⭐⭐⭐⭐⭐</option>
+                        <option value="4">⭐⭐⭐⭐</option>
+                        <option value="3">⭐⭐⭐</option>
+                        <option value="2">⭐⭐</option>
+                        <option value="1">⭐</option>
 
-                </select>
-            </form>
-            {{--            БЛОК НАПИСАНИЕ КОМЕНТА--}}
+                    </select>
+                </form>
+                {{--            БЛОК НАПИСАНИЕ КОМЕНТА--}}
+            @endif
         @endauth
         {{--                    COMMENTARIES--}}
         @forelse($commentaries as $commentary)
@@ -137,12 +139,18 @@
                 <div class="d-flex flex-column ">
                     <div class="p-3 px-4 border rounded-4">
                         <div class="d-flex justify-content-between">
-                            <div class="flex-column ">
+                            <div class="flex-column">
                                 <span class="text fs-5">{{ $commentary->user->name }}</span>
+
                                 <span class="ms-3 text-muted"
                                       style="font-size: 0.9rem;">{{ $commentary->created_at->diffForHumans() }}</span>
                                 <span class="ms-3" style="font-size: 0.9rem;">{{ $commentary->rating }}
                                                 <i class="bi bi-star-fill text-warning"></i></span>
+                                <span class="text-muted small">
+                                    @if ($commentary->updated_at != $commentary->created_at)
+                                        Изменено {{ $commentary->updated_at->diffForHumans() }}
+                                    @endif
+                                </span>
                             </div>
 
                             <div class="d-flex">

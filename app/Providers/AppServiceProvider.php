@@ -70,10 +70,6 @@ class AppServiceProvider extends ServiceProvider
 
             }
         });
-
-
-
-
         View::composer('*', function ($view) {
             if (Auth::guard()->check()) {
                 $bookmarkBookUser = Bookmark::where('user_id', Auth::id())->pluck('book_id')->toArray();

@@ -4,12 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\Book;
 use App\Models\Category;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
 class SearchController extends Controller
 {
-    public function search(Request $request)
+    public function search(Request $request):JsonResponse
     {
        // Log::info($request->input('search'));
        // Log::info($request->input('category_slug'));

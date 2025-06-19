@@ -59,15 +59,9 @@ class CommentController extends Controller
     {
         $this->authorize('update', $comment);
 
-        $validated = $request->validate([
-            'text' => 'required|string|max:600',
-        ]);
-
-        $comment->update([
-            'text' => $validated['text'],
-            'updated_at' => now(),
-        ]);
-
+        $validated = $request->validated();
+        $validated['updated_at'] = now();
+        $comment->update($validated);
 
         return back()->with('success', 'Успешно изменен');
     }

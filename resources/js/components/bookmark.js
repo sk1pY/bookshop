@@ -1,6 +1,7 @@
 document.addEventListener('click', function (event) {
     const button = event.target.closest('.bookmark-button');
-    let bookId = button.dataset.bookId;
+        if(!button) return;
+        let bookId = button.dataset.bookId;
         let bookmarkButton = button.querySelector('.bookmark_button');
         let url = button.dataset.url;
         axios.post(url, {book_id: bookId})

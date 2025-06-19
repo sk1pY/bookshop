@@ -51,8 +51,11 @@ document.addEventListener('click', function (e) {
                     inputQuantityBook.textContent = quantity;
 
                     if (basketPrice) {
-                        basketPrice.textContent = response.data.basketPrice;
+                        console.log(response.data.basketPrice);
+
+                        basketPrice.textContent = response.data.basketPrice + ' р.';
                         bookPrice.textContent  =  response.data.bookFullPrice;
+
                     }
                     console.log(response.data.message);
                 } else {

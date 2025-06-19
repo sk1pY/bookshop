@@ -16,10 +16,10 @@ class OrderController extends Controller
     {
         $status = $request->query('status', 'all');
         $user = Auth::user();
-        if ($status == 'all') {
+        if ($status === 'all') {
             $orders = $user->orders()->latest()->get();
 
-        } elseif ($status == 'delivered') {
+        } elseif ($status === 'delivered') {
             $orders = $user->orders()->where('status', 'Получен')->get();
         }
 

@@ -7,13 +7,15 @@ use App\Http\Requests\UpdateInfoRequest;
 use App\Models\Address;
 use App\Models\Comment;
 use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
 
 class UserController extends Controller
 {
 
-    public function infoUser()
+    public function infoUser():View
     {
         $user = Auth::user();
         $addresses = Address::get();
@@ -21,7 +23,7 @@ class UserController extends Controller
         return view('home.info', compact('user', 'addresses'));
     }
 
-    public function infoUserUpdate(UpdateInfoRequest $request)
+    public function infoUserUpdate(UpdateInfoRequest $request):RedirectResponse
     {
         $validated = $request->validated();
         auth()->user()->update($validated);
@@ -29,7 +31,7 @@ class UserController extends Controller
 
     }
 
-    public function userDelete()
+    public function userDelete():RedirectResponse
     {
         auth()->user()->delete();
         return back()->with('success', 'success');

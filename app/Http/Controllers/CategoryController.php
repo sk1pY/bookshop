@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\Book\AddBookQuantityField;
+use App\Actions\Book\FilterBooks;
 use App\Models\Book;
 use App\Models\Bookmark;
 use App\Models\Category;
+use App\Services\BasketService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
@@ -12,40 +15,27 @@ use Illuminate\View\View;
 class CategoryController extends Controller
 {
 
-    public function specialCategories(Request $request, $slug): View
+    public function specialCategories(
+        Request              $request, $slug,
+        FilterBooks          $filterBooks,
+        AddBookQuantityField $addBookQuantityField,
+        BasketService        $basketService): View
     {
-        $bookQuery = Book::query();
-        $bookQuery = match ($slug) {
-            'bestsellers' => $bookQuery->bestsellers(),
-            'newest' => $bookQuery->newest(),
-            'sales' => $bookQuery->sales(),
-            default => null
+        $basket = $basketService->getBasket();
+        $booksQuery = Book::query();
+        $filter = $request->input('filter');
+        $filterBooks->execute($booksQuery, $filter);
+
+        $booksQuery = match ($slug) {
+            'bestsellers' => $booksQuery->bestsellers(),
+            'newest' => $booksQuery->newest(),
+            'sales' => $booksQuery->sales(),
+            default => $booksQuery
         };
 
-        $bookQuery = match ($request->input('filter')) {
-            'cheap' => $bookQuery->orderBy('price'),
-            'expensive' => $bookQuery->orderBy('price', 'desc'),
-            'rating' => $bookQuery->orderBy('avgRating', 'desc'),
-            default => $bookQuery->latest()
-        };
+        $books = $booksQuery->paginate(10);
 
-
-        $basket = app('basket');
-        $books = $bookQuery->paginate(10);
-
-        //ADD QUANTITY BOOK
-        $books_session = collect(session('books', []));
-        $quantities = Auth::check() ?
-            $basket->basket_items()->pluck('quantity', 'book_id') :
-            $books_session->pluck('quantity', 'id');
-
-
-        $books->setCollection(
-            $books->getCollection()->map(function ($book) use ($quantities) {
-                $book->quantity = $quantities[$book->id] ?? 0;
-                return $book;
-            })
-        );
+        $addBookQuantityField->execute($basket, $books);
 
         $cat_rus = match ($slug) {
             'bestsellers' => 'Бестселлеры',
@@ -58,38 +48,24 @@ class CategoryController extends Controller
         return view('front.categories.special_categories_show', compact('books', 'slug', 'cat_rus'));
     }
 
-    public function show(Request $request, Category $category)
+    public function show(
+        Request              $request,
+        Category             $category,
+        FilterBooks          $filterBooks,
+        AddBookQuantityField $addBookQuantityField,
+        BasketService        $basketService): View
     {
+        $basket = $basketService->getBasket();
         $bookmarkTaskUser = Auth::check() ?
             Bookmark::where('user_id', Auth::id())->pluck('book_id')->toArray() : null;
 
-        $bookQuery = $category->books();
+        $booksQuery = $category->books();
+        $filter = $request->input('filter');
+        $filterBooks->execute($booksQuery, $filter);
 
-        $bookQuery = match ($request->input('filter')) {
-            'cheap' => $bookQuery->orderBy('price'),
-            'expensive' => $bookQuery->orderBy('price', 'desc'),
-            'rating' => $bookQuery->orderBy('avgRating', 'desc'),
-            default => $bookQuery->latest()
-        };
+        $books = $booksQuery->paginate(10);
 
-
-        $basket = app('basket');
-        $books = $bookQuery->paginate(10);
-
-        //ADD QUANTITY BOOK
-        $books_session = collect(session('books', []));
-        $quantities = Auth::check() ?
-            $basket->basket_items()->pluck('quantity', 'book_id') :
-            $books_session->pluck('quantity', 'id');
-
-
-        $books->setCollection(
-            $books->getCollection()->map(function ($book) use ($quantities) {
-                $book->quantity = $quantities[$book->id] ?? 0;
-                return $book;
-            })
-        );
-
+        $addBookQuantityField->execute($basket, $books);
 
         return view('front.categories.categories', compact('books', 'category', 'bookmarkTaskUser'));
     }

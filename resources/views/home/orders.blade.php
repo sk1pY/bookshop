@@ -18,7 +18,7 @@
         <a href="{{ route('home.orders.show', $order ) }}">
                 <div class=" border rounded-4 bg-white p-4 mb-3">
                 Заказ: {{ $order->id }}
-                <p>цена: {{ $order -> price }}</p>
+                <p>Сумма: {{ $order -> price }} р.</p>
                 <p>Статус заказа: {{ $order -> status }}</p>
                 @if($order->status === "Новый заказ"  )
                     <form action="{{ route('home.orders.destroy',$order) }}" method="post">
