@@ -26,7 +26,7 @@ sed -i '/^MAIL_FROM_NAME=/c\MAIL_FROM_NAME="Demo App"' .env
 echo "4 Настройка БД"
 sed -i '/^DB_CONNECTION=/c\DB_CONNECTION=mysql' .env
 sed -i '/^DB_HOST=/c\DB_HOST=mysql' .env
-sed -i '/^DB_PORT=/c\DB_PORT=3307' .env
+sed -i '/^DB_PORT=/c\DB_PORT=3306' .env
 sed -i '/^DB_DATABASE=/c\DB_DATABASE=bookshop' .env
 sed -i '/^DB_USERNAME=/c\DB_USERNAME=root' .env
 sed -i '/^DB_PASSWORD=/c\DB_PASSWORD=' .env
