@@ -44,14 +44,18 @@ class BookController extends Controller
 
     public function show(Book $book): View
     {
-        $orders = Auth::user()->orders()->where('status', 'Получен')->pluck('id');
 
-        $booksWhichBuyArray = OrderItem::whereIn('order_id', $orders)->pluck('book_id')->toArray();
+        if (Auth::check()) {
+            $orders = Auth::user()->orders()->where('status', 'Получен')->pluck('id');
 
-        in_array($book->id, $booksWhichBuyArray, true) ?
-            $bought = true :
-            $bought = false;
+            $booksWhichBuyArray = OrderItem::whereIn('order_id', $orders)->pluck('book_id')->toArray();
 
+            in_array($book->id, $booksWhichBuyArray, true) ?
+                $bought = true :
+                $bought = false;
+        }
+
+        $bought = false;
         $bookQuantityInBasket = BasketItem::where('book_id', $book->id)->first()->quantity ?? 0;
         $commentaries = $book->commentaries()->latest()->paginate(6);
 
