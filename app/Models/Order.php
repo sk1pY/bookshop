@@ -11,11 +11,11 @@ class Order extends Model
     protected $fillable = ['status','user_id','basket_id','price','address_id'];
     public function basket()
     {
-        return $this->BelongsTo(Basket::class);
+        return $this->belongsTo(Basket::class);
     }
 
     public function user(){
-        return $this->BelongsTo(User::class);
+        return $this->belongsTo(User::class);
     }
 
     public function order_items()

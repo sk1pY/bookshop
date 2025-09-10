@@ -2,21 +2,27 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Events\LeaveReview;
+use App\Events\OrderCancelled;
+use App\Events\OrderReady;
 use App\Http\Controllers\Controller;
 use App\Models\Book;
 use App\Models\Order;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 
 class OrderController extends Controller
 {
     public const NEW = 'Новый заказ';
     public const READY = 'Готов к выдаче';
-    public const CANCEL = 'Отменен';
+    public const CANCEL = 'Отмена заказа';
     public const RECEIVED = 'Получен';
     public function orders():View
     {
-        $orders = Order::whereIn('status', [self::NEW, self::READY])->get();
+        $orders = Order::whereIn('status', [self::NEW, self::READY])
+            ->orderBy('created_at', 'desc')
+            ->get();
 
         return view('admin.orders.index', compact('orders'));
     }
@@ -37,14 +43,21 @@ class OrderController extends Controller
                  Book::where(['id' => $item->book_id])
                     ->increment('numberOfPurchased', $item->quantity);
             });
-
+        //    event(new LeaveReview());
         }
         if ($order->status === self::CANCEL) {
             $booksBoughtUpdate->each(function ($item) {
                 Book::where(['id' => $item->book_id])
                     ->increment('stock', $item->quantity);
             });
+
+            event(new OrderCancelled($order));
+
         }
+        if ($order->status === self::READY) {
+            event(new OrderReady($order));
+        }
+
         return back()->with('success', 'Статус заказа обновлен');
 
     }

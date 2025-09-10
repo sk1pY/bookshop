@@ -47,16 +47,49 @@
 
                             <i class="bi bi-bell fs-6 d-flex  p-0 m-0">
                                     <span class="text text-sm-center badge rounded-pill text-bg-danger">
-                                                                               {{ $countOrdersforUser }}
-
+                                        {{ auth()->user()->unreadNotifications->count() }}
                                     </span>
                             </i>
                         </button>
-                        <ul class="dropdown-menu">
-                            @foreach($notifOrders as $not)
-                                <li><a class="dropdown-item" href="{{route('home.orders.show',$not)}}">Ваш заказ
-                                        №{{$not}} готов к получению</a></li>
+                        <ul class="dropdown-menu " style="width: 300px" aria-labelledby="notificationsDropdown"
+                            style="width: auto; max-width: 100vw; max-height: 500px; overflow-y: auto;">
+                            @foreach($notifications as $notification)
+                                <li class="list-group-item border-0 px-3 py-3 {{ $notification->read_at ? 'bg-light' : 'bg-white shadow-sm' }}">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <span class="fw-semibold">Заказ на сумму</span>
+                                            <span class="text-success fw-bold">
+                {{ number_format($notification->data['order_price'] ?? 0, 2, '.', ' ') }} ₽
+            </span>
+                                            <span class="text-muted">
+                                                {{$notification->data['message']}}
+                                            </span>
+
+                                            <div class="mt-2">
+                                                <a href="{{ route('home.orders.show', $notification->data['order_id']) }}"
+                                                   class="btn btn-sm btn-outline-primary rounded-pill">
+                                                    Подробнее
+                                                </a>
+                                            </div>
+                                        </div>
+
+                                        <small class="text-secondary fst-italic">
+                                            {{ $notification->created_at->translatedFormat('d M Y, H:i') }}
+                                        </small>
+                                    </div>
+                                </li>
+
                             @endforeach
+                            <li class="d-flex justify-content-center text-center py-2">
+                                <a href="#">
+                                    Посмотреть все уведомления
+                                </a>
+
+                            </li>
+
+                            @php
+                                auth()->user()->unreadNotifications->markAsRead();
+                            @endphp
                         </ul>
                     </div>
 
@@ -164,13 +197,16 @@
 
 <ul class="nav nav-tabs ">
     <li class="nav-item ">
-        <a class="text-dark nav-link {{ request()->routeIs('specialCategories.show') && request()->route('slug') === 'sales' ? 'active' : '' }}" href="{{ route('specialCategories.show','sales') }}">Акции</a>
+        <a class="text-dark nav-link {{ request()->routeIs('specialCategories.show') && request()->route('slug') === 'sales' ? 'active' : '' }}"
+           href="{{ route('specialCategories.show','sales') }}">Акции</a>
     </li>
     <li class="nav-item">
-        <a class="text-dark nav-link {{ request()->routeIs('specialCategories.show') && request()->route('slug') === 'bestsellers' ? 'active' : '' }}" href="{{ route('specialCategories.show','bestsellers') }}">Бестселлеры</a>
+        <a class="text-dark nav-link {{ request()->routeIs('specialCategories.show') && request()->route('slug') === 'bestsellers' ? 'active' : '' }}"
+           href="{{ route('specialCategories.show','bestsellers') }}">Бестселлеры</a>
     </li>
     <li class="nav-item">
-        <a class="text-dark nav-link {{ request()->routeIs('specialCategories.show') && request()->route('slug') === 'newest' ? 'active' : '' }}" href="{{ route('specialCategories.show','newest') }}">Новинки</a>
+        <a class="text-dark nav-link {{ request()->routeIs('specialCategories.show') && request()->route('slug') === 'newest' ? 'active' : '' }}"
+           href="{{ route('specialCategories.show','newest') }}">Новинки</a>
     </li>
 </ul>
 

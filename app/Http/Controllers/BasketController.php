@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\OrderPlaced;
 use App\Http\Requests\MakeOrderRequest;
 use App\Models\Address;
 use App\Models\BasketItem;
@@ -35,6 +36,7 @@ class BasketController extends Controller
         $validated = $request->validated();
         $user = Auth::user();
         $order = $orderService->makeOrder($user,$validated);
+        event(new OrderPlaced($order));
         return to_route('basket.index')->with('success', 'Заказ успешно оформлен');
     }
 }

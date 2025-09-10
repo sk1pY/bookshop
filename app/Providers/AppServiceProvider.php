@@ -84,12 +84,19 @@ class AppServiceProvider extends ServiceProvider
 
         View::composer('partials.nav', function ($view) {
             if (Auth::guard()->check()) {
-                $notifOrders = Auth::user()->orders()->where('status', 'Готов к выдаче')->pluck('id')->all();
-                $view->with('notifOrders', $notifOrders);
+              //  $notifOrders = Auth::user()->orders()->where('status', 'Готов к выдаче')->pluck('id')->all();
+              //  $view->with('notifOrders', $notifOrders);
+
+                $notifications = auth()->user()->notifications()->take(5)->get();
+            }else{
+                $notifications = [];
             }
             $categories = Category::all();
 
-            $view->with('categories', $categories);
+            $view->with([
+                'categories'=> $categories,
+                'notifications' => $notifications]
+        );
 
         });
     }

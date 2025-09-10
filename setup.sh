@@ -2,6 +2,8 @@
 echo "1. Копируем .env.example -> .env"
 cp .env.example .env
 sed -i 's/^#\s*\(DB_[A-Z_]*=.*\)/\1/' .env
+echo "UID=1000" >> .env
+echo "GID=1000" >> .env
 
 echo "2. Настраиваем Mailpit"
 sed -i '/^MAIL_MAILER=/c\MAIL_MAILER=smtp' .env
@@ -22,40 +24,40 @@ sed -i '/^DB_USERNAME=/c\DB_USERNAME=laravel' .env
 sed -i '/^DB_PASSWORD=/c\DB_PASSWORD=root' .env
 
 echo "4. Запускаем контейнеры Sail"
-docker-compose up -d
+docker compose up -d
 
 echo "5. Ждем запуска MySQL..."
-until docker-compose exec php nc -z -w 1 mysql 3306; do
+until docker compose exec php nc -z -w 1 mysql 3306; do
     echo "Ожидание MySQL..."
     sleep 2
 done
 
-echo "5. Устанавливаем зависимости Composer"
-docker-compose exec composer git config --global --add safe.directory /var/www/laravel
-docker-compose exec composer composer install --no-interaction
+echo "6. Устанавливаем зависимости Composer"
+docker compose exec composer git config --global --add safe.directory /var/www/laravel
+docker compose exec composer composer install --no-interaction
 
-echo "7. Устанавливаем права"
-docker-compose exec php mkdir -p storage/logs bootstrap/cache
-docker-compose exec php chown -R www-data:www-data storage bootstrap/cache
-docker-compose exec php chmod -R 775 storage bootstrap/cache
+#echo "7. Устанавливаем права"
+#docker compose exec php mkdir -p storage/logs bootstrap/cache
+#docker compose exec php chown -R www-data:www-data storage bootstrap/cache
+#docker compose exec php chmod -R 775 storage bootstrap/cache
 
-echo "7. Генерируем ключ приложения"
-docker-compose exec php php artisan key:generate
+echo "8. Генерируем ключ приложения"
+docker compose exec php php artisan key:generate
 
-echo "8. миграции"
-docker-compose exec php php artisan migrate --force
+echo "9. миграции"
+docker compose exec php php artisan migrate:fresh --force
 
-echo "9. Сеем "
-docker-compose exec php php artisan db:seed
+echo "10. Сеем"
+docker compose exec php php artisan db:seed
 
-echo "10. Создаем символическую ссылку для storage"
-docker-compose exec php php artisan storage:link
+echo "11. Создаем символическую ссылку для storage"
+docker compose exec php php artisan storage:link
 
-echo "11. Устанавливаем зависимости npm"
-docker-compose exec node npm install
+echo "12. Устанавливаем зависимости npm"
+docker compose exec node npm install
 
-echo "12. Собираем (Vite)"
-docker-compose exec node npm run build
+echo "13. Собираем (Vite)"
+docker compose exec node npm run build
 
 
 

@@ -20,7 +20,6 @@ class OrderService
 
     public function makeOrder(User $user, array $validated)
     {
-
         $booksInBasket = $this->basketService->booksInBasket();
         $basket = $this->basketService->getBasket();
         $basketFullPrice = $this->basketService->basketFullPrice($booksInBasket);

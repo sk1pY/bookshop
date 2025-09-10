@@ -7,6 +7,7 @@ $(document).ready(function() {
         paging: false,
         searching: true,
         ordering: true,
+        order: [],
         info:false,
         language
     });
